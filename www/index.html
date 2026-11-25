@@ -99,6 +99,17 @@ button{cursor:pointer;border:0;background:none}
 .empty{padding:30px 16px;text-align:center;color:var(--mute)}
 .busy{position:fixed;inset:0;background:#0009;color:#fff;display:none;place-items:center;z-index:40;font-size:16px;text-align:center}
 .busy.on{display:grid}
+#splash{position:fixed;inset:0;z-index:60;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;transition:opacity .45s}
+#splash.out{opacity:0;pointer-events:none}
+#splash img{width:min(240px,60vw);animation:pop .7s ease-out}
+#splash h2{margin:6px 0 0;font-size:26px;color:#2b2b30}
+#splash p{margin:0;color:#6b6b75;font-size:15px}
+#splash .en{color:#a91a2c;font-weight:700;font-size:13.5px;letter-spacing:.4px}
+#splash .bar{width:120px;height:3px;border-radius:2px;background:#f1d9dc;overflow:hidden;margin-top:10px}
+#splash .bar i{display:block;height:100%;width:40%;background:#a91a2c;animation:load 1.1s ease-in-out infinite}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
+@keyframes load{from{transform:translateX(160%)}to{transform:translateX(-260%)}}
+@media(prefers-reduced-motion:reduce){#splash img,#splash .bar i{animation:none}}
 #wel{position:fixed;inset:0;z-index:50;background:var(--card);display:none;flex-direction:column}
 #wel.on{display:flex}
 .wtrack{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
@@ -168,6 +179,7 @@ button{cursor:pointer;border:0;background:none}
   </div>
 </section>
 
+<div id="splash"><img src="img/logo.png" alt="TAAM"><h2 id="spH">أهلاً بيك</h2><div class="en">SUMOW SUBURB – BLOCK 5 · SNAG LIST</div><p>نظام سناج ليست لفلل بلوك 5 — شركة تام للإنشاء والتعمير</p><div class="bar"><i></i></div></div>
 <div id="wel" role="dialog" aria-label="مرحباً">
   <div class="wtrack" id="wtrack">
     <section class="wslide"><img src="img/logo.png" alt="TAAM — شركة تام للإنشاء والتعمير"><div class="en">SUMOW SUBURB – BLOCK 5 · SNAG LIST</div>
@@ -601,7 +613,10 @@ $('#helpB').onclick=welcome;
     const [a,b]=await Promise.all([fetch('data/snag.json').then(r=>r.json()),fetch('data/plan.json').then(r=>r.json())]);D=a;P=b;
   }catch(e){document.body.innerHTML='<div class="empty">تعذّر تحميل البيانات</div>';return}
   drawPlan();
-  let seen=null;try{seen=localStorage.getItem('snag5_welcomed')}catch(e){}if(!seen)welcome();
+  let seen=null;try{seen=localStorage.getItem('snag5_welcomed')}catch(e){}
+  const sp=$('#splash');const hr=new Date().getHours();$('#spH').textContent=(hr<12?'صباح الخير':'مساء الخير')+' 👋 أهلاً بيك';
+  let gone=false;const hide=()=>{if(gone)return;gone=true;sp.classList.add('out');setTimeout(()=>sp.remove(),500);if(!seen)welcome()};
+  sp.onclick=hide;setTimeout(hide,2200);
   const h=location.hash.slice(1);if(h.startsWith('v')&&D.villas[h.slice(1)])openVilla(h.slice(1));
   initCaps();
 })();
