@@ -101,6 +101,14 @@ button{cursor:pointer;border:0;background:none}
 .busy.on{display:grid}
 .upd{display:none;align-items:center;gap:8px;background:#0f8a83;color:#fff;padding:10px 12px;font-size:14px;position:fixed;inset-inline:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));border-radius:14px;box-shadow:0 8px 24px #0004;z-index:45}
 .upd.on{display:flex}.upd span{flex:1}.upd #updB{background:#fff;color:#0f8a83;font-weight:700;border-radius:9px;padding:5px 14px}.upd #updX{color:#fff;font-size:20px;padding:0 4px}
+.badge{position:absolute;top:-4px;left:-4px;min-width:17px;height:17px;border-radius:9px;background:#a91a2c;color:#fff;font-size:10.5px;font-style:normal;display:none;place-items:center;padding:0 4px;font-weight:700}
+.badge.on{display:grid}
+.act{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);align-items:start}
+.act .av{width:34px;height:34px;border-radius:50%;background:#a91a2c18;color:#a91a2c;display:grid;place-items:center;font-weight:700}
+.act p{margin:0;font-size:14px;line-height:1.6}.act small{color:var(--mute)}.act.new{background:#fbeef0;border-radius:10px;padding-inline:8px}
+.dua{position:fixed;inset-inline:14px;top:calc(70px + env(safe-area-inset-top,0px));z-index:47;background:#fff;border:1px solid #ecd3d7;border-inline-start:4px solid #a91a2c;border-radius:14px;padding:12px 14px;box-shadow:0 10px 30px #0002;font-size:15.5px;line-height:1.8;color:#2b2b30;text-align:center;opacity:0;transform:translateY(-8px);transition:opacity .4s,transform .4s;pointer-events:none}
+.dua.on{opacity:1;transform:none;pointer-events:auto}
+.dua small{display:block;color:#a91a2c;font-size:12px;font-weight:700;margin-bottom:2px}
 #auth{position:fixed;inset:0;z-index:55;background:#fff url(img/logo_faint.png) center 85%/min(80%,420px) no-repeat;display:none;flex-direction:column;align-items:center;overflow:auto;padding:calc(30px + env(safe-area-inset-top,0px)) 20px 30px}
 #auth.on{display:flex}
 #auth .logo{width:min(200px,52vw);margin:10px 0 6px}
@@ -167,6 +175,7 @@ button{cursor:pointer;border:0;background:none}
   <div class="tt"><h1 id="ttl" dir="auto">Dhahiat Sumou – Block 5</h1><small><span class="net" id="netd"></span><span id="sub">Snag List</span></small></div>
   <div class="seg" id="phase"><button data-p="1" class="on">المرحلة 1</button><button data-p="2">المرحلة 2</button></div>
   <button class="ib help" id="helpB" aria-label="شرح الاستخدام">؟</button>
+  <button class="ib help" id="actB" aria-label="آخر التحديثات" style="display:none;position:relative">🔔<i id="actN" class="badge"></i></button>
   <button class="ib help" id="userB" aria-label="حسابي" style="display:none">👤</button>
   <img class="brand" src="img/mark.png" alt="TAAM">
 </div>
@@ -225,6 +234,7 @@ button{cursor:pointer;border:0;background:none}
 </div>
 <div class="dlg" id="dlg"><div class="box" id="box"></div></div>
 <div class="toast" id="toast"></div>
+<div class="dua" id="dua" role="status"></div>
 <div class="busy" id="busy"><div id="busyT">جاري التجهيز…</div></div>
 
 <script src="lib/jszip.min.js"></script>
@@ -300,7 +310,7 @@ function diffDoc(want,have){const FV=firebase.firestore.FieldValue;const upd={};
     if(Object.keys(o).length)upd[P]=o}
   return upd}
 function pushDoc(code){const upd=diffDoc(REC[code],SYNCED[code]);if(!Object.keys(upd).length)return;
-  upd.lu=ME;upd.lt=Date.now();
+  logAct(code,upd);upd.lu=ME;upd.lt=Date.now();
   FS.collection('v').doc(code).set(upd,{merge:true}).catch(e=>toast('تعذّر الرفع: '+(e.code||e.message),4000))}
 function canEdit(o){if(mode!=='fs'||!o)return true;if(isAdmin())return true;if(o.uid)return !!USER&&o.uid===USER.uid;return !o.by||o.by===ME}
 function netDot(){const n=$('#netd');if(n)n.classList.toggle('on',navigator.onLine)}
@@ -309,7 +319,7 @@ function startSync(){if(unsubV)return;mode='fs';
   unsubV=FS.collection('v').onSnapshot(s=>{s.docChanges().forEach(ch=>{const id=ch.doc.id;
       if(ch.type==='removed'){delete SYNCED[id];if(!dirty[id])delete REC[id]}else{SYNCED[id]=ch.doc.data();if(!dirty[id])REC[id]=toLocal(SYNCED[id])}});
     setWarn('');if(!pending)refresh();migrate()},e=>setWarn('مشكلة في الاتصال بالسيرفر: '+(e.code||'')));}
-function stopSync(){if(unsubV){unsubV();unsubV=null}for(const k in REC)delete REC[k];for(const k in SYNCED)delete SYNCED[k];refresh()}
+function stopSync(){if(unsubA){unsubA();unsubA=null}$('#actB').style.display='none';if(unsubV){unsubV();unsubV=null}for(const k in REC)delete REC[k];for(const k in SYNCED)delete SYNCED[k];refresh()}
 let migrating=false;
 async function migrate(){if(migrating||lsGet('snag5_migrated'))return;migrating=true;
   try{const codes=Object.keys(LOCALREC);for(const code of codes){const L=LOCALREC[code];const R=rec(code);
@@ -327,6 +337,49 @@ async function loadPhoto(id){if(PURL[id]||!id||id.startsWith('data:'))return PUR
     try{await idb('photos','readwrite',st=>st.put(b,id))}catch(e){}PURL[id]=URL.createObjectURL(b);return PURL[id]}catch(e){return ''}}
 function fillImgs(root){root.querySelectorAll('img[data-pid]').forEach(async im=>{if(!im.getAttribute('src')){const u=await loadPhoto(im.dataset.pid);if(u)im.src=u}})}
 
+/* ---------- greeting, duas ---------- */
+function greet(){const h=new Date().getHours();return (h<12?'صباح الخير':'مساء الخير')+' يا '+(ME||'').split(' ')[0]+' 👋'}
+const DUAS=['سبحان الله وبحمده، سبحان الله العظيم','لا حول ولا قوة إلا بالله','اللهم صلِّ وسلم على نبينا محمد','أستغفر الله العظيم وأتوب إليه',
+ 'لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير','سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر',
+ 'حسبي الله لا إله إلا هو، عليه توكلت وهو رب العرش العظيم','ربِّ اشرح لي صدري، ويسِّر لي أمري','اللهم إني أسألك علمًا نافعًا، ورزقًا طيبًا، وعملًا متقبلًا',
+ 'يا حي يا قيوم، برحمتك أستغيث، أصلح لي شأني كله','بسم الله، توكلت على الله، ولا حول ولا قوة إلا بالله','اللهم بارك لنا في عملنا ووقتنا',
+ 'ربنا آتنا في الدنيا حسنة، وفي الآخرة حسنة، وقنا عذاب النار','اللهم أعنّي على ذكرك وشكرك وحسن عبادتك','لا إله إلا أنت سبحانك إني كنت من الظالمين'];
+let duaI=Math.floor(Math.random()*DUAS.length);
+function showDua(){if(lsGet('snag5_dua')==='0'||document.hidden)return;if($('#dlg').classList.contains('on')||$('#auth').classList.contains('on')||$('#wel').classList.contains('on'))return;
+  const d=$('#dua');d.innerHTML='<small>ذكر</small>'+esc(DUAS[duaI++%DUAS.length]);d.classList.add('on');clearTimeout(d._t);d._t=setTimeout(()=>d.classList.remove('on'),9000)}
+$('#dua').onclick=()=>$('#dua').classList.remove('on');
+setTimeout(showDua,25000);setInterval(showDua,6*60*1000);
+
+/* ---------- activity feed + notifications ---------- */
+let ACT=[],unsubA=null,notifReady=false;const LN=()=>{try{return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.LocalNotifications}catch(e){return null}};
+async function notifPerm(){const L=LN();if(!L||notifReady)return;try{let p=await L.checkPermissions();if(p.display!=='granted')p=await L.requestPermissions();notifReady=p.display==='granted';
+  L.addListener('localNotificationActionPerformed',a=>{const c=a.notification&&a.notification.extra&&a.notification.extra.code;if(c&&D&&D.villas[c])openVilla(c)})}catch(e){}}
+function villaNo(code){return String(code).split('-')[1]||code}
+function logAct(code,upd){if(!FS||!USER)return;const parts=[];
+  for(const p of [1,2]){const o=upd['p'+p];if(!o)continue;const its=items(code,p);const nOf=k=>{const i=its.find(x=>x.key===k);return i?i.n:''};
+    const have=(SYNCED[code]&&SYNCED[code]['p'+p])||{};
+    for(const id in o.marks||{}){const v=o.marks[id];const old=(have.marks||{})[id];
+      if(v&&v.id&&!old)parts.push(`علّم البند ${nOf(v.key)}`);else if(v&&v.id){if(!(old.uid===USER.uid&&Date.now()-(old.t||0)<180000))parts.push(`عدّل ملاحظة البند ${nOf(v.key)}`)}else parts.push('مسح تعليم')}
+    for(const k in o.extra||{}){if(o.extra[k]&&o.extra[k].key)parts.push('أضاف بند جديد')}
+    for(const k in o.gen||{}){if(typeof o.gen[k]==='string')parts.push(`كتب ملاحظة على البند ${nOf(k)}`)}}
+  if(!parts.length)return;const uniq=[...new Set(parts)];
+  FS.collection('act').add({by:ME,uid:USER.uid,code,txt:uniq.slice(0,3).join('، ')+` — فيلا ${villaNo(code)}`,t:Date.now()}).catch(()=>{})}
+function startAct(){if(unsubA||!FS)return;notifPerm();$('#actB').style.display='';
+  const since=+(lsGet('snag5_actseen')||0);let first=true;
+  unsubA=FS.collection('act').orderBy('t','desc').limit(40).onSnapshot(s=>{ACT=s.docs.map(d=>d.data());
+    const mine=USER&&USER.uid;const fresh=s.docChanges().filter(c=>c.type==='added').map(c=>c.doc.data()).filter(a=>a.uid!==mine);
+    const unseen=ACT.filter(a=>a.uid!==mine&&a.t>+(lsGet('snag5_actseen')||0));const b=$('#actN');b.textContent=unseen.length>9?'9+':unseen.length;b.classList.toggle('on',unseen.length>0);
+    if(first){first=false;if(unseen.length)setTimeout(()=>toast(`🔔 ${unseen.length} تحديث من الفريق وانت مش موجود — دوس 🔔`,4500),3200);return}
+    for(const a of fresh){if(a.t<since)continue;toast('🔔 '+a.by+': '+a.txt,4500);
+      const L=LN();if(L&&notifReady)L.schedule({notifications:[{id:Math.floor(Math.random()*2e9),title:a.by+' — Dhahiat Sumou',body:a.txt,extra:{code:a.code},smallIcon:'ic_stat_notify'}]}).catch(()=>{})}
+  },()=>{})}
+function actPanel(){const mine=USER&&USER.uid;const seen=+(lsGet('snag5_actseen')||0);
+  dlg(`<h3>آخر تحديثات الفريق</h3>`+(ACT.length?ACT.map(a=>`<div class="act ${a.uid!==mine&&a.t>seen?'new':''}" data-c="${esc(a.code)}"><div class="av">${esc((a.by||'?').trim()[0]||'?')}</div><div><p><b>${esc(a.by||'')}</b> ${esc(a.txt||'')}</p><small>${esc(new Date(a.t).toLocaleString('ar-EG',{dateStyle:'short',timeStyle:'short'}))}</small></div></div>`).join(''):'<p class="q">لسه مفيش تحديثات.</p>')+
+   '<div class="row"><span class="sp"></span><button class="btn g" id="aX">إغلاق</button></div>');
+  lsSet('snag5_actseen',String(Date.now()));$('#actN').classList.remove('on');$('#aX').onclick=close;
+  $('#box').querySelectorAll('.act[data-c]').forEach(e=>e.onclick=()=>{const c=e.dataset.c;close();if(D.villas[c])openVilla(c)})}
+$('#actB').onclick=actPanel;
+
 /* ---------- in-app updates ---------- */
 const REPO='mohamednabilwaheeb/-';const BUILD=+(window.APP_BUILD||0),NATIVE=+(window.APP_NATIVE||1);
 const UPD=()=>{try{return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.CapacitorUpdater}catch(e){return null}};
@@ -335,7 +388,7 @@ async function checkUpdate(manual){
   try{const r=await fetch(`https://api.github.com/repos/${REPO}/releases/latest`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const j=await r.json();
     const body=j.body||'';const m=body.match(/\{[^{}]*"build"[^{}]*\}/);const info=m?JSON.parse(m[0]):{build:+(String(j.tag_name).replace(/\D/g,''))||0,native:NATIVE};
     const asset=n=>(j.assets||[]).find(a=>a.name===n);
-    if(info.build>BUILD){NEWREL={...info,notes:body.replace(m?m[0]:'','').trim(),zip:asset('bundle.zip'),apk:asset('SnagBlock5.apk'),page:j.html_url};
+    if(info.build>BUILD){NEWREL={...info,notes:body.replace(m?m[0]:'','').trim(),zip:asset('bundle.zip'),apk:(j.assets||[]).find(a=>/\.apk$/i.test(a.name)),page:j.html_url};
       $('#updT').textContent=`فيه تحديث جديد (نسخة ${info.build})`+(NEWREL.notes?' — '+NEWREL.notes.split('\n')[0].slice(0,60):'');$('#upd').classList.add('on')}
     else if(manual)toast('عندك آخر نسخة ✓ ('+BUILD+')')}
   catch(e){if(manual)toast('مقدرتش أتأكد من التحديثات — اتأكد من النت')}}
@@ -398,7 +451,8 @@ async function bioLogin(){const E=$('#aE');try{await BIO().verifyIdentity({reaso
 async function unlock(){try{await BIO().verifyIdentity({reason:'فتح التطبيق',title:'Dhahiat Sumou – Snag List'});lockPending=false;afterProfile()}catch(e){const E=$('#aE');if(E)E.textContent='البصمة مانجحتش — حاول تاني'}}
 function afterProfile(){if(!USER)return;ME=(PROFILE&&PROFILE.name)||USER.email.split('@')[0];$('#userB').style.display='';
   if(lockPending){showAuth('lock');return}
-  if(isAdmin()||(PROFILE&&PROFILE.approved)){hideAuth();startSync()}
+  lsSet('snag5_name',ME);
+  if(isAdmin()||(PROFILE&&PROFILE.approved)){const wasLocked=$('#auth').classList.contains('on');hideAuth();startSync();startAct();if(wasLocked)toast(greet(),3500)}
   else{stopSync();showAuth(PROFILE&&PROFILE.disabled?'disabled':'pending')}}
 function startFirebase(){
   firebase.initializeApp(CFG);FS=firebase.firestore();try{FS.enablePersistence({synchronizeTabs:false}).catch(()=>{})}catch(e){}
@@ -413,8 +467,8 @@ function userMenu(){const bio=lsGet('snag5_bio')==='1';
   <p class="q"><span class="net ${navigator.onLine?'on':''}"></span>${navigator.onLine?'متصل — التعديلات بتظهر للفريق على طول':'مفيش نت — التعديلات محفوظة وهترتفع لما النت يرجع'}</p>
   <div class="row" style="flex-direction:column">${isAdmin()?'<button class="btn" id="mUsers">👥 إدارة المستخدمين</button>':''}
   <button class="btn g" id="mBio">${bio?'إلغاء الدخول بالبصمة':'تفعيل الدخول بالبصمة'}</button>
-  <button class="btn g" id="mUpd">🔄 البحث عن تحديث</button><button class="btn g" id="mOut">تسجيل خروج</button><button class="btn g" id="mX">إغلاق</button></div><p class="q" style="text-align:center;margin-top:10px">النسخة ${BUILD}</p>`);
-  $('#mUpd').onclick=()=>{close();checkUpdate(true)};
+  <button class="btn g" id="mDua">${lsGet('snag5_dua')==='0'?'تشغيل الأذكار':'إيقاف الأذكار'}</button><button class="btn g" id="mUpd">🔄 البحث عن تحديث</button><button class="btn g" id="mOut">تسجيل خروج</button><button class="btn g" id="mX">إغلاق</button></div><p class="q" style="text-align:center;margin-top:10px">النسخة ${BUILD}</p>`);
+  $('#mUpd').onclick=()=>{close();checkUpdate(true)};$('#mDua').onclick=()=>{lsSet('snag5_dua',lsGet('snag5_dua')==='0'?'1':'0');close();toast(lsGet('snag5_dua')==='0'?'اتوقفت الأذكار':'اتشغلت الأذكار');if(lsGet('snag5_dua')!=='0')showDua()};
   if(isAdmin())$('#mUsers').onclick=usersPanel;
   $('#mBio').onclick=async()=>{if(bio){try{await BIO()&&BIO().deleteCredentials({server:BIO_SRV})}catch(e){}lsSet('snag5_bio',null);toast('اتلغت البصمة');close()}
     else{close();lsSet('snag5_bio_no',null);dlg(`<h3>تفعيل البصمة</h3><p class="q">اكتب كلمة السر مرة واحدة عشان نحفظها بأمان مع البصمة.</p><input type="password" id="bpw" dir="ltr"><div class="row"><button class="btn" id="bOk">تفعيل</button><span class="sp"></span><button class="btn g" id="bX">إلغاء</button></div>`);
@@ -813,7 +867,7 @@ $('#helpB').onclick=welcome;
   }catch(e){document.body.innerHTML='<div class="empty">تعذّر تحميل البيانات</div>';return}
   drawPlan();
   let seen=null;try{seen=localStorage.getItem('snag5_welcomed')}catch(e){}
-  const sp=$('#splash');const hr=new Date().getHours();$('#spH').textContent=(hr<12?'صباح الخير':'مساء الخير')+' 👋 أهلاً بيك';
+  const sp=$('#splash');const hr=new Date().getHours();const nm=(()=>{try{return localStorage.getItem('snag5_name')}catch(e){return null}})();$('#spH').textContent=(hr<12?'صباح الخير':'مساء الخير')+(nm?' يا '+nm.split(' ')[0]:'')+' 👋';
   let gone=false;const hide=()=>{if(gone)return;gone=true;sp.classList.add('out');setTimeout(()=>sp.remove(),500);if(!seen)welcome()};
   sp.onclick=hide;setTimeout(hide,2200);
   const h=location.hash.slice(1);if(h.startsWith('v')&&D.villas[h.slice(1)])openVilla(h.slice(1));

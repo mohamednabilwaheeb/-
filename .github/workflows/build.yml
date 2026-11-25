@@ -26,7 +26,7 @@ jobs:
         run: |
           chmod +x android/gradlew
           cd android && ./gradlew assembleDebug --no-daemon
-      - run: cp android/app/build/outputs/apk/debug/app-debug.apk SnagBlock5.apk
+      - run: cp android/app/build/outputs/apk/debug/app-debug.apk Dhahiat-Sumou-Mecca-TAAM.apk
       - name: Web bundle for in-app updates
         run: |
           cd www && zip -qr ../bundle.zip . && cd ..
@@ -35,12 +35,12 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: SnagBlock5-apk
-          path: SnagBlock5.apk
+          path: Dhahiat-Sumou-Mecca-TAAM.apk
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: build-${{ github.run_number }}
           name: Snag Block 5 - build ${{ github.run_number }}
           body_path: notes.md
           files: |
-            SnagBlock5.apk
+            Dhahiat-Sumou-Mecca-TAAM.apk
             bundle.zip

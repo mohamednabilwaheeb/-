@@ -1,6 +1,6 @@
 {
   "appId": "com.taam.snagblock5",
-  "appName": "Dhahiat Sumou Makkah Block 5",
+  "appName": "Dhahiat Sumou Mecca TAAM",
   "webDir": "www",
   "android": {
     "allowMixedContent": false
@@ -11,6 +11,10 @@
       "statsUrl": "",
       "updateUrl": "",
       "channelUrl": ""
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_notify",
+      "iconColor": "#A91A2C"
     }
   }
 }
