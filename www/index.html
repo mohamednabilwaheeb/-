@@ -99,6 +99,26 @@ button{cursor:pointer;border:0;background:none}
 .empty{padding:30px 16px;text-align:center;color:var(--mute)}
 .busy{position:fixed;inset:0;background:#0009;color:#fff;display:none;place-items:center;z-index:40;font-size:16px;text-align:center}
 .busy.on{display:grid}
+#auth{position:fixed;inset:0;z-index:55;background:#fff url(img/logo_faint.png) center 85%/min(80%,420px) no-repeat;display:none;flex-direction:column;align-items:center;overflow:auto;padding:calc(30px + env(safe-area-inset-top,0px)) 20px 30px}
+#auth.on{display:flex}
+#auth .logo{width:min(200px,52vw);margin:10px 0 6px}
+#auth .en{color:#a91a2c;font-weight:700;font-size:13px;letter-spacing:.4px;margin-bottom:18px}
+.acard{width:min(400px,100%);background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 10px 30px #0000000d;display:flex;flex-direction:column;gap:10px}
+.acard h3{margin:0 0 4px;font-size:19px}
+.acard p{margin:0;color:var(--mute);font-size:14px;line-height:1.7}
+.acard label{font-size:13px;color:var(--mute);margin-top:4px}
+.acard input{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 12px;font-size:16px;background:#fafafb}
+.acard input:focus{outline:2px solid #a91a2c55;border-color:#a91a2c}
+.acard .btn{width:100%;min-height:46px;font-size:15.5px}
+.acard .lnk{color:var(--acc);font-weight:700;font-size:14px;text-align:center;padding:6px}
+.aerr{color:#b00020;font-size:13.5px;min-height:18px}
+.bio{display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid var(--acc)!important;color:var(--acc)!important;background:#fff!important}
+.urow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.urow small{color:var(--mute);display:block}
+.st{font-size:12px;border-radius:6px;padding:1px 7px;font-weight:700}
+.st.ok{background:#0f8a8320;color:#0f8a83}.st.wait{background:#e8a1aa40;color:#a91a2c}
+.net{display:inline-block;width:8px;height:8px;border-radius:50%;background:#9aa0a6;margin-inline-end:4px;vertical-align:middle}
+.net.on{background:#18a957}
 #splash{position:fixed;inset:0;z-index:60;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;transition:opacity .45s}
 #splash.out{opacity:0;pointer-events:none}
 #splash img{width:min(240px,60vw);animation:pop .7s ease-out}
@@ -142,9 +162,10 @@ button{cursor:pointer;border:0;background:none}
 <body>
 <div class="top">
   <button class="ib" id="back" aria-label="رجوع" style="display:none">→</button>
-  <div class="tt"><h1 id="ttl">Dhahiat Sumou – Block 5</h1><small id="sub">Snag List</small></div>
+  <div class="tt"><h1 id="ttl" dir="auto">Dhahiat Sumou – Block 5</h1><small><span class="net" id="netd"></span><span id="sub">Snag List</span></small></div>
   <div class="seg" id="phase"><button data-p="1" class="on">المرحلة 1</button><button data-p="2">المرحلة 2</button></div>
   <button class="ib help" id="helpB" aria-label="شرح الاستخدام">؟</button>
+  <button class="ib help" id="userB" aria-label="حسابي" style="display:none">👤</button>
   <img class="brand" src="img/mark.png" alt="TAAM">
 </div>
 <div class="warn" id="warn"></div>
@@ -179,6 +200,7 @@ button{cursor:pointer;border:0;background:none}
   </div>
 </section>
 
+<div id="auth"><img class="logo" src="img/logo.png" alt="TAAM"><div class="en">DHAHIAT SUMOU – BLOCK 5 · SNAG LIST</div><div class="acard" id="acard"></div></div>
 <div id="splash"><img src="img/logo.png" alt="TAAM"><h2 id="spH">أهلاً بيك</h2><div class="en">DHAHIAT SUMOU – BLOCK 5 · SNAG LIST</div><p>نظام Snag List لفلل بلوك 5 — شركة تام للإنشاء والتعمير</p><div class="bar"><i></i></div></div>
 <div id="wel" role="dialog" aria-label="مرحباً">
   <div class="wtrack" id="wtrack">
@@ -205,6 +227,10 @@ button{cursor:pointer;border:0;background:none}
 <script src="lib/jszip.min.js"></script>
 <script src="lib/exceljs.min.js"></script>
 <script src="lib/jspdf.umd.min.js"></script>
+<script src="lib/firebase-app-compat.js"></script>
+<script src="lib/firebase-auth-compat.js"></script>
+<script src="lib/firebase-firestore-compat.js"></script>
+<script src="config.js"></script>
 <script>
 {
 const $=s=>document.querySelector(s);
@@ -229,6 +255,7 @@ function save(code){
   saving[code]=setTimeout(async()=>{
     const body=JSON.parse(JSON.stringify(REC[code]));
     try{
+      if(mode==='fs'){pushDoc(code);delete dirty[code];return}
       if(!IDB)return; await idb('recs','readwrite',st=>st.put(body,code));
       if(JSON.stringify(REC[code])===JSON.stringify(body))delete dirty[code];
     }catch(e){ toast('تعذّر الحفظ: '+(e&&e.code||'')+' — هيتحاول تاني'); setTimeout(()=>save(code),3000); }
@@ -241,11 +268,143 @@ let IDB=null;const PURL={};
 function openIDB(){return new Promise((ok,no)=>{const r=indexedDB.open('snagblock5',1);r.onupgradeneeded=()=>{r.result.createObjectStore('recs');r.result.createObjectStore('photos')};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
 function idb(store,mode,fn){return new Promise((ok,no)=>{const tx=IDB.transaction(store,mode);const st=tx.objectStore(store);const q=fn(st);tx.oncomplete=()=>ok(q&&q.result);tx.onerror=()=>no(tx.error)})}
 function idbAll(store){return new Promise((ok,no)=>{const out={};const tx=IDB.transaction(store);const c=tx.objectStore(store).openCursor();c.onsuccess=()=>{const cur=c.result;if(cur){out[cur.key]=cur.value;cur.continue()}else ok(out)};c.onerror=()=>no(c.error)})}
+/* ---------- online: Firebase auth + shared data ---------- */
+const CFG=window.FIREBASE_CONFIG||null;const DOMAIN='dhahiat-sumou.app',ADMIN='haithamfawzy',BIO_SRV='dhahiat-sumou.snag';
+let FS=null,AUTH=null,USER=null,PROFILE=null,unsubV=null,unsubU=null,ME='',lockPending=false,LOCALREC={};const SYNCED={};
+const BIO=()=>{try{return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.NativeBiometric}catch(e){return null}};
+const mail=u=>u.trim().toLowerCase()+'@'+DOMAIN;
+const isAdmin=()=>!!(USER&&USER.email===mail(ADMIN));
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}};
+function canon(o){if(Array.isArray(o))return '['+o.map(canon).join(',')+']';if(o&&typeof o==='object')return '{'+Object.keys(o).sort().filter(k=>o[k]!==undefined).map(k=>JSON.stringify(k)+':'+canon(o[k])).join(',')+'}';return JSON.stringify(o)}
+function toLocal(d){d=JSON.parse(JSON.stringify(d));const r=blank();r.mirror=!!d.mirror;for(const p of [1,2]){const q=d['p'+p]||{};
+  r.p[p].marks=Object.values(q.marks||{}).sort((a,b)=>(a.t||0)-(b.t||0));r.p[p].extra=Object.values(q.extra||{}).sort((a,b)=>(a.t||0)-(b.t||0));r.p[p].gen={...(q.gen||{})}}return r}
+function diffDoc(want,have){const FV=firebase.firestore.FieldValue;const upd={};have=have||{};
+  if(!!want.mirror!==!!have.mirror)upd.mirror=!!want.mirror;
+  for(const p of [1,2]){const P='p'+p,hp=have[P]||{},o={};
+    const wm=Object.fromEntries(want.p[p].marks.map(m=>[m.id,m])),hm=hp.marks||{};
+    for(const id in wm){if(canon(wm[id])!==canon(hm[id])){if(hm[id]){wm[id].ub=ME;wm[id].ut=Date.now()}(o.marks||(o.marks={}))[id]=JSON.parse(JSON.stringify(wm[id]))}}
+    for(const id in hm)if(!wm[id])(o.marks||(o.marks={}))[id]=FV.delete();
+    const we=Object.fromEntries(want.p[p].extra.map(x=>[x.key,x])),he=hp.extra||{};
+    for(const k in we)if(canon(we[k])!==canon(he[k]))(o.extra||(o.extra={}))[k]=JSON.parse(JSON.stringify(we[k]));
+    for(const k in he)if(!we[k])(o.extra||(o.extra={}))[k]=FV.delete();
+    const wg=want.p[p].gen||{},hg=hp.gen||{};
+    for(const k in wg)if(wg[k]!==hg[k])(o.gen||(o.gen={}))[k]=wg[k];
+    for(const k in hg)if(!(k in wg))(o.gen||(o.gen={}))[k]=FV.delete();
+    if(Object.keys(o).length)upd[P]=o}
+  return upd}
+function pushDoc(code){const upd=diffDoc(REC[code],SYNCED[code]);if(!Object.keys(upd).length)return;
+  upd.lu=ME;upd.lt=Date.now();
+  FS.collection('v').doc(code).set(upd,{merge:true}).catch(e=>toast('تعذّر الرفع: '+(e.code||e.message),4000))}
+function netDot(){const n=$('#netd');if(n)n.classList.toggle('on',navigator.onLine)}
+window.addEventListener('online',netDot);window.addEventListener('offline',netDot);
+function startSync(){if(unsubV)return;mode='fs';
+  unsubV=FS.collection('v').onSnapshot(s=>{s.docChanges().forEach(ch=>{const id=ch.doc.id;
+      if(ch.type==='removed'){delete SYNCED[id];if(!dirty[id])delete REC[id]}else{SYNCED[id]=ch.doc.data();if(!dirty[id])REC[id]=toLocal(SYNCED[id])}});
+    setWarn('');if(!pending)refresh();migrate()},e=>setWarn('مشكلة في الاتصال بالسيرفر: '+(e.code||'')));}
+function stopSync(){if(unsubV){unsubV();unsubV=null}for(const k in REC)delete REC[k];for(const k in SYNCED)delete SYNCED[k];refresh()}
+let migrating=false;
+async function migrate(){if(migrating||lsGet('snag5_migrated'))return;migrating=true;
+  try{const codes=Object.keys(LOCALREC);for(const code of codes){const L=LOCALREC[code];const R=rec(code);
+      for(const p of [1,2]){const lp=L.p&&L.p[p];if(!lp)continue;
+        for(const m of lp.marks||[]){if(!R.p[p].marks.find(x=>x.id===m.id)){m.by=m.by||ME;R.p[p].marks.push(m);
+          for(const pid of m.photos||[]){try{const b=await idb('photos','readonly',st=>st.get(pid));if(b)await FS.collection('ph').doc(pid).set({d:await blobUrl(b),code,by:ME,t:Date.now()})}catch(e){}}}}
+        for(const x of lp.extra||[])if(!R.p[p].extra.find(y=>y.key===x.key))R.p[p].extra.push(x);
+        for(const k in lp.gen||{})if(!(k in R.p[p].gen))R.p[p].gen[k]=lp.gen[k]}
+      if(L.mirror&&!R.mirror)R.mirror=true;pushDoc(code)}
+    lsSet('snag5_migrated','1');if(codes.length)toast('اتنقلت بياناتك القديمة للسيرفر ✓')}finally{migrating=false}}
+function blobUrl(b){return new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(b)})}
+async function loadPhoto(id){if(PURL[id]||!id||id.startsWith('data:'))return PURL[id];
+  try{const b=await idb('photos','readonly',st=>st.get(id));if(b){PURL[id]=URL.createObjectURL(b);return PURL[id]}}catch(e){}
+  if(!FS)return '';try{const d=await FS.collection('ph').doc(id).get();if(!d.exists)return '';const b=await (await fetch(d.data().d)).blob();
+    try{await idb('photos','readwrite',st=>st.put(b,id))}catch(e){}PURL[id]=URL.createObjectURL(b);return PURL[id]}catch(e){return ''}}
+function fillImgs(root){root.querySelectorAll('img[data-pid]').forEach(async im=>{if(!im.getAttribute('src')){const u=await loadPhoto(im.dataset.pid);if(u)im.src=u}})}
+
+/* auth screens */
+function showAuth(kind,msg){$('#auth').classList.add('on');const c=$('#acard');const hasBio=lsGet('snag5_bio')==='1'&&BIO();
+  if(kind==='loading'){c.innerHTML='<h3>جاري التحميل…</h3><p>بنجهّز حسابك.</p>';return}
+  if(kind==='login'){c.innerHTML=`<h3>تسجيل الدخول</h3><p>ادخل باسم المستخدم وكلمة السر بتوعك.</p>
+    <label for="aU">اسم المستخدم</label><input id="aU" autocomplete="username" autocapitalize="none" spellcheck="false" dir="ltr" value="${esc(lsGet('snag5_lastuser')||'')}">
+    <label for="aP">كلمة السر</label><input id="aP" type="password" autocomplete="current-password" dir="ltr">
+    <div class="aerr" id="aE">${esc(msg||'')}</div><button class="btn" id="aGo">دخول</button>
+    ${hasBio?'<button class="btn g bio" id="aBio">☝️ دخول بالبصمة</button>':''}
+    <button class="lnk" id="aReg">معندكش حساب؟ اعمل حساب جديد</button>`;
+    $('#aGo').onclick=doLogin;$('#aP').onkeydown=e=>{if(e.key==='Enter')doLogin()};$('#aReg').onclick=()=>showAuth('register');
+    if(hasBio){$('#aBio').onclick=bioLogin}return}
+  if(kind==='register'){c.innerHTML=`<h3>حساب جديد</h3><p>بعد ما تعمل الحساب، المدير م. هيثم فوزي لازم يوافق عليه قبل ما تقدر تستخدم التطبيق.</p>
+    <label for="rN">الاسم بالكامل</label><input id="rN" autocomplete="name">
+    <label for="rU">اسم المستخدم (حروف إنجليزي وأرقام)</label><input id="rU" autocapitalize="none" spellcheck="false" dir="ltr" placeholder="ahmedali">
+    <label for="rP">كلمة السر (6 حروف أو أكتر)</label><input id="rP" type="password" autocomplete="new-password" dir="ltr">
+    <label for="rP2">تأكيد كلمة السر</label><input id="rP2" type="password" autocomplete="new-password" dir="ltr">
+    <div class="aerr" id="aE"></div><button class="btn" id="rGo">إنشاء الحساب</button><button class="lnk" id="aBack">عندي حساب — دخول</button>`;
+    $('#rGo').onclick=doRegister;$('#aBack').onclick=()=>showAuth('login');return}
+  if(kind==='pending'){c.innerHTML=`<h3>حسابك مستني الموافقة ⏳</h3><p>أهلاً ${esc(ME)}. حسابك اتعمل، وهيتفتح أول ما المدير م. هيثم فوزي يوافق عليه. هيفتح لوحده هنا أول ما الموافقة توصل.</p>
+    <button class="btn g" id="aOut">تسجيل خروج</button>`;$('#aOut').onclick=()=>AUTH.signOut();return}
+  if(kind==='disabled'){c.innerHTML=`<h3>الحساب موقوف</h3><p>الحساب ده اتوقف من المدير. كلّم م. هيثم فوزي.</p><button class="btn g" id="aOut">تسجيل خروج</button>`;$('#aOut').onclick=()=>AUTH.signOut();return}
+  if(kind==='lock'){c.innerHTML=`<h3>أهلاً ${esc(ME||'')} 👋</h3><p>استخدم البصمة عشان تفتح التطبيق.</p>
+    <button class="btn bio" id="lBio">☝️ افتح بالبصمة</button><div class="aerr" id="aE">${esc(msg||'')}</div><button class="lnk" id="lPw">ادخل بكلمة السر بدل البصمة</button>`;
+    $('#lBio').onclick=unlock;$('#lPw').onclick=()=>{lockPending=false;AUTH.signOut()};return}}
+function hideAuth(){$('#auth').classList.remove('on')}
+function authErr(e){const c=e&&e.code||'';return c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found')?'اسم المستخدم أو كلمة السر غلط':
+  c.includes('email-already-in-use')?'اسم المستخدم ده مستخدم قبل كده — اختار اسم تاني':c.includes('weak-password')?'كلمة السر لازم تكون 6 حروف أو أكتر':
+  c.includes('network')?'مفيش نت — اتأكد من الاتصال وحاول تاني':c.includes('too-many')?'محاولات كتير — استنى شوية وحاول تاني':'حصلت مشكلة: '+c}
+async function doLogin(){const u=$('#aU').value.trim(),p=$('#aP').value;if(!u||!p){$('#aE').textContent='اكتب اسم المستخدم وكلمة السر';return}
+  $('#aGo').disabled=true;try{await AUTH.signInWithEmailAndPassword(mail(u),p);lsSet('snag5_lastuser',u);offerBio(u,p)}catch(e){$('#aE').textContent=authErr(e);$('#aGo').disabled=false}}
+async function doRegister(){const n=$('#rN').value.trim(),u=$('#rU').value.trim().toLowerCase(),p=$('#rP').value,p2=$('#rP2').value;const E=$('#aE');
+  if(n.length<3){E.textContent='اكتب اسمك بالكامل';return}if(!/^[a-z0-9._-]{3,24}$/.test(u)){E.textContent='اسم المستخدم: حروف إنجليزي صغيرة وأرقام بس، من 3 لـ 24 حرف';return}
+  if(p.length<6){E.textContent='كلمة السر لازم تكون 6 حروف أو أكتر';return}if(p!==p2){E.textContent='كلمتين السر مش زي بعض';return}
+  $('#rGo').disabled=true;try{const cr=await AUTH.createUserWithEmailAndPassword(mail(u),p);
+    await FS.collection('users').doc(cr.user.uid).set({name:n,username:u,approved:false,t:Date.now()});lsSet('snag5_lastuser',u);offerBio(u,p)}
+  catch(e){E.textContent=authErr(e);$('#rGo').disabled=false}}
+async function bioOK(){const B=BIO();if(!B)return false;try{const r=await B.isAvailable();return !!(r&&r.isAvailable)}catch(e){return false}}
+async function offerBio(u,p){if(lsGet('snag5_bio')==='1'||lsGet('snag5_bio_no')===u||!(await bioOK()))return;
+  setTimeout(()=>{dlg(`<h3>الدخول بالبصمة ☝️</h3><p class="q">تحب تفتح التطبيق بالبصمة بعد كده بدل ما تكتب كلمة السر؟</p>
+    <div class="row"><button class="btn" id="bY">فعّل البصمة</button><span class="sp"></span><button class="btn g" id="bN">مش دلوقتي</button></div>`);
+    $('#bY').onclick=async()=>{try{await BIO().verifyIdentity({reason:'تفعيل الدخول بالبصمة',title:'تفعيل البصمة'});await BIO().setCredentials({username:u,password:p,server:BIO_SRV});lsSet('snag5_bio','1');toast('اتفعّلت البصمة ✓')}catch(e){toast('متفعّلتش البصمة')}close()};
+    $('#bN').onclick=()=>{lsSet('snag5_bio_no',u);close()}},800)}
+async function bioLogin(){const E=$('#aE');try{await BIO().verifyIdentity({reason:'تسجيل الدخول',title:'Dhahiat Sumou – Snag List'});
+  const c=await BIO().getCredentials({server:BIO_SRV});await AUTH.signInWithEmailAndPassword(mail(c.username),c.password)}catch(e){E.textContent=e&&e.code&&e.code.startsWith('auth/')?authErr(e):'البصمة مانجحتش — حاول تاني أو استخدم كلمة السر'}}
+async function unlock(){try{await BIO().verifyIdentity({reason:'فتح التطبيق',title:'Dhahiat Sumou – Snag List'});lockPending=false;afterProfile()}catch(e){const E=$('#aE');if(E)E.textContent='البصمة مانجحتش — حاول تاني'}}
+function afterProfile(){if(!USER)return;ME=(PROFILE&&PROFILE.name)||USER.email.split('@')[0];$('#userB').style.display='';
+  if(lockPending){showAuth('lock');return}
+  if(isAdmin()||(PROFILE&&PROFILE.approved)){hideAuth();startSync()}
+  else{stopSync();showAuth(PROFILE&&PROFILE.disabled?'disabled':'pending')}}
+function startFirebase(){
+  firebase.initializeApp(CFG);FS=firebase.firestore();try{FS.enablePersistence({synchronizeTabs:false}).catch(()=>{})}catch(e){}
+  AUTH=firebase.auth();showAuth('loading');let first=true;
+  AUTH.onAuthStateChanged(u=>{USER=u;if(unsubU){unsubU();unsubU=null}
+    if(!u){PROFILE=null;ME='';$('#userB').style.display='none';stopSync();showAuth('login');first=false;return}
+    if(first&&lsGet('snag5_bio')==='1'&&BIO())lockPending=true;first=false;
+    unsubU=FS.collection('users').doc(u.uid).onSnapshot(s=>{PROFILE=s.exists?s.data():null;afterProfile()},e=>{PROFILE=null;afterProfile()})});
+}
+function userMenu(){const bio=lsGet('snag5_bio')==='1';
+  dlg(`<h3>${esc(ME)}</h3><p class="q" dir="ltr" style="text-align:right">${esc(USER?USER.email.split('@')[0]:'')} ${isAdmin()?'· مدير':''}</p>
+  <p class="q"><span class="net ${navigator.onLine?'on':''}"></span>${navigator.onLine?'متصل — التعديلات بتظهر للفريق على طول':'مفيش نت — التعديلات محفوظة وهترتفع لما النت يرجع'}</p>
+  <div class="row" style="flex-direction:column">${isAdmin()?'<button class="btn" id="mUsers">👥 إدارة المستخدمين</button>':''}
+  <button class="btn g" id="mBio">${bio?'إلغاء الدخول بالبصمة':'تفعيل الدخول بالبصمة'}</button>
+  <button class="btn g" id="mOut">تسجيل خروج</button><button class="btn g" id="mX">إغلاق</button></div>`);
+  if(isAdmin())$('#mUsers').onclick=usersPanel;
+  $('#mBio').onclick=async()=>{if(bio){try{await BIO()&&BIO().deleteCredentials({server:BIO_SRV})}catch(e){}lsSet('snag5_bio',null);toast('اتلغت البصمة');close()}
+    else{close();lsSet('snag5_bio_no',null);dlg(`<h3>تفعيل البصمة</h3><p class="q">اكتب كلمة السر مرة واحدة عشان نحفظها بأمان مع البصمة.</p><input type="password" id="bpw" dir="ltr"><div class="row"><button class="btn" id="bOk">تفعيل</button><span class="sp"></span><button class="btn g" id="bX">إلغاء</button></div>`);
+      $('#bX').onclick=close;$('#bOk').onclick=async()=>{const pw=$('#bpw').value;const u=USER.email.split('@')[0];
+        try{await AUTH.signInWithEmailAndPassword(USER.email,pw);if(!(await bioOK())){toast('الموبايل ده مفيهوش بصمة');close();return}
+          await BIO().verifyIdentity({reason:'تفعيل الدخول بالبصمة',title:'تفعيل البصمة'});await BIO().setCredentials({username:u,password:pw,server:BIO_SRV});lsSet('snag5_bio','1');toast('اتفعّلت البصمة ✓');close()}
+        catch(e){toast(e&&e.code&&e.code.startsWith('auth/')?authErr(e):'متفعّلتش البصمة',3500)}}}};
+  $('#mOut').onclick=()=>{close();lockPending=false;AUTH.signOut()};$('#mX').onclick=close}
+async function usersPanel(){dlg('<h3>إدارة المستخدمين</h3><p class="q">جاري التحميل…</p>');
+  try{const s=await FS.collection('users').get();const rows=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.approved===b.approved?0:a.approved?1:-1)||(b.t||0)-(a.t||0));
+    $('#box').innerHTML=`<h3>إدارة المستخدمين (${rows.length})</h3><p class="q">وافق على حسابات الفريق أو وقّفها.</p>`+rows.map(r=>`<div class="urow"><div><b>${esc(r.name||'')}</b> ${r.username===ADMIN?'':`<span class="st ${r.approved?'ok':'wait'}">${r.approved?'مفعّل':(r.disabled?'موقوف':'مستني موافقة')}</span>`}<small dir="ltr" style="text-align:right">${esc(r.username||'')}</small></div>
+      <div>${r.username===ADMIN?'<span class="st ok">المدير</span>':r.approved?`<button class="btn g" data-off="${esc(r.id)}">إيقاف</button>`:`<button class="btn" data-on="${esc(r.id)}">موافقة</button>`}</div></div>`).join('')+'<div class="row"><span class="sp"></span><button class="btn g" id="uX">إغلاق</button></div>';
+    $('#uX').onclick=close;
+    $('#box').querySelectorAll('[data-on],[data-off]').forEach(b=>b.onclick=async()=>{b.disabled=true;const on=!!b.dataset.on;
+      try{await FS.collection('users').doc(b.dataset.on||b.dataset.off).update({approved:on,disabled:!on,by:ME,at:Date.now()});usersPanel()}catch(e){toast('تعذّر التعديل: '+(e.code||''));b.disabled=false}})}
+  catch(e){$('#box').innerHTML='<h3>إدارة المستخدمين</h3><p class="q">تعذّر التحميل: '+esc(e.code||e.message)+'</p>'}}
+$('#userB').onclick=userMenu;
+
 async function initCaps(){
   try{IDB=await openIDB();if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
-    Object.assign(REC,await idbAll('recs'));const ph=await idbAll('photos');for(const[k,b] of Object.entries(ph))PURL[k]=URL.createObjectURL(b);
-    mode='idb';refresh();
-  }catch(e){setWarn('مشكلة في الحفظ على الموبايل: '+e)}
+    LOCALREC=await idbAll('recs');const ph=await idbAll('photos');for(const[k,b] of Object.entries(ph))PURL[k]=URL.createObjectURL(b);
+    if(CFG&&window.firebase){startFirebase()}else{Object.assign(REC,LOCALREC);mode='idb';refresh()}
+  }catch(e){setWarn('مشكلة في الحفظ على الموبايل: '+e);if(CFG&&window.firebase&&!FS)startFirebase()}
   downloads={save:nativeSave};
 }
 async function nativeSave({filename,data}){
@@ -377,7 +536,7 @@ function onDrawTap(X,Y,e,t){
   const [x,y]=unrot(X,Y,W,H);
   if(x<0||y<0||x>W||y>H)return;
   const ox=mirror?W-x:x;
-  const m={id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),key:pending,floor,x:Math.round(ox),y:Math.round(y),note:'',photos:[],t:Date.now()};
+  const m={id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),key:pending,floor,x:Math.round(ox),y:Math.round(y),note:'',photos:[],t:Date.now(),by:ME||undefined};
   rec(cur).p[phase].marks.push(m);pending=null;showHint();save(cur);drawMarks();renderList();openMark(m.id,true);
 }
 function showHint(){const h=$('#hint');if(pending){const it=items(cur,phase).find(i=>i.key===pending);$('#hintT').textContent=`اضغط على مكان البند رقم ${it?it.n:''} في اللوحة`;h.classList.add('on')}else h.classList.remove('on')}
@@ -394,7 +553,7 @@ function renderList(){
       (it.shared?'<span class="tag sh">مشترك بين المرحلتين</span>':'')+(it.isNew?'<span class="tag new">بند جديد</span>':'')+
       (ms.length?`<span class="tag cnt">${ms.length} مكان</span>`:'')+`</div>`;
     if(ms.length||g){h+='<div class="notes">'+(g?`<div class="note">ملاحظة عامة: ${esc(g)} <button data-gen="${esc(it.key)}">تعديل</button></div>`:'')+
-      ms.map(m=>`<div class="note">${esc(FLs[m.floor]||'')}: ${esc(m.note||'بدون وصف')}${m.photos&&m.photos.length?' 📷'+m.photos.length:''} <button data-open="${esc(m.id)}">فتح</button></div>`).join('')+'</div>'}
+      ms.map(m=>`<div class="note">${esc(FLs[m.floor]||'')}: ${esc(m.note||'بدون وصف')}${m.photos&&m.photos.length?' 📷'+m.photos.length:''}${m.by?' <small style="color:var(--mute)">— '+esc(m.ub&&m.ub!==m.by?m.by+' / '+m.ub:m.by)+'</small>':''} <button data-open="${esc(m.id)}">فتح</button></div>`).join('')+'</div>'}
     h+=`</div><div class="acts"><button class="pin" data-pin="${esc(it.key)}">📍 حدد مكانه</button><button data-gen="${esc(it.key)}">✎ ملاحظة</button>${it.isNew?`<button data-del="${esc(it.key)}">حذف</button>`:''}</div></div>`;
   }
   $('#list').innerHTML=h;
@@ -415,7 +574,7 @@ function openMark(id,isNew){
     <div class="row"><label class="file">📷 صورة<input type="file" id="mFile" accept="image/*" capture="environment"></label>
     <label class="file">🖼 من المعرض<input type="file" id="mFile2" accept="image/*" multiple></label></div>
     <div class="row"><button class="btn" id="mOk">حفظ</button><button class="btn g" id="mDel">حذف المكان</button><span class="sp"></span><button class="btn g" id="mX">إغلاق</button></div>`);
-  const ph=()=>{$('#mPh').innerHTML=(m.photos||[]).map((p,i)=>`<div><img src="${esc(photoUrl(p))}" alt=""><button data-i="${i}">×</button></div>`).join('')};ph();
+  const ph=()=>{$('#mPh').innerHTML=(m.photos||[]).map((p,i)=>`<div><img data-pid="${esc(p)}" src="${esc(photoUrl(p))}" alt=""><button data-i="${i}">×</button></div>`).join('');fillImgs($('#mPh'))};ph();
   $('#mPh').onclick=e=>{const b=e.target.closest('button');if(b){m.photos.splice(+b.dataset.i,1);ph();save(cur);renderList()}};
   const add=async e=>{for(const f of e.target.files){try{busy('جاري رفع الصورة…');const id=await storePhoto(f);m.photos.push(id);ph();save(cur);renderList()}catch(err){toast('تعذّر حفظ الصورة')}finally{busy()}}e.target.value=''};
   $('#mFile').onchange=add;$('#mFile2').onchange=add;
@@ -431,8 +590,10 @@ async function shrink(file,max=1600,q=0.82){
   return await new Promise(r=>c.toBlob(r,'image/jpeg',q));
 }
 async function storePhoto(file){
-  const b=await shrink(file);const id='p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-  await idb('photos','readwrite',st=>st.put(b,id));PURL[id]=URL.createObjectURL(b);return id;
+  const b=await shrink(file,1280,0.75);const id='p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  try{await idb('photos','readwrite',st=>st.put(b,id))}catch(e){}PURL[id]=URL.createObjectURL(b);
+  if(mode==='fs')FS.collection('ph').doc(id).set({d:await blobUrl(b),code:cur,by:ME,t:Date.now()}).catch(e=>toast('تعذّر رفع الصورة: '+(e.code||'')));
+  return id;
 }
 function editGen(key){
   const it=items(cur,phase).find(i=>i.key===key);const g=rec(cur).p[phase].gen||(rec(cur).p[phase].gen={});
@@ -446,7 +607,7 @@ function addItem(){
   <div style="height:8px"></div><textarea id="nT" placeholder="وصف البند…"></textarea>
   <div class="row"><button class="btn" id="nOk">إضافة</button><span class="sp"></span><button class="btn g" id="nX">إلغاء</button></div>`);
   $('#nOk').onclick=()=>{const t=$('#nT').value.trim();if(!t){toast('اكتب وصف البند');return}
-    rec(cur).p[phase].extra.push({key:'n'+Date.now().toString(36),text:t,spec:$('#nS').value});save(cur);close();renderList();
+    rec(cur).p[phase].extra.push({key:'n'+Date.now().toString(36),text:t,spec:$('#nS').value,by:ME||undefined,t:Date.now()});save(cur);close();renderList();
     $('#list').scrollTop=1e6};$('#nX').onclick=close;
 }
 
@@ -510,7 +671,7 @@ async function sheetCanvas(code,p,f,fc){
 }
 function c2b(c,type='image/png',q){return new Promise(r=>c.toBlob(r,type,q))}
 async function b64(blob){return await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result.split(',')[1]);f.readAsDataURL(blob)})}
-async function photoB64(p){if(p.startsWith('data:'))return p.split(',')[1];const b=await (await fetch(photoUrl(p))).blob();return await b64(b)}
+async function photoB64(p){if(p.startsWith('data:'))return p.split(',')[1];const u=await loadPhoto(p);const b=await (await fetch(u)).blob();return await b64(b)}
 
 async function buildExport(code,p){
   await document.fonts.load('700 40px Cairo');await document.fonts.load('400 40px Cairo');
@@ -541,7 +702,7 @@ async function buildExport(code,p){
   for(const it of its){
     const ms=marks.filter(m=>m.key===it.key);
     const notes=[];if(gen[it.key])notes.push('عام: '+gen[it.key]);
-    ms.forEach((m,j)=>notes.push(`(${j+1}) ${FLs[m.floor]||''}: ${m.note||'بدون وصف'}`));
+    ms.forEach((m,j)=>notes.push(`(${j+1}) ${FLs[m.floor]||''}: ${m.note||'بدون وصف'}${m.by?' — '+m.by:''}`));
     const fl=[...new Set(ms.map(m=>FLs[m.floor]))].join(' / ');
     const ph=ms.reduce((a,m)=>a+(m.photos?m.photos.length:0),0);
     const row=ws.getRow(rn);const has=notes.length>0;const fill=has?'FFFFF1EC':undefined;
