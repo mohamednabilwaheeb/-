@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#a91a2c"><link rel="icon" href="img/icon-192.png"><link rel="apple-touch-icon" href="img/icon-192.png">
 <title>Snag List – Dhahiat Sumou Block 5</title>
 <style>
 @font-face{font-family:Cairo;font-weight:400 600;src:url(lib/cairo-arabic-400.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+200C-200F,U+FB50-FDFF,U+FE70-FEFF}
@@ -352,7 +353,7 @@ setTimeout(showDua,25000);setInterval(showDua,6*60*1000);
 
 /* ---------- activity feed + notifications ---------- */
 let ACT=[],unsubA=null,notifReady=false;const LN=()=>{try{return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.LocalNotifications}catch(e){return null}};
-async function notifPerm(){const L=LN();if(!L||notifReady)return;try{let p=await L.checkPermissions();if(p.display!=='granted')p=await L.requestPermissions();notifReady=p.display==='granted';
+async function notifPerm(){const L=LN();if(!L){try{if(!NATIVE_APP&&'Notification' in window&&Notification.permission==='default')await Notification.requestPermission()}catch(e){}return}if(notifReady)return;try{let p=await L.checkPermissions();if(p.display!=='granted')p=await L.requestPermissions();notifReady=p.display==='granted';
   L.addListener('localNotificationActionPerformed',a=>{const c=a.notification&&a.notification.extra&&a.notification.extra.code;if(c&&D&&D.villas[c])openVilla(c)})}catch(e){}}
 function villaNo(code){return String(code).split('-')[1]||code}
 function logAct(code,upd){if(!FS||!USER)return;const parts=[];
@@ -371,6 +372,7 @@ function startAct(){if(unsubA||!FS)return;notifPerm();$('#actB').style.display='
     const unseen=ACT.filter(a=>a.uid!==mine&&a.t>+(lsGet('snag5_actseen')||0));const b=$('#actN');b.textContent=unseen.length>9?'9+':unseen.length;b.classList.toggle('on',unseen.length>0);
     if(first){first=false;if(unseen.length)setTimeout(()=>toast(`🔔 ${unseen.length} تحديث من الفريق وانت مش موجود — دوس 🔔`,4500),3200);return}
     for(const a of fresh){if(a.t<since)continue;toast('🔔 '+a.by+': '+a.txt,4500);
+      try{if(!LN()&&'Notification' in window&&Notification.permission==='granted'&&document.hidden){const n=new Notification(a.by+' — Dhahiat Sumou',{body:a.txt,icon:'img/icon-192.png'});n.onclick=()=>{window.focus();if(D.villas[a.code])openVilla(a.code)}}}catch(e){}
       const L=LN();if(L&&notifReady)L.schedule({notifications:[{id:Math.floor(Math.random()*2e9),title:a.by+' — Dhahiat Sumou',body:a.txt,extra:{code:a.code},smallIcon:'ic_stat_notify'}]}).catch(()=>{})}
   },()=>{})}
 function actPanel(){const mine=USER&&USER.uid;const seen=+(lsGet('snag5_actseen')||0);
@@ -392,7 +394,9 @@ async function checkUpdate(manual){
       $('#updT').textContent=`فيه تحديث جديد (نسخة ${info.build})`+(NEWREL.notes?' — '+NEWREL.notes.split('\n')[0].slice(0,60):'');$('#upd').classList.add('on')}
     else if(manual)toast('عندك آخر نسخة ✓ ('+BUILD+')')}
   catch(e){if(manual)toast('مقدرتش أتأكد من التحديثات — اتأكد من النت')}}
+const NATIVE_APP=!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());
 async function applyUpdate(){const R=NEWREL;if(!R)return;const U=UPD();
+  if(!NATIVE_APP){busy('جاري التحديث…');try{const rs=await caches.keys();await Promise.all(rs.map(k=>caches.delete(k)))}catch(e){}location.replace(location.pathname+'?v='+R.build);return}
   const needApk=R.native>NATIVE||!U||!R.zip;
   if(needApk){const url=R.apk?R.apk.browser_download_url:R.page;
     dlg(`<h3>تحديث كامل للتطبيق</h3><p class="q">التحديث ده محتاج تنزّل نسخة جديدة من التطبيق وتسطّبها فوق القديمة (بياناتك مش هتضيع).</p>
@@ -860,6 +864,8 @@ function welcome(){const w=$('#wel'),tr=$('#wtrack'),n=tr.children.length;
   $('#wNext').onclick=()=>{const i=idx();if(i>=n-1)done();else tr.children[i+1].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})};
   $('#wSkip').onclick=done;}
 $('#helpB').onclick=welcome;
+/* ---------- web app install ---------- */
+try{if(!NATIVE_APP&&'serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js')}catch(e){}
 /* ---------- start ---------- */
 (async()=>{
   try{
