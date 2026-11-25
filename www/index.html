@@ -78,7 +78,7 @@ button{cursor:pointer;border:0;background:none}
 .search input{flex:1;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:16px;background:var(--bg)}
 .legend{font-size:12.5px;color:var(--mute);display:flex;gap:10px;align-items:center;white-space:nowrap}
 .legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:middle;margin-inline-end:4px}
-.dlg{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:20}
+.dlg{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:48}
 .dlg.on{display:flex}
 .box{background:var(--card);width:min(560px,100%);border-radius:18px 18px 0 0;padding:16px;max-height:92vh;overflow:auto}
 .box h3{margin:0 0 6px;font-size:17px}
@@ -92,14 +92,14 @@ button{cursor:pointer;border:0;background:none}
 .ph button{position:absolute;top:-6px;left:-6px;width:24px;height:24px;border-radius:50%;background:var(--acc);color:#fff;font-size:14px}
 .file{display:inline-flex;align-items:center;gap:6px;border:1px dashed var(--mute);border-radius:10px;padding:8px 12px;font-size:14px;cursor:pointer}
 .file input{display:none}
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#2b2b30;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:30;display:none;max-width:92vw;text-align:center}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#2b2b30;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:58;display:none;max-width:92vw;text-align:center}
 .toast.on{display:block}
-.warn{background:#fff4d6;color:#6b4a00;font-size:13px;padding:6px 12px;display:none}
+.warn{background:#fff4d6;color:#6b4a00;font-size:13px;padding:8px 12px;display:none;position:fixed;inset-inline:10px;bottom:calc(70px + env(safe-area-inset-bottom,0px));border-radius:12px;z-index:44;box-shadow:0 6px 18px #0002}
 .warn.on{display:block}
 .empty{padding:30px 16px;text-align:center;color:var(--mute)}
-.busy{position:fixed;inset:0;background:#0009;color:#fff;display:none;place-items:center;z-index:40;font-size:16px;text-align:center}
+.busy{position:fixed;inset:0;background:#0009;color:#fff;display:none;place-items:center;z-index:49;font-size:16px;text-align:center}
 .busy.on{display:grid}
-.upd{display:none;align-items:center;gap:8px;background:#0f8a83;color:#fff;padding:8px 12px;font-size:14px;position:relative;z-index:6}
+.upd{display:none;align-items:center;gap:8px;background:#0f8a83;color:#fff;padding:10px 12px;font-size:14px;position:fixed;inset-inline:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));border-radius:14px;box-shadow:0 8px 24px #0004;z-index:45}
 .upd.on{display:flex}.upd span{flex:1}.upd #updB{background:#fff;color:#0f8a83;font-weight:700;border-radius:9px;padding:5px 14px}.upd #updX{color:#fff;font-size:20px;padding:0 4px}
 #auth{position:fixed;inset:0;z-index:55;background:#fff url(img/logo_faint.png) center 85%/min(80%,420px) no-repeat;display:none;flex-direction:column;align-items:center;overflow:auto;padding:calc(30px + env(safe-area-inset-top,0px)) 20px 30px}
 #auth.on{display:flex}
@@ -251,7 +251,7 @@ function toast(t,ms=2600){const e=$('#toast');e.textContent=t;e.classList.add('o
 function busy(t){const b=$('#busy');if(t){$('#busyT').textContent=t;b.classList.add('on')}else b.classList.remove('on')}
 
 /* ---------- storage ---------- */
-function blank(){return {mirror:false,p:{1:{marks:[],extra:[],gen:{}},2:{marks:[],extra:[],gen:{}}}}}
+function blank(){return {mirror:false,p:{1:{marks:[],extra:[],gen:{},gb:{}},2:{marks:[],extra:[],gen:{},gb:{}}}}}
 function rec(code){return REC[code]||(REC[code]=blank())}
 const saving={},dirty={};
 function save(code){
@@ -281,7 +281,7 @@ const isAdmin=()=>!!(USER&&USER.email===mail(ADMIN));
 const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}};
 function canon(o){if(Array.isArray(o))return '['+o.map(canon).join(',')+']';if(o&&typeof o==='object')return '{'+Object.keys(o).sort().filter(k=>o[k]!==undefined).map(k=>JSON.stringify(k)+':'+canon(o[k])).join(',')+'}';return JSON.stringify(o)}
 function toLocal(d){d=JSON.parse(JSON.stringify(d));const r=blank();r.mirror=!!d.mirror;for(const p of [1,2]){const q=d['p'+p]||{};
-  r.p[p].marks=Object.values(q.marks||{}).sort((a,b)=>(a.t||0)-(b.t||0));r.p[p].extra=Object.values(q.extra||{}).sort((a,b)=>(a.t||0)-(b.t||0));r.p[p].gen={...(q.gen||{})}}return r}
+  r.p[p].marks=Object.values(q.marks||{}).sort((a,b)=>(a.t||0)-(b.t||0));r.p[p].extra=Object.values(q.extra||{}).sort((a,b)=>(a.t||0)-(b.t||0));r.p[p].gen={...(q.gen||{})};r.p[p].gb={...(q.gb||{})}}return r}
 function diffDoc(want,have){const FV=firebase.firestore.FieldValue;const upd={};have=have||{};
   if(!!want.mirror!==!!have.mirror)upd.mirror=!!want.mirror;
   for(const p of [1,2]){const P='p'+p,hp=have[P]||{},o={};
@@ -294,11 +294,15 @@ function diffDoc(want,have){const FV=firebase.firestore.FieldValue;const upd={};
     const wg=want.p[p].gen||{},hg=hp.gen||{};
     for(const k in wg)if(wg[k]!==hg[k])(o.gen||(o.gen={}))[k]=wg[k];
     for(const k in hg)if(!(k in wg))(o.gen||(o.gen={}))[k]=FV.delete();
+    const wb=want.p[p].gb||{},hb=hp.gb||{};
+    for(const k in wb)if(canon(wb[k])!==canon(hb[k]))(o.gb||(o.gb={}))[k]=JSON.parse(JSON.stringify(wb[k]));
+    for(const k in hb)if(!(k in wb))(o.gb||(o.gb={}))[k]=FV.delete();
     if(Object.keys(o).length)upd[P]=o}
   return upd}
 function pushDoc(code){const upd=diffDoc(REC[code],SYNCED[code]);if(!Object.keys(upd).length)return;
   upd.lu=ME;upd.lt=Date.now();
   FS.collection('v').doc(code).set(upd,{merge:true}).catch(e=>toast('تعذّر الرفع: '+(e.code||e.message),4000))}
+function canEdit(o){if(mode!=='fs'||!o)return true;if(isAdmin())return true;if(o.uid)return !!USER&&o.uid===USER.uid;return !o.by||o.by===ME}
 function netDot(){const n=$('#netd');if(n)n.classList.toggle('on',navigator.onLine)}
 window.addEventListener('online',netDot);window.addEventListener('offline',netDot);
 function startSync(){if(unsubV)return;mode='fs';
@@ -313,7 +317,7 @@ async function migrate(){if(migrating||lsGet('snag5_migrated'))return;migrating=
         for(const m of lp.marks||[]){if(!R.p[p].marks.find(x=>x.id===m.id)){m.by=m.by||ME;R.p[p].marks.push(m);
           for(const pid of m.photos||[]){try{const b=await idb('photos','readonly',st=>st.get(pid));if(b)await FS.collection('ph').doc(pid).set({d:await blobUrl(b),code,by:ME,t:Date.now()})}catch(e){}}}}
         for(const x of lp.extra||[])if(!R.p[p].extra.find(y=>y.key===x.key))R.p[p].extra.push(x);
-        for(const k in lp.gen||{})if(!(k in R.p[p].gen))R.p[p].gen[k]=lp.gen[k]}
+        for(const k in lp.gen||{})if(!(k in R.p[p].gen)){R.p[p].gen[k]=lp.gen[k];R.p[p].gb=R.p[p].gb||{};R.p[p].gb[k]={by:ME,uid:USER&&USER.uid,t:Date.now()}}}
       if(L.mirror&&!R.mirror)R.mirror=true;pushDoc(code)}
     lsSet('snag5_migrated','1');if(codes.length)toast('اتنقلت بياناتك القديمة للسيرفر ✓')}finally{migrating=false}}
 function blobUrl(b){return new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(b)})}
@@ -565,7 +569,7 @@ function onDrawTap(X,Y,e,t){
   const [x,y]=unrot(X,Y,W,H);
   if(x<0||y<0||x>W||y>H)return;
   const ox=mirror?W-x:x;
-  const m={id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),key:pending,floor,x:Math.round(ox),y:Math.round(y),note:'',photos:[],t:Date.now(),by:ME||undefined};
+  const m={id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),key:pending,floor,x:Math.round(ox),y:Math.round(y),note:'',photos:[],t:Date.now(),by:ME||undefined,uid:(USER&&USER.uid)||undefined};
   rec(cur).p[phase].marks.push(m);pending=null;showHint();save(cur);drawMarks();renderList();openMark(m.id,true);
 }
 function showHint(){const h=$('#hint');if(pending){const it=items(cur,phase).find(i=>i.key===pending);$('#hintT').textContent=`اضغط على مكان البند رقم ${it?it.n:''} في اللوحة`;h.classList.add('on')}else h.classList.remove('on')}
@@ -581,9 +585,9 @@ function renderList(){
     h+=`<div class="it ${ms.length||g?'has':''} ${pending===it.key?'sel':''}" data-k="${esc(it.key)}"><div class="num">${it.n}</div><div><p>${esc(it.text)}</p><div class="meta">`+
       (it.shared?'<span class="tag sh">مشترك بين المرحلتين</span>':'')+(it.isNew?'<span class="tag new">بند جديد</span>':'')+
       (ms.length?`<span class="tag cnt">${ms.length} مكان</span>`:'')+`</div>`;
-    if(ms.length||g){h+='<div class="notes">'+(g?`<div class="note">ملاحظة عامة: ${esc(g)} <button data-gen="${esc(it.key)}">تعديل</button></div>`:'')+
+    if(ms.length||g){h+='<div class="notes">'+(g?`<div class="note">ملاحظة عامة: ${esc(g)}${(rec(cur).p[phase].gb||{})[it.key]?' <small style="color:var(--mute)">— '+esc(rec(cur).p[phase].gb[it.key].by||'')+'</small>':''} <button data-gen="${esc(it.key)}">فتح</button></div>`:'')+
       ms.map(m=>`<div class="note">${esc(FLs[m.floor]||'')}: ${esc(m.note||'بدون وصف')}${m.photos&&m.photos.length?' 📷'+m.photos.length:''}${m.by?' <small style="color:var(--mute)">— '+esc(m.ub&&m.ub!==m.by?m.by+' / '+m.ub:m.by)+'</small>':''} <button data-open="${esc(m.id)}">فتح</button></div>`).join('')+'</div>'}
-    h+=`</div><div class="acts"><button class="pin" data-pin="${esc(it.key)}">📍 حدد مكانه</button><button data-gen="${esc(it.key)}">✎ ملاحظة</button>${it.isNew?`<button data-del="${esc(it.key)}">حذف</button>`:''}</div></div>`;
+    h+=`</div><div class="acts"><button class="pin" data-pin="${esc(it.key)}">📍 حدد مكانه</button><button data-gen="${esc(it.key)}">✎ ملاحظة</button>${it.isNew&&canEdit(rec(cur).p[phase].extra.find(x=>x.key===it.key))?`<button data-del="${esc(it.key)}">حذف</button>`:''}</div></div>`;
   }
   $('#list').innerHTML=h;
 }
@@ -607,6 +611,9 @@ function openMark(id,isNew){
   $('#mPh').onclick=e=>{const b=e.target.closest('button');if(b){m.photos.splice(+b.dataset.i,1);ph();save(cur);renderList()}};
   const add=async e=>{for(const f of e.target.files){try{busy('جاري رفع الصورة…');const id=await storePhoto(f);m.photos.push(id);ph();save(cur);renderList()}catch(err){toast('تعذّر حفظ الصورة')}finally{busy()}}e.target.value=''};
   $('#mFile').onchange=add;$('#mFile2').onchange=add;
+  if(!canEdit(m)){$('#mNote').readOnly=true;['mDel','mOk'].forEach(i=>$('#'+i).style.display='none');$('#box').querySelectorAll('.file,#mPh button').forEach(e=>e.style.display='none');
+    $('#mNote').insertAdjacentHTML('beforebegin',`<p class="q">🔒 سجّلها <b>${esc(m.by||'')}</b> — التعديل لصاحبها والمدير بس.</p>`);
+    $('#mX').onclick=close;return}
   $('#mOk').onclick=()=>{m.note=$('#mNote').value.trim();save(cur);close();renderList();drawMarks()};
   $('#mX').onclick=()=>{const n=$('#mNote').value.trim();if(n!==m.note){m.note=n;save(cur);renderList()}close()};
   $('#mDel').onclick=()=>{if($('#mDel').dataset.c){const a=rec(cur).p[phase].marks;a.splice(a.indexOf(m),1);save(cur);close();renderList();drawMarks()}else{$('#mDel').dataset.c=1;$('#mDel').textContent='اضغط تاني للتأكيد'}};
@@ -628,7 +635,9 @@ function editGen(key){
   const it=items(cur,phase).find(i=>i.key===key);const g=rec(cur).p[phase].gen||(rec(cur).p[phase].gen={});
   dlg(`<h3>ملاحظة على البند رقم ${it.n}</h3><p class="q">${esc(it.text)}</p><textarea id="gN" placeholder="ملاحظة عامة على البند (من غير مكان على اللوحة)">${esc(g[key]||'')}</textarea>
   <div class="row"><button class="btn" id="gOk">حفظ</button><span class="sp"></span><button class="btn g" id="gX">إلغاء</button></div>`);
-  $('#gOk').onclick=()=>{const v=$('#gN').value.trim();if(v)g[key]=v;else delete g[key];save(cur);close();renderList()};$('#gX').onclick=close;
+  const P=rec(cur).p[phase];P.gb=P.gb||{};const own=P.gb[key];
+  if(g[key]&&!canEdit(own)){$('#gN').readOnly=true;$('#gOk').style.display='none';$('#gN').insertAdjacentHTML('beforebegin',`<p class="q">🔒 كتبها <b>${esc(own&&own.by||'')}</b> — التعديل لصاحبها والمدير بس.</p>`);$('#gX').textContent='إغلاق';$('#gX').onclick=close;return}
+  $('#gOk').onclick=()=>{const v=$('#gN').value.trim();if(v){g[key]=v;if(!own)P.gb[key]={by:ME||undefined,uid:(USER&&USER.uid)||undefined,t:Date.now()}}else{delete g[key];delete P.gb[key]}save(cur);close();renderList()};$('#gX').onclick=close;
 }
 function addItem(){
   dlg(`<h3>بند جديد — ${PH[phase]}</h3><p class="q">هياخد الرقم اللي بعد آخر بند، ويطلع في ملف الـ Snag List.</p>
@@ -636,7 +645,7 @@ function addItem(){
   <div style="height:8px"></div><textarea id="nT" placeholder="وصف البند…"></textarea>
   <div class="row"><button class="btn" id="nOk">إضافة</button><span class="sp"></span><button class="btn g" id="nX">إلغاء</button></div>`);
   $('#nOk').onclick=()=>{const t=$('#nT').value.trim();if(!t){toast('اكتب وصف البند');return}
-    rec(cur).p[phase].extra.push({key:'n'+Date.now().toString(36),text:t,spec:$('#nS').value,by:ME||undefined,t:Date.now()});save(cur);close();renderList();
+    rec(cur).p[phase].extra.push({key:'n'+Date.now().toString(36),text:t,spec:$('#nS').value,by:ME||undefined,uid:(USER&&USER.uid)||undefined,t:Date.now()});save(cur);close();renderList();
     $('#list').scrollTop=1e6};$('#nX').onclick=close;
 }
 
@@ -730,7 +739,7 @@ async function buildExport(code,p){
   let rn=6;const photoRows=[];
   for(const it of its){
     const ms=marks.filter(m=>m.key===it.key);
-    const notes=[];if(gen[it.key])notes.push('عام: '+gen[it.key]);
+    const gbm=r.p[p].gb||{};const notes=[];if(gen[it.key])notes.push('عام: '+gen[it.key]+(gbm[it.key]&&gbm[it.key].by?' — '+gbm[it.key].by:''));
     ms.forEach((m,j)=>notes.push(`(${j+1}) ${FLs[m.floor]||''}: ${m.note||'بدون وصف'}${m.by?' — '+m.by:''}`));
     const fl=[...new Set(ms.map(m=>FLs[m.floor]))].join(' / ');
     const ph=ms.reduce((a,m)=>a+(m.photos?m.photos.length:0),0);
