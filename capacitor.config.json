@@ -1,6 +1,8 @@
 {
   "appId": "com.taam.snagblock5",
-  "appName": "سناج بلوك 5",
+  "appName": "ضاحية سمو مكة بلوك 5",
   "webDir": "www",
-  "android": { "allowMixedContent": false }
+  "android": {
+    "allowMixedContent": false
+  }
 }

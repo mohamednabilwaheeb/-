@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">سناج بلوك 5</string>
-    <string name="title_activity_main">سناج بلوك 5</string>
+    <string name="app_name">ضاحية سمو مكة بلوك 5</string>
+    <string name="title_activity_main">ضاحية سمو مكة بلوك 5</string>
     <string name="package_name">com.taam.snagblock5</string>
     <string name="custom_url_scheme">com.taam.snagblock5</string>
 </resources>
