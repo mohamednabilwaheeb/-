@@ -130,7 +130,7 @@ button{cursor:pointer;border:0;background:none}
     </div>
     <div class="stage" id="drStage"><svg class="main" id="drSvg" xmlns="http://www.w3.org/2000/svg"></svg>
       <div class="hint" id="hint"><span id="hintT"></span><button id="hintX">إلغاء</button></div>
-      <div class="zoom"><button data-z="in" data-t="dr">+</button><button data-z="out" data-t="dr">−</button><button data-z="fit" data-t="dr">⤢</button></div>
+      <div class="zoom"><button data-z="rot" data-t="dr" aria-label="لف اللوحة">⟳</button><button data-z="in" data-t="dr">+</button><button data-z="out" data-t="dr">−</button><button data-z="fit" data-t="dr">⤢</button></div>
       <div class="empty" id="noDr" style="display:none;position:absolute;inset:0;background:var(--card)"></div>
     </div>
   </div>
@@ -233,7 +233,7 @@ function PanZoom(svg,onTap){
     else if(ptrs.size===2){const ps=[...ptrs.values()];const other=ps.find(p=>p!==ptrs.get(e.pointerId))||ps[0];
       const d0=Math.hypot(prev[0]-other[0],prev[1]-other[1]),d1=Math.hypot(e.clientX-other[0],e.clientY-other[1]);
       if(d0>0&&d1>0)zoomAt(d0/d1,(e.clientX+other[0])/2,(e.clientY+other[1])/2)}});
-  const up=e=>{const was=ptrs.size;ptrs.delete(e.pointerId);if(was===1&&!moved&&start){onTap(...toSvg(e.clientX,e.clientY),e)}if(ptrs.size===0)start=null};
+  const up=e=>{const was=ptrs.size;ptrs.delete(e.pointerId);if(was===1&&!moved&&start){const t=document.elementFromPoint(e.clientX,e.clientY)||svg;onTap(...toSvg(e.clientX,e.clientY),e,t)}if(ptrs.size===0)start=null};
   svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',e=>{ptrs.delete(e.pointerId);start=null});
   svg.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.deltaY>0?1.15:1/1.15,e.clientX,e.clientY)},{passive:false});
   return {fit,zoom:f=>{const r=svg.getBoundingClientRect();zoomAt(f,r.left+r.width/2,r.top+r.height/2)},st,refit:()=>st.box&&fit(st.box)};
@@ -258,7 +258,7 @@ function drawPlan(){
        `<text x="${cx}" y="${cy+fs*0.95}" text-anchor="middle" font-size="${fs*0.72}" fill="#0f8a83" font-family="Cairo,Arial" direction="ltr">${esc(m)}</text></g>`;
   }
   h+='</g>';svg.innerHTML=h;
-  planPZ=PanZoom(svg,(x,y,e)=>{const g=e.target.closest&&e.target.closest('.vl');if(g)openVilla(g.dataset.code)});
+  planPZ=PanZoom(svg,(x,y,e,t)=>{const g=t.closest&&t.closest('.vl');if(g)openVilla(g.dataset.code)});
   const xs=P.segs.flatMap(s=>[s[0],s[2]]),ys=P.segs.flatMap(s=>[-s[1],-s[3]]);
   planPZ.fit([Math.min(...xs),Math.min(...ys),Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys)]);
   colorPlan();
@@ -295,10 +295,13 @@ async function loadDrawing(){
   svg.innerHTML='<text x="20" y="60" font-size="40">…</text>';
   let t;try{t=await getSvg(name)}catch(e){no.style.display='block';no.textContent='تعذّر تحميل اللوحة';return}
   const inner=t.replace(/^[\s\S]*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'');
-  svg.innerHTML=`<g id="dwg">${inner}</g><g id="mk"></g>`;
+  svg.innerHTML=`<g id="rotg" transform="${rotT(W,H)}"><g id="dwg">${inner}</g><g id="mk"></g></g>`;
   if(!drPZ){drPZ=PanZoom(svg,onDrawTap);svg.addEventListener('vb',drawMarks)}
-  drPZ.fit([0,0,W,H]);drawMarks();
+  drPZ.fit(rot%180?[0,0,H,W]:[0,0,W,H]);drawMarks();
 }
+let rot=0;
+function rotT(W,H){return rot===90?`translate(${H},0) rotate(90)`:rot===180?`translate(${W},${H}) rotate(180)`:rot===270?`translate(0,${W}) rotate(270)`:''}
+function unrot(X,Y,W,H){return rot===90?[Y,H-X]:rot===180?[W-X,H-Y]:rot===270?[W-Y,X]:[X,Y]}
 function disp(x){const v=D.villas[cur];const [W]=D.meta[`${v.model}_${floor}`];return mirror?W-x:x}
 function drawMarks(){
   const g=$('#mk');if(!g||!cur)return;
@@ -306,13 +309,14 @@ function drawMarks(){
   const R=15*k;const its=items(cur,phase);const byKey=Object.fromEntries(its.map(i=>[i.key,i]));
   g.innerHTML=marksOf(cur,phase).filter(m=>m.floor===floor&&byKey[m.key]).map(m=>{const n=byKey[m.key].n;const x=disp(m.x),y=m.y;
     return `<g class="mkr" data-id="${esc(m.id)}"><circle cx="${x}" cy="${y}" r="${R}" fill="#e0462b" stroke="#fff" stroke-width="${2.5*k}"/>`+
-      `<text x="${x}" y="${y+R*0.36}" text-anchor="middle" font-size="${R*1.05}" font-weight="700" fill="#fff" font-family="Cairo,Arial" direction="ltr">${n}</text></g>`}).join('');
+      `<text transform="rotate(${-rot} ${x} ${y})" x="${x}" y="${y+R*0.36}" text-anchor="middle" font-size="${R*1.05}" font-weight="700" fill="#fff" font-family="Cairo,Arial" direction="ltr">${n}</text></g>`}).join('');
 }
-function onDrawTap(x,y,e){
-  const mk=e.target.closest&&e.target.closest('.mkr');
+function onDrawTap(X,Y,e,t){
+  const mk=t.closest&&t.closest('.mkr');
   if(mk&&!pending){openMark(mk.dataset.id);return}
   if(!pending){toast('اختار بند من القائمة الأول واضغط "حدد مكانه"');return}
   const v=D.villas[cur];const [W,H]=D.meta[`${v.model}_${floor}`];
+  const [x,y]=unrot(X,Y,W,H);
   if(x<0||y<0||x>W||y>H)return;
   const ox=mirror?W-x:x;
   const m={id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),key:pending,floor,x:Math.round(ox),y:Math.round(y),note:'',photos:[],t:Date.now()};
@@ -406,10 +410,10 @@ $('#hintX').onclick=()=>{pending=null;showHint();renderList()};
 $('#addItem').onclick=addItem;
 $('#grip').onclick=()=>$('#sheet').classList.toggle('big');
 document.querySelectorAll('.zoom button').forEach(b=>b.onclick=()=>{const pz=b.dataset.t==='plan'?planPZ:drPZ;if(!pz)return;
-  if(b.dataset.z==='fit')pz.refit();else pz.zoom(b.dataset.z==='in'?1/1.4:1.4)});
+  if(b.dataset.z==='rot'){rot=(rot+90)%360;loadDrawing();return}if(b.dataset.z==='fit')pz.refit();else pz.zoom(b.dataset.z==='in'?1/1.4:1.4)});
 $('#q').addEventListener('keydown',e=>{if(e.key==='Enter')goto()});$('#q').addEventListener('input',()=>{const v=$('#q').value.trim();if(v.length===3&&P.villas[v])goto()});
 function goto(){const v=$('#q').value.trim().replace(/\D/g,'');const pv=P.villas[v];if(pv){$('#q').value='';openVilla(pv.code)}else toast('رقم الفيلا مش موجود في بلوك 5')}
-window.addEventListener('resize',()=>{drawMarks()});
+window.addEventListener('resize',()=>{setTimeout(()=>{planPZ&&planPZ.refit();drPZ&&drPZ.refit();drawMarks()},250)});
 
 /* ---------- export ---------- */
 const RLM='‏';
