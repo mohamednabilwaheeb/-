@@ -1,0 +1,9 @@
+{
+  "hosting": {
+    "public": "www",
+    "ignore": ["firebase.json", "**/.*"],
+    "headers": [
+      { "source": "**/@(index.html|sw.js|app-version.js|config.js)", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
+    ]
+  }
+}
