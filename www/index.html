@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>سناج ليست بلوك 5</title>
+<style>
+@font-face{font-family:Cairo;font-weight:400 600;src:url(lib/cairo-arabic-400.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+200C-200F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:Cairo;font-weight:400 600;src:url(lib/cairo-latin-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cairo;font-weight:700;src:url(lib/cairo-arabic-700.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+200C-200F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:Cairo;font-weight:700;src:url(lib/cairo-latin-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+</style>
+<style>
+/* VOICE: site tool, clear and calm, works one-handed on a phone
+   IDEA: a surveyor's marked-up print set — plan sheet, then villa sheet with red numbered tags
+   PICTURE: the drawing itself fills the screen; list below it
+   COLOUR: drafting white, ink navy #13294b, red-orange tag #e0462b, shared items teal
+   TYPE: Cairo; LAYOUT: top bar, drawing, bottom sheet list */
+:root{color-scheme:light dark;--bg:light-dark(#f3f4f6,#0f1520);--card:light-dark(#fff,#18212f);--ink:light-dark(#13294b,#e6ecf5);--mute:light-dark(#5b6b82,#93a3ba);--line:light-dark(#dde2ea,#2a3545);--acc:#e0462b;--sh:#0f8a83;--nav:#13294b;--sel:light-dark(#fff3e8,#3a2a1c)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Cairo,Tahoma,Arial,sans-serif;overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.top{height:54px;margin-top:env(safe-area-inset-top);background:var(--nav);color:#fff;display:flex;align-items:center;gap:8px;padding:0 10px;position:relative;z-index:5}
+.top h1{font-size:16px;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .ib{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:20px}
+.top .ib:active{background:#ffffff22}
+.seg{display:inline-flex;background:#ffffff1f;border-radius:10px;padding:3px}
+.seg button{color:#fff;padding:4px 10px;border-radius:8px;font-size:13px;white-space:nowrap}
+.seg button.on{background:#fff;color:var(--nav);font-weight:700}
+.view{position:absolute;inset:54px 0 0 0;display:none;flex-direction:column}
+.view.on{display:flex}
+.stage{position:relative;flex:1;overflow:hidden;background:light-dark(#fff,#fff);touch-action:none}
+.stage svg.main{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hint{position:absolute;top:8px;inset-inline:8px;background:var(--acc);color:#fff;border-radius:10px;padding:8px 12px;font-size:14px;display:none;align-items:center;gap:8px;z-index:3}
+.hint.on{display:flex}.hint span{flex:1}.hint button{color:#fff;font-weight:700;padding:2px 8px;border:1px solid #fff8;border-radius:8px}
+.zoom{position:absolute;bottom:10px;left:10px;display:flex;flex-direction:column;gap:6px;z-index:2}
+.zoom button{width:42px;height:42px;border-radius:12px;background:#13294bdd;color:#fff;font-size:20px}
+.tools{display:flex;gap:8px;align-items:center;padding:8px 10px;background:var(--card);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.chip{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.chip button{padding:6px 12px;font-size:14px}
+.chip button.on{background:var(--nav);color:#fff;font-weight:700}
+.sp{flex:1}
+.btn{background:var(--acc);color:#fff;border-radius:10px;padding:8px 14px;font-weight:700;font-size:14px;min-height:40px}
+.btn.g{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.5}
+.sheet{height:42%;min-height:200px;background:var(--card);border-top:1px solid var(--line);display:flex;flex-direction:column}
+.sheet.big{height:70%}
+.sh-h{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.sh-h b{flex:1;font-size:15px}
+.grip{width:44px;height:28px;border-radius:8px;color:var(--mute)}
+.list{overflow:auto;flex:1;padding:4px 0 80px}
+.sec{padding:10px 12px 4px;font-size:13px;color:var(--mute);font-weight:700}
+.it{display:grid;grid-template-columns:34px 1fr auto;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);align-items:start}
+.it.sel{background:var(--sel)}
+.num{width:30px;height:30px;border-radius:50%;background:var(--nav);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}
+.it.has .num{background:var(--acc)}
+.it p{margin:0;font-size:14px;line-height:1.55}
+.meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;font-size:12px;color:var(--mute)}
+.tag{border-radius:6px;padding:0 6px;background:light-dark(#eef1f5,#243042)}
+.tag.sh{background:#0f8a8322;color:var(--sh);font-weight:700}
+.tag.new{background:#e0462b22;color:var(--acc);font-weight:700}
+.tag.cnt{background:#e0462b;color:#fff}
+.acts{display:flex;flex-direction:column;gap:6px}
+.acts button{border:1px solid var(--line);border-radius:9px;padding:4px 8px;font-size:12.5px;white-space:nowrap;background:var(--card)}
+.acts button.pin{border-color:var(--acc);color:var(--acc);font-weight:700}
+.notes{margin-top:6px;display:flex;flex-direction:column;gap:4px}
+.note{font-size:13px;background:light-dark(#fff7f2,#2a211b);border-inline-start:3px solid var(--acc);padding:4px 8px;border-radius:6px}
+.note button{font-size:12px;color:var(--acc);font-weight:700;margin-inline-start:6px}
+.search{display:flex;gap:8px;padding:8px 10px;background:var(--card);border-bottom:1px solid var(--line);align-items:center}
+.search input{flex:1;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:16px;background:var(--bg)}
+.legend{font-size:12.5px;color:var(--mute);display:flex;gap:10px;align-items:center;white-space:nowrap}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:middle;margin-inline-end:4px}
+.dlg{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:20}
+.dlg.on{display:flex}
+.box{background:var(--card);width:min(560px,100%);border-radius:18px 18px 0 0;padding:16px;max-height:92vh;overflow:auto}
+.box h3{margin:0 0 6px;font-size:17px}
+.box .q{font-size:13.5px;color:var(--mute);margin:0 0 10px}
+.box textarea,.box input[type=text],.box select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:16px;background:var(--bg)}
+.box textarea{min-height:96px;resize:vertical}
+.row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.ph{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ph div{position:relative}
+.ph img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+.ph button{position:absolute;top:-6px;left:-6px;width:24px;height:24px;border-radius:50%;background:var(--acc);color:#fff;font-size:14px}
+.file{display:inline-flex;align-items:center;gap:6px;border:1px dashed var(--mute);border-radius:10px;padding:8px 12px;font-size:14px;cursor:pointer}
+.file input{display:none}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#13294b;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:30;display:none;max-width:92vw;text-align:center}
+.toast.on{display:block}
+.warn{background:#fff4d6;color:#6b4a00;font-size:13px;padding:6px 12px;display:none}
+.warn.on{display:block}
+.empty{padding:30px 16px;text-align:center;color:var(--mute)}
+.busy{position:fixed;inset:0;background:#0009;color:#fff;display:none;place-items:center;z-index:40;font-size:16px;text-align:center}
+.busy.on{display:grid}
+@media(min-width:900px){
+  .vv{flex-direction:row}
+  .vv .left{flex:1;display:flex;flex-direction:column}
+  .vv .sheet,.vv .sheet.big{height:auto;width:420px;border-top:0;border-inline-start:1px solid var(--line)}
+  .grip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="ib" id="back" aria-label="رجوع" style="display:none">→</button>
+  <h1 id="ttl">سناج ليست – بلوك 5 ضاحية سمو</h1>
+  <div class="seg" id="phase"><button data-p="1" class="on">المرحلة 1</button><button data-p="2">المرحلة 2</button></div>
+</div>
+<div class="warn" id="warn"></div>
+
+<section class="view on" id="vPlan">
+  <div class="search">
+    <input id="q" inputmode="numeric" placeholder="اكتب رقم الفيلا… مثلاً 225">
+    <div class="legend"><span><i style="background:#e0462b"></i>فيها تعليم</span><span><i style="background:#dfe7f2;border:1px solid #9fb0c8"></i>بدون</span></div>
+  </div>
+  <div class="stage" id="planStage"><svg class="main" id="planSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="zoom"><button data-z="in" data-t="plan">+</button><button data-z="out" data-t="plan">−</button><button data-z="fit" data-t="plan">⤢</button></div>
+  </div>
+</section>
+
+<section class="view vv" id="vVilla">
+  <div class="left" style="display:flex;flex-direction:column;flex:1">
+    <div class="tools">
+      <div class="chip" id="floors"></div>
+      <div class="chip" id="mir"><button data-m="0" class="on">الأصل</button><button data-m="1">Mirror</button></div>
+      <span class="sp"></span>
+      <button class="btn" id="exp">⬇ استخراج</button>
+    </div>
+    <div class="stage" id="drStage"><svg class="main" id="drSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="hint" id="hint"><span id="hintT"></span><button id="hintX">إلغاء</button></div>
+      <div class="zoom"><button data-z="in" data-t="dr">+</button><button data-z="out" data-t="dr">−</button><button data-z="fit" data-t="dr">⤢</button></div>
+      <div class="empty" id="noDr" style="display:none;position:absolute;inset:0;background:var(--card)"></div>
+    </div>
+  </div>
+  <div class="sheet" id="sheet">
+    <div class="sh-h"><button class="grip" id="grip" aria-label="تكبير القائمة">⇕</button><b id="shT">بنود السناج</b><button class="btn g" id="addItem">+ بند جديد</button></div>
+    <div class="list" id="list"></div>
+  </div>
+</section>
+
+<div class="dlg" id="dlg"><div class="box" id="box"></div></div>
+<div class="toast" id="toast"></div>
+<div class="busy" id="busy"><div id="busyT">جاري التجهيز…</div></div>
+
+<script src="lib/jszip.min.js"></script>
+<script src="lib/exceljs.min.js"></script>
+<script src="lib/jspdf.umd.min.js"></script>
+<script>
+{
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const FL={G:'الدور الأرضي',F:'الدور الأول',S:'الدور الثاني'};
+const FLs={G:'أرضي',F:'أول',S:'ثاني'};
+const PH={1:'المرحلة الأولى',2:'المرحلة الثانية'};
+let D=null,P=null;               // snag data, plan data
+let phase=1, cur=null, floor='G', mirror=false, pending=null, svgCache={};
+const REC={};                    // code -> record
+let db=null, uid=null, assets=null, downloads=null, mode='local';
+
+function toast(t,ms=2600){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),ms)}
+function busy(t){const b=$('#busy');if(t){$('#busyT').textContent=t;b.classList.add('on')}else b.classList.remove('on')}
+
+/* ---------- storage ---------- */
+function blank(){return {mirror:false,p:{1:{marks:[],extra:[],gen:{}},2:{marks:[],extra:[],gen:{}}}}}
+function rec(code){return REC[code]||(REC[code]=blank())}
+const saving={},dirty={};
+function save(code){
+  clearTimeout(saving[code]);dirty[code]=1;
+  saving[code]=setTimeout(async()=>{
+    const body=JSON.parse(JSON.stringify(REC[code]));
+    try{
+      if(!IDB)return; await idb('recs','readwrite',st=>st.put(body,code));
+      if(JSON.stringify(REC[code])===JSON.stringify(body))delete dirty[code];
+    }catch(e){ toast('تعذّر الحفظ: '+(e&&e.code||'')+' — هيتحاول تاني'); setTimeout(()=>save(code),3000); }
+  },500);
+}
+function loadLocal(){
+  try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('snag5_'))REC[k.slice(6)]=JSON.parse(localStorage.getItem(k))}}catch(e){}
+}
+let IDB=null;const PURL={};
+function openIDB(){return new Promise((ok,no)=>{const r=indexedDB.open('snagblock5',1);r.onupgradeneeded=()=>{r.result.createObjectStore('recs');r.result.createObjectStore('photos')};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
+function idb(store,mode,fn){return new Promise((ok,no)=>{const tx=IDB.transaction(store,mode);const st=tx.objectStore(store);const q=fn(st);tx.oncomplete=()=>ok(q&&q.result);tx.onerror=()=>no(tx.error)})}
+function idbAll(store){return new Promise((ok,no)=>{const out={};const tx=IDB.transaction(store);const c=tx.objectStore(store).openCursor();c.onsuccess=()=>{const cur=c.result;if(cur){out[cur.key]=cur.value;cur.continue()}else ok(out)};c.onerror=()=>no(c.error)})}
+async function initCaps(){
+  try{IDB=await openIDB();if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+    Object.assign(REC,await idbAll('recs'));const ph=await idbAll('photos');for(const[k,b] of Object.entries(ph))PURL[k]=URL.createObjectURL(b);
+    mode='idb';refresh();
+  }catch(e){setWarn('مشكلة في الحفظ على الموبايل: '+e)}
+  downloads={save:nativeSave};
+}
+async function nativeSave({filename,data}){
+  const C=window.Capacitor;const blob=data instanceof Blob?data:new Blob([data]);
+  if(C&&C.isNativePlatform&&C.isNativePlatform()){
+    const {Filesystem,Share}=C.Plugins;const b=await b64(blob);let saved='';
+    try{await Filesystem.writeFile({path:'SnagBlock5/'+filename,data:b,directory:'DOCUMENTS',recursive:true});saved='Documents/SnagBlock5'}catch(e){}
+    const w=await Filesystem.writeFile({path:filename,data:b,directory:'CACHE'});
+    try{await Share.share({title:filename,files:[w.uri],dialogTitle:'ابعت الملف'})}catch(e){}
+    if(saved)toast('اتحفظ في '+saved,4000);
+    return {status:'saved'};
+  }
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();return {status:'saved'};
+}
+function setWarn(t){const w=$('#warn');w.textContent=t;w.classList.toggle('on',!!t)}
+
+/* ---------- snag list for a villa ---------- */
+function items(code,p){
+  const v=D.villas[code];const out=[];let n=0;
+  v.items.forEach(([mid,sec,spec],i)=>{const m=D.master[mid];if(!m)return;
+    if(p==1?m.p1:m.p2){n++;out.push({key:'m'+mid+'_'+i,n,mid,sec,spec,text:m.text,shared:m.p1&&m.p2,isNew:false})}});
+  rec(code).p[p].extra.forEach(x=>{n++;out.push({key:x.key,n,sec:'بنود مضافة من الموقع',spec:x.spec,text:x.text,shared:false,isNew:true})});
+  return out;
+}
+function marksOf(code,p){return rec(code).p[p].marks}
+
+/* ---------- pan / zoom ---------- */
+function PanZoom(svg,onTap){
+  const st={x:0,y:0,w:100,h:100,box:null};
+  const ptrs=new Map();let start=null,moved=false;
+  function apply(){svg.setAttribute('viewBox',`${st.x} ${st.y} ${st.w} ${st.h}`);svg.dispatchEvent(new Event('vb'))}
+  function fit(b){st.box=b;const r=svg.getBoundingClientRect();const ar=r.width/Math.max(r.height,1);
+    let w=b[2],h=b[3];if(w/h>ar)h=w/ar;else w=h*ar;st.w=w*1.04;st.h=h*1.04;st.x=b[0]-(st.w-b[2])/2;st.y=b[1]-(st.h-b[3])/2;apply()}
+  function toSvg(cx,cy){const r=svg.getBoundingClientRect();return [st.x+(cx-r.left)/r.width*st.w,st.y+(cy-r.top)/r.height*st.h]}
+  function zoomAt(f,cx,cy){const [px,py]=toSvg(cx,cy);const nw=Math.min(Math.max(st.w*f,(st.box?st.box[2]:st.w)/60),(st.box?st.box[2]:st.w)*4);const k=nw/st.w;
+    st.x=px-(px-st.x)*k;st.y=py-(py-st.y)*k;st.w*=k;st.h*=k;apply()}
+  svg.addEventListener('pointerdown',e=>{svg.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+    if(ptrs.size===1){start=[e.clientX,e.clientY,st.x,st.y];moved=false}else{moved=true;start=null}});
+  svg.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId))return;const prev=ptrs.get(e.pointerId);ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+    const r=svg.getBoundingClientRect();
+    if(ptrs.size===1&&start){const dx=e.clientX-start[0],dy=e.clientY-start[1];if(Math.hypot(dx,dy)>8)moved=true;
+      if(moved){st.x=start[2]-dx/r.width*st.w;st.y=start[3]-dy/r.height*st.h;apply()}}
+    else if(ptrs.size===2){const ps=[...ptrs.values()];const other=ps.find(p=>p!==ptrs.get(e.pointerId))||ps[0];
+      const d0=Math.hypot(prev[0]-other[0],prev[1]-other[1]),d1=Math.hypot(e.clientX-other[0],e.clientY-other[1]);
+      if(d0>0&&d1>0)zoomAt(d0/d1,(e.clientX+other[0])/2,(e.clientY+other[1])/2)}});
+  const up=e=>{const was=ptrs.size;ptrs.delete(e.pointerId);if(was===1&&!moved&&start){onTap(...toSvg(e.clientX,e.clientY),e)}if(ptrs.size===0)start=null};
+  svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',e=>{ptrs.delete(e.pointerId);start=null});
+  svg.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.deltaY>0?1.15:1/1.15,e.clientX,e.clientY)},{passive:false});
+  return {fit,zoom:f=>{const r=svg.getBoundingClientRect();zoomAt(f,r.left+r.width/2,r.top+r.height/2)},st,refit:()=>st.box&&fit(st.box)};
+}
+
+/* ---------- block plan ---------- */
+let planPZ;
+function drawPlan(){
+  const svg=$('#planSvg');
+  let h='<g stroke="#8a97ab" stroke-width="0.35" fill="none">';
+  h+=P.segs.map(s=>`<line x1="${s[0]}" y1="${-s[1]}" x2="${s[2]}" y2="${-s[3]}"/>`).join('');h+='</g>';
+  h+='<g font-family="Cairo,Arial" fill="#5b6b82" font-size="5">'+P.texts.map(t=>`<text x="${t.x}" y="${-t.y}" direction="ltr">${esc(t.t)}</text>`).join('')+'</g>';
+  h+='<g id="villas">';
+  for(const [n,v] of Object.entries(P.villas)){
+    const code=v.code,m=D.villas[code].model;
+    const pts=v.poly.map(p=>p[0]+','+(-p[1])).join(' ');
+    const xs=v.poly.map(p=>p[0]),ys=v.poly.map(p=>-p[1]);
+    const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2;
+    const fs=Math.min(6,(Math.max(...xs)-Math.min(...xs))/4.2);
+    h+=`<g data-code="${esc(code)}" class="vl"><polygon points="${pts}" stroke="#7f91ab" stroke-width="0.5"/>`+
+       `<text x="${cx}" y="${cy-fs*0.15}" text-anchor="middle" font-size="${fs}" font-weight="700" fill="#13294b" font-family="Cairo,Arial" direction="ltr">${esc(n)}</text>`+
+       `<text x="${cx}" y="${cy+fs*0.95}" text-anchor="middle" font-size="${fs*0.72}" fill="#0f8a83" font-family="Cairo,Arial" direction="ltr">${esc(m)}</text></g>`;
+  }
+  h+='</g>';svg.innerHTML=h;
+  planPZ=PanZoom(svg,(x,y,e)=>{const g=e.target.closest&&e.target.closest('.vl');if(g)openVilla(g.dataset.code)});
+  const xs=P.segs.flatMap(s=>[s[0],s[2]]),ys=P.segs.flatMap(s=>[-s[1],-s[3]]);
+  planPZ.fit([Math.min(...xs),Math.min(...ys),Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys)]);
+  colorPlan();
+}
+function colorPlan(){
+  document.querySelectorAll('#villas .vl').forEach(g=>{const r=REC[g.dataset.code];const has=r&&r.p[phase]&&r.p[phase].marks.length+Object.values(r.p[phase].gen||{}).filter(Boolean).length>0;
+    g.querySelector('polygon').setAttribute('fill',has?'#f6b3a6':'#dfe7f2')});
+}
+
+/* ---------- villa view ---------- */
+let drPZ;
+function openVilla(code){
+  cur=code;const v=D.villas[code];const r=rec(code);mirror=!!r.mirror;
+  const fls=D.floors[v.model]||[];floor=fls[0]||'G';pending=null;
+  $('#ttl').textContent=`فيلا ${code.split('-')[1]} — ${v.model}`;
+  $('#back').style.display='';
+  $('#vPlan').classList.remove('on');$('#vVilla').classList.add('on');
+  $('#floors').innerHTML=fls.map(f=>`<button data-f="${f}">${FLs[f]}</button>`).join('')||'<button disabled>لا توجد لوحة</button>';
+  setChips();loadDrawing();renderList();
+}
+function setChips(){
+  document.querySelectorAll('#floors button').forEach(b=>b.classList.toggle('on',b.dataset.f===floor));
+  document.querySelectorAll('#mir button').forEach(b=>b.classList.toggle('on',(b.dataset.m==='1')===mirror));
+}
+async function getSvg(name){
+  if(svgCache[name])return svgCache[name];
+  const t=await (await fetch('svg/'+name+'.svg')).text();return svgCache[name]=t;
+}
+async function loadDrawing(){
+  const v=D.villas[cur];const fls=D.floors[v.model]||[];const svg=$('#drSvg');const no=$('#noDr');
+  if(!fls.length){svg.innerHTML='';no.style.display='block';no.textContent=`نموذج ${v.model} ملهوش لوحة لسه. تقدر تكتب ملاحظات على البنود من القائمة.`;return}
+  no.style.display='none';
+  const name=`${v.model}_${floor}${mirror?'_m':''}`;const [W,H]=D.meta[`${v.model}_${floor}`];
+  svg.innerHTML='<text x="20" y="60" font-size="40">…</text>';
+  let t;try{t=await getSvg(name)}catch(e){no.style.display='block';no.textContent='تعذّر تحميل اللوحة';return}
+  const inner=t.replace(/^[\s\S]*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'');
+  svg.innerHTML=`<g id="dwg">${inner}</g><g id="mk"></g>`;
+  if(!drPZ){drPZ=PanZoom(svg,onDrawTap);svg.addEventListener('vb',drawMarks)}
+  drPZ.fit([0,0,W,H]);drawMarks();
+}
+function disp(x){const v=D.villas[cur];const [W]=D.meta[`${v.model}_${floor}`];return mirror?W-x:x}
+function drawMarks(){
+  const g=$('#mk');if(!g||!cur)return;
+  const svg=$('#drSvg');const r=svg.getBoundingClientRect();const k=drPZ?drPZ.st.w/Math.max(r.width,1):1;
+  const R=15*k;const its=items(cur,phase);const byKey=Object.fromEntries(its.map(i=>[i.key,i]));
+  g.innerHTML=marksOf(cur,phase).filter(m=>m.floor===floor&&byKey[m.key]).map(m=>{const n=byKey[m.key].n;const x=disp(m.x),y=m.y;
+    return `<g class="mkr" data-id="${esc(m.id)}"><circle cx="${x}" cy="${y}" r="${R}" fill="#e0462b" stroke="#fff" stroke-width="${2.5*k}"/>`+
+      `<text x="${x}" y="${y+R*0.36}" text-anchor="middle" font-size="${R*1.05}" font-weight="700" fill="#fff" font-family="Cairo,Arial" direction="ltr">${n}</text></g>`}).join('');
+}
+function onDrawTap(x,y,e){
+  const mk=e.target.closest&&e.target.closest('.mkr');
+  if(mk&&!pending){openMark(mk.dataset.id);return}
+  if(!pending){toast('اختار بند من القائمة الأول واضغط "حدد مكانه"');return}
+  const v=D.villas[cur];const [W,H]=D.meta[`${v.model}_${floor}`];
+  if(x<0||y<0||x>W||y>H)return;
+  const ox=mirror?W-x:x;
+  const m={id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),key:pending,floor,x:Math.round(ox),y:Math.round(y),note:'',photos:[],t:Date.now()};
+  rec(cur).p[phase].marks.push(m);pending=null;showHint();save(cur);drawMarks();renderList();openMark(m.id,true);
+}
+function showHint(){const h=$('#hint');if(pending){const it=items(cur,phase).find(i=>i.key===pending);$('#hintT').textContent=`اضغط على مكان البند رقم ${it?it.n:''} في اللوحة`;h.classList.add('on')}else h.classList.remove('on')}
+
+function renderList(){
+  const its=items(cur,phase);const marks=marksOf(cur,phase);const gen=rec(cur).p[phase].gen||{};
+  $('#shT').textContent=`بنود ${PH[phase]} (${its.length})`;
+  if(!its.length){$('#list').innerHTML='<div class="empty">مفيش بنود للفيلا دي في المرحلة دي.</div>';return}
+  let h='',ls='';
+  for(const it of its){
+    const head=(it.spec||'')+' — '+(it.sec||'');if(head!==ls){h+=`<div class="sec">${esc(head)}</div>`;ls=head}
+    const ms=marks.filter(m=>m.key===it.key);const g=gen[it.key];
+    h+=`<div class="it ${ms.length||g?'has':''} ${pending===it.key?'sel':''}" data-k="${esc(it.key)}"><div class="num">${it.n}</div><div><p>${esc(it.text)}</p><div class="meta">`+
+      (it.shared?'<span class="tag sh">مشترك بين المرحلتين</span>':'')+(it.isNew?'<span class="tag new">بند جديد</span>':'')+
+      (ms.length?`<span class="tag cnt">${ms.length} مكان</span>`:'')+`</div>`;
+    if(ms.length||g){h+='<div class="notes">'+(g?`<div class="note">ملاحظة عامة: ${esc(g)} <button data-gen="${esc(it.key)}">تعديل</button></div>`:'')+
+      ms.map(m=>`<div class="note">${esc(FLs[m.floor]||'')}: ${esc(m.note||'بدون وصف')}${m.photos&&m.photos.length?' 📷'+m.photos.length:''} <button data-open="${esc(m.id)}">فتح</button></div>`).join('')+'</div>'}
+    h+=`</div><div class="acts"><button class="pin" data-pin="${esc(it.key)}">📍 حدد مكانه</button><button data-gen="${esc(it.key)}">✎ ملاحظة</button>${it.isNew?`<button data-del="${esc(it.key)}">حذف</button>`:''}</div></div>`;
+  }
+  $('#list').innerHTML=h;
+}
+function refresh(){if(cur&&$('#vVilla').classList.contains('on')){mirror=!!rec(cur).mirror;setChips();renderList();drawMarks()}else if(P)colorPlan()}
+
+/* ---------- dialogs ---------- */
+function dlg(html){$('#box').innerHTML=html;$('#dlg').classList.add('on')}
+function close(){$('#dlg').classList.remove('on')}
+$('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')close()});
+function photoUrl(p){return p.startsWith('data:')?p:(PURL[p]||'')}
+function openMark(id,isNew){
+  const m=marksOf(cur,phase).find(x=>x.id===id);if(!m)return;const it=items(cur,phase).find(i=>i.key===m.key);
+  if(m.floor!==floor){floor=m.floor;setChips();loadDrawing()}
+  dlg(`<h3>البند رقم ${it?it.n:''} — ${esc(FL[m.floor]||'')}</h3><p class="q">${esc(it?it.text:'')}</p>
+    <textarea id="mNote" placeholder="اكتب تفاصيل الملاحظة في المكان ده…">${esc(m.note)}</textarea>
+    <div class="ph" id="mPh"></div>
+    <div class="row"><label class="file">📷 صورة<input type="file" id="mFile" accept="image/*" capture="environment"></label>
+    <label class="file">🖼 من المعرض<input type="file" id="mFile2" accept="image/*" multiple></label></div>
+    <div class="row"><button class="btn" id="mOk">حفظ</button><button class="btn g" id="mDel">حذف المكان</button><span class="sp"></span><button class="btn g" id="mX">إغلاق</button></div>`);
+  const ph=()=>{$('#mPh').innerHTML=(m.photos||[]).map((p,i)=>`<div><img src="${esc(photoUrl(p))}" alt=""><button data-i="${i}">×</button></div>`).join('')};ph();
+  $('#mPh').onclick=e=>{const b=e.target.closest('button');if(b){m.photos.splice(+b.dataset.i,1);ph();save(cur);renderList()}};
+  const add=async e=>{for(const f of e.target.files){try{busy('جاري رفع الصورة…');const id=await storePhoto(f);m.photos.push(id);ph();save(cur);renderList()}catch(err){toast('تعذّر حفظ الصورة')}finally{busy()}}e.target.value=''};
+  $('#mFile').onchange=add;$('#mFile2').onchange=add;
+  $('#mOk').onclick=()=>{m.note=$('#mNote').value.trim();save(cur);close();renderList();drawMarks()};
+  $('#mX').onclick=()=>{const n=$('#mNote').value.trim();if(n!==m.note){m.note=n;save(cur);renderList()}close()};
+  $('#mDel').onclick=()=>{if($('#mDel').dataset.c){const a=rec(cur).p[phase].marks;a.splice(a.indexOf(m),1);save(cur);close();renderList();drawMarks()}else{$('#mDel').dataset.c=1;$('#mDel').textContent='اضغط تاني للتأكيد'}};
+  if(isNew)setTimeout(()=>$('#mNote').focus(),50);
+}
+async function shrink(file,max=1600,q=0.82){
+  const url=URL.createObjectURL(file);const img=new Image();await new Promise((ok,no)=>{img.onload=ok;img.onerror=no;img.src=url});
+  const k=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
+  c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
+  return await new Promise(r=>c.toBlob(r,'image/jpeg',q));
+}
+async function storePhoto(file){
+  const b=await shrink(file);const id='p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  await idb('photos','readwrite',st=>st.put(b,id));PURL[id]=URL.createObjectURL(b);return id;
+}
+function editGen(key){
+  const it=items(cur,phase).find(i=>i.key===key);const g=rec(cur).p[phase].gen||(rec(cur).p[phase].gen={});
+  dlg(`<h3>ملاحظة على البند رقم ${it.n}</h3><p class="q">${esc(it.text)}</p><textarea id="gN" placeholder="ملاحظة عامة على البند (من غير مكان على اللوحة)">${esc(g[key]||'')}</textarea>
+  <div class="row"><button class="btn" id="gOk">حفظ</button><span class="sp"></span><button class="btn g" id="gX">إلغاء</button></div>`);
+  $('#gOk').onclick=()=>{const v=$('#gN').value.trim();if(v)g[key]=v;else delete g[key];save(cur);close();renderList()};$('#gX').onclick=close;
+}
+function addItem(){
+  dlg(`<h3>بند جديد — ${PH[phase]}</h3><p class="q">هياخد الرقم اللي بعد آخر بند، ويطلع في ملف السناج.</p>
+  <select id="nS"><option>معماري وإنشائي</option><option>إلكتروميكانيك</option></select>
+  <div style="height:8px"></div><textarea id="nT" placeholder="وصف البند…"></textarea>
+  <div class="row"><button class="btn" id="nOk">إضافة</button><span class="sp"></span><button class="btn g" id="nX">إلغاء</button></div>`);
+  $('#nOk').onclick=()=>{const t=$('#nT').value.trim();if(!t){toast('اكتب وصف البند');return}
+    rec(cur).p[phase].extra.push({key:'n'+Date.now().toString(36),text:t,spec:$('#nS').value});save(cur);close();renderList();
+    $('#list').scrollTop=1e6};$('#nX').onclick=close;
+}
+
+/* ---------- events ---------- */
+$('#phase').onclick=e=>{const b=e.target.closest('button');if(!b)return;phase=+b.dataset.p;
+  document.querySelectorAll('#phase button').forEach(x=>x.classList.toggle('on',x===b));pending=null;showHint();
+  if(cur&&$('#vVilla').classList.contains('on')){renderList();drawMarks()}else colorPlan()};
+$('#back').onclick=()=>{$('#vVilla').classList.remove('on');$('#vPlan').classList.add('on');$('#back').style.display='none';
+  $('#ttl').textContent='سناج ليست – بلوك 5 ضاحية سمو';cur=null;pending=null;showHint();colorPlan();planPZ&&planPZ.refit()};
+$('#floors').onclick=e=>{const b=e.target.closest('button[data-f]');if(!b)return;floor=b.dataset.f;setChips();loadDrawing()};
+$('#mir').onclick=e=>{const b=e.target.closest('button');if(!b)return;mirror=b.dataset.m==='1';rec(cur).mirror=mirror;save(cur);setChips();loadDrawing()};
+$('#list').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.pin){if(!(D.floors[D.villas[cur].model]||[]).length){toast('مفيش لوحة للنموذج ده');return}
+    pending=b.dataset.pin;showHint();renderList();if(innerWidth<900)$('#sheet').classList.remove('big')}
+  else if(b.dataset.gen)editGen(b.dataset.gen);
+  else if(b.dataset.open)openMark(b.dataset.open);
+  else if(b.dataset.del){if(b.dataset.c){const p=rec(cur).p[phase];p.extra=p.extra.filter(x=>x.key!==b.dataset.del);p.marks=p.marks.filter(m=>m.key!==b.dataset.del);save(cur);renderList();drawMarks()}else{b.dataset.c=1;b.textContent='تأكيد'}}};
+$('#hintX').onclick=()=>{pending=null;showHint();renderList()};
+$('#addItem').onclick=addItem;
+$('#grip').onclick=()=>$('#sheet').classList.toggle('big');
+document.querySelectorAll('.zoom button').forEach(b=>b.onclick=()=>{const pz=b.dataset.t==='plan'?planPZ:drPZ;if(!pz)return;
+  if(b.dataset.z==='fit')pz.refit();else pz.zoom(b.dataset.z==='in'?1/1.4:1.4)});
+$('#q').addEventListener('keydown',e=>{if(e.key==='Enter')goto()});$('#q').addEventListener('input',()=>{const v=$('#q').value.trim();if(v.length===3&&P.villas[v])goto()});
+function goto(){const v=$('#q').value.trim().replace(/\D/g,'');const pv=P.villas[v];if(pv){$('#q').value='';openVilla(pv.code)}else toast('رقم الفيلا مش موجود في بلوك 5')}
+window.addEventListener('resize',()=>{drawMarks()});
+
+/* ---------- export ---------- */
+const RLM='‏';
+function ar(s){return s?RLM+s:''}
+async function svgToImage(text,W,H,scale){
+  const blob=new Blob([text],{type:'image/svg+xml'});const url=URL.createObjectURL(blob);
+  const img=new Image();await new Promise((ok,no)=>{img.onload=ok;img.onerror=no;img.src=url});
+  const c=document.createElement('canvas');c.width=Math.round(W*scale);c.height=Math.round(H*scale);
+  const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);return c;
+}
+async function floorCanvas(code,p,f){
+  const v=D.villas[code];const r=rec(code);const mir=!!r.mirror;const [W,H]=D.meta[`${v.model}_${f}`];
+  const t=await getSvg(`${v.model}_${f}${mir?'_m':''}`);const sc=Math.min(1,2600/W);
+  const c=await svgToImage(t,W,H,sc);const x=c.getContext('2d');
+  const its=items(code,p);const byKey=Object.fromEntries(its.map(i=>[i.key,i]));
+  const R=Math.max(24,Math.min(W,H)*sc*0.022);
+  r.p[p].marks.filter(m=>m.floor===f&&byKey[m.key]).forEach(m=>{const px=(mir?W-m.x:m.x)*sc,py=m.y*sc;
+    x.beginPath();x.arc(px,py,R,0,7);x.fillStyle='#e0462b';x.fill();x.lineWidth=R*0.18;x.strokeStyle='#fff';x.stroke();
+    x.fillStyle='#fff';x.font=`700 ${R*1.1}px Cairo,Arial`;x.textAlign='center';x.textBaseline='middle';x.fillText(String(byKey[m.key].n),px,py+R*0.05)});
+  return c;
+}
+async function sheetCanvas(code,p,f,fc){
+  const v=D.villas[code];const PW=3307,PH_=2339,m=70,hh=230;
+  const c=document.createElement('canvas');c.width=PW;c.height=PH_;const x=c.getContext('2d');
+  x.fillStyle='#fff';x.fillRect(0,0,PW,PH_);x.strokeStyle='#13294b';x.lineWidth=5;x.strokeRect(m/2,m/2,PW-m,PH_-m);
+  x.beginPath();x.moveTo(m/2,m/2+hh);x.lineTo(PW-m/2,m/2+hh);x.stroke();
+  x.fillStyle='#13294b';x.direction='rtl';x.textAlign='right';x.textBaseline='middle';
+  x.font='700 58px Cairo,Arial';x.fillText('إدارة مشروع ضاحية سمو',PW-m-20,m/2+70);
+  x.font='600 44px Cairo,Arial';x.fillText(`سناج ليست — فيلا ${code} — ${PH[p]} — ${FL[f]}${rec(code).mirror?' (Mirror)':''}`,PW-m-20,m/2+160);
+  x.textAlign='left';x.direction='ltr';x.font='700 54px Cairo,Arial';x.fillText('TAAM',m+20,m/2+70);
+  x.direction='rtl';x.textAlign='left';x.font='600 38px Cairo,Arial';x.fillText('شركة تام للإنشاء والتعمير',m+20,m/2+150);
+  x.font='400 32px Cairo,Arial';x.fillStyle='#5b6b82';x.textAlign='center';x.fillText(new Date().toLocaleDateString('en-GB'),PW/2,m/2+150);
+  const aw=PW-2*m-40,ah=PH_-m-hh-80;const k=Math.min(aw/fc.width,ah/fc.height);const dw=fc.width*k,dh=fc.height*k;
+  x.drawImage(fc,(PW-dw)/2,m/2+hh+30+(ah-dh)/2,dw,dh);return c;
+}
+function c2b(c,type='image/png',q){return new Promise(r=>c.toBlob(r,type,q))}
+async function b64(blob){return await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result.split(',')[1]);f.readAsDataURL(blob)})}
+async function photoB64(p){if(p.startsWith('data:'))return p.split(',')[1];const b=await (await fetch(photoUrl(p))).blob();return await b64(b)}
+
+async function buildExport(code,p){
+  await document.fonts.load('700 40px Cairo');await document.fonts.load('400 40px Cairo');
+  const v=D.villas[code];const fls=D.floors[v.model]||[];const its=items(code,p);const r=rec(code);const marks=r.p[p].marks;const gen=r.p[p].gen||{};
+  const floorsC={};for(const f of fls){busy(`جاري تجهيز ${FL[f]}…`);floorsC[f]=await floorCanvas(code,p,f)}
+  // ---------- PDF
+  let pdfBlob=null;
+  if(fls.length){const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a3',compress:true});
+    let first=true;for(const f of fls){const sc=await sheetCanvas(code,p,f,floorsC[f]);if(!first)pdf.addPage('a3','landscape');first=false;
+      pdf.addImage(sc.toDataURL('image/jpeg',0.9),'JPEG',0,0,420,297,undefined,'FAST')}
+    pdfBlob=pdf.output('blob')}
+  // ---------- Excel (columns run physically right-to-left: م on the far right)
+  busy('جاري تجهيز ملف الإكسيل…');
+  const wb=new ExcelJS.Workbook();wb.creator='Snag Block 5';
+  const ws=wb.addWorksheet('سناج ليست',{views:[{rightToLeft:false,showGridLines:false}],pageSetup:{paperSize:9,orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0}});
+  // A..H  : ملاحظات الموقع | الصور | الدور | المرحلة | البند | القسم | التخصص | م
+  const cols=[48,8,12,16,62,18,16,6];ws.columns=cols.map(w=>({width:w}));
+  const thin={style:'thin',color:{argb:'FF9FB0C8'}};const bd={top:thin,left:thin,bottom:thin,right:thin};
+  const R_=(c,t,o={})=>{c.value=t;c.alignment={horizontal:o.h||'right',vertical:'middle',wrapText:true,readingOrder:'rtl'};c.font={name:'Arial',size:o.s||11,bold:!!o.b,color:{argb:o.c||'FF13294B'}};if(o.f)c.fill={type:'pattern',pattern:'solid',fgColor:{argb:o.f}};if(o.bd)c.border=bd};
+  ws.mergeCells('A1:C1');R_(ws.getCell('A1'),ar('شركة تام للإنشاء والتعمير'),{h:'center',b:true,s:13});
+  ws.mergeCells('D1:H1');R_(ws.getCell('D1'),ar('إدارة مشروع ضاحية سمو'),{h:'center',b:true,s:13});
+  ws.mergeCells('A2:H2');R_(ws.getCell('A2'),ar(`سناج ليست — فيلا ${code} — نموذج ${v.model} — ${PH[p]}`),{h:'center',b:true,s:15});
+  ws.mergeCells('A3:H3');R_(ws.getCell('A3'),ar(`تاريخ الاستخراج: ${new Date().toLocaleDateString('en-GB')}   |   الوضع: ${r.mirror?'Mirror':'الأصل'}   |   عدد البنود: ${its.length}`),{h:'center',s:11,c:'FF5B6B82'});
+  ws.getRow(1).height=26;ws.getRow(2).height=28;
+  const hdr=['ملاحظات الموقع','صور','الدور','المرحلة','البند','القسم','التخصص','م'];
+  const hr=ws.getRow(5);hdr.forEach((t,i)=>R_(hr.getCell(i+1),ar(t),{b:true,h:'center',c:'FFFFFFFF',f:'FF13294B',bd:1}));hr.height=24;
+  let rn=6;const photoRows=[];
+  for(const it of its){
+    const ms=marks.filter(m=>m.key===it.key);
+    const notes=[];if(gen[it.key])notes.push('عام: '+gen[it.key]);
+    ms.forEach((m,j)=>notes.push(`(${j+1}) ${FLs[m.floor]||''}: ${m.note||'بدون وصف'}`));
+    const fl=[...new Set(ms.map(m=>FLs[m.floor]))].join(' / ');
+    const ph=ms.reduce((a,m)=>a+(m.photos?m.photos.length:0),0);
+    const row=ws.getRow(rn);const has=notes.length>0;const fill=has?'FFFFF1EC':undefined;
+    R_(row.getCell(1),ar(notes.join('\n')),{bd:1,f:fill});
+    R_(row.getCell(2),ph?String(ph):'',{h:'center',bd:1,f:fill});
+    R_(row.getCell(3),ar(fl),{h:'center',bd:1,f:fill});
+    R_(row.getCell(4),ar(it.shared?'مشترك بين المرحلتين':(it.isNew?'بند جديد':PH[p])),{h:'center',bd:1,f:fill,c:it.shared?'FF0F8A83':'FF13294B',b:it.shared});
+    R_(row.getCell(5),ar(it.text),{bd:1,f:fill});R_(row.getCell(6),ar(it.sec||''),{h:'center',bd:1,f:fill});
+    R_(row.getCell(7),ar(it.spec||''),{h:'center',bd:1,f:fill});R_(row.getCell(8),it.n,{h:'center',b:true,bd:1,f:fill});
+    row.height=Math.max(22,Math.ceil(Math.max(it.text.length/55,notes.join(' ').length/42,notes.length))*17);
+    ms.forEach(m=>(m.photos||[]).forEach(pid=>photoRows.push({n:it.n,floor:m.floor,note:m.note,pid})));
+    rn++;
+  }
+  // drawings sheet
+  const wd=wb.addWorksheet('اللوحات',{views:[{showGridLines:false}]});wd.columns=[{width:150}];
+  let dr=1;for(const f of fls){R_(wd.getCell(dr,1),ar(`${FL[f]} — فيلا ${code}${r.mirror?' (Mirror)':''}`),{b:true,s:14});
+    const fc=floorsC[f];const id=wb.addImage({base64:await b64(await c2b(fc)),extension:'png'});
+    const w=1050,h=Math.round(w*fc.height/fc.width);wd.addImage(id,{tl:{col:0,row:dr},ext:{width:w,height:h}});dr+=Math.ceil(h/20)+3}
+  // also put drawings under the table on the main sheet
+  rn+=2;for(const f of fls){R_(ws.getCell(rn,8),'');ws.mergeCells(rn,1,rn,8);R_(ws.getCell(rn,1),ar(`لوحة ${FL[f]}`),{b:true,h:'center',s:13});rn++;
+    const fc=floorsC[f];const id=wb.addImage({base64:await b64(await c2b(fc)),extension:'png'});const w=1150,h=Math.round(w*fc.height/fc.width);
+    ws.addImage(id,{tl:{col:0,row:rn},ext:{width:w,height:h}});rn+=Math.ceil(h/20)+2}
+  // photos sheet
+  if(photoRows.length){busy('جاري إضافة الصور…');const wp=wb.addWorksheet('الصور',{views:[{showGridLines:false}]});
+    wp.columns=[{width:46},{width:40},{width:12},{width:8}];
+    ['الصورة','الملاحظة','الدور','م'].forEach((t,i)=>R_(wp.getRow(1).getCell(i+1),ar(t),{b:true,h:'center',c:'FFFFFFFF',f:'FF13294B',bd:1}));
+    let pr=2;for(const q of photoRows){try{const id=wb.addImage({base64:await photoB64(q.pid),extension:'jpeg'});
+      R_(wp.getCell(pr,2),ar(q.note||''),{bd:1});R_(wp.getCell(pr,3),ar(FLs[q.floor]||''),{h:'center',bd:1});R_(wp.getCell(pr,4),q.n,{h:'center',b:true,bd:1});
+      wp.getRow(pr).height=170;wp.addImage(id,{tl:{col:0.05,row:pr-1+0.05},ext:{width:300,height:220}});pr++}catch(e){}}}
+  const xbuf=await wb.xlsx.writeBuffer();
+  return {xlsx:new Blob([xbuf]),pdf:pdfBlob};
+}
+async function doExport(kind){
+  close();
+  const code=cur,p=phase;const base=`Snag_${code}_P${p}`;
+  try{busy('جاري التجهيز…');const r=await buildExport(code,p);busy();
+    let data,name;
+    if(kind==='xlsx'){data=r.xlsx;name=base+'.xlsx'}
+    else if(kind==='pdf'){if(!r.pdf){toast('مفيش لوحة للنموذج ده');return}data=r.pdf;name=base+'_Drawings.pdf'}
+    else{const z=new JSZip();z.file(base+'.xlsx',r.xlsx);if(r.pdf)z.file(base+'_Drawings.pdf',r.pdf);data=await z.generateAsync({type:'blob'});name=base+'.zip'}
+    await downloads.save({filename:name,data});
+  }catch(e){busy();const c=e&&e.code;
+    toast(c==='declined'?'اتلغى الحفظ':c==='host_unavailable'?'التطبيق مش بيحفظ ملفات — افتح الصفحة من Chrome':'حصلت مشكلة في الاستخراج: '+(c||e.message||e),4500)}
+}
+$('#exp').onclick=()=>{
+  dlg(`<h3>استخراج ملف فيلا ${esc(cur)}</h3><p class="q">${PH[phase]} — شيت إكسيل فيه السناج والملاحظات واللوحات، وملف PDF للوحات بأرقام السناج.</p>
+  <div class="row" style="flex-direction:column"><button class="btn" data-k="zip">ملف مجمّع (Excel + PDF) — ZIP</button>
+  <button class="btn g" data-k="xlsx">Excel بس</button><button class="btn g" data-k="pdf">PDF اللوحات بس</button><button class="btn g" data-k="x">إلغاء</button></div>`);
+  $('#box').onclick=e=>{const b=e.target.closest('button[data-k]');if(!b)return;$('#box').onclick=null;if(b.dataset.k==='x')close();else doExport(b.dataset.k)};
+};
+
+/* ---------- android back ---------- */
+try{const A=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.App;if(A)A.addListener('backButton',()=>{
+  if($('#dlg').classList.contains('on'))close();else if(pending){pending=null;showHint();renderList()}
+  else if($('#vVilla').classList.contains('on'))$('#back').click();else A.exitApp()})}catch(e){}
+/* ---------- start ---------- */
+(async()=>{
+  try{
+    const [a,b]=await Promise.all([fetch('data/snag.json').then(r=>r.json()),fetch('data/plan.json').then(r=>r.json())]);D=a;P=b;
+  }catch(e){document.body.innerHTML='<div class="empty">تعذّر تحميل البيانات</div>';return}
+  drawPlan();
+  const h=location.hash.slice(1);if(h.startsWith('v')&&D.villas[h.slice(1)])openVilla(h.slice(1));
+  initCaps();
+})();
+}
+</script>
+</body>
+</html>
