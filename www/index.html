@@ -16,28 +16,33 @@
    PICTURE: the drawing itself fills the screen; list below it
    COLOUR: drafting white, ink navy #13294b, red-orange tag #e0462b, shared items teal
    TYPE: Cairo; LAYOUT: top bar, drawing, bottom sheet list */
-:root{color-scheme:light dark;--bg:light-dark(#f3f4f6,#0f1520);--card:light-dark(#fff,#18212f);--ink:light-dark(#13294b,#e6ecf5);--mute:light-dark(#5b6b82,#93a3ba);--line:light-dark(#dde2ea,#2a3545);--acc:#e0462b;--sh:#0f8a83;--nav:#13294b;--sel:light-dark(#fff3e8,#3a2a1c)}
-:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+:root{color-scheme:light;--bg:light-dark(#f3f4f6,#0f1520);--card:light-dark(#fff,#18212f);--ink:light-dark(#13294b,#e6ecf5);--mute:light-dark(#5b6b82,#93a3ba);--line:light-dark(#dde2ea,#2a3545);--acc:#a91a2c;--sh:#0f8a83;--nav:#2b2b30;--sel:light-dark(#fbeef0,#3a1c22)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:light}
 *{box-sizing:border-box;min-width:0}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Cairo,Tahoma,Arial,sans-serif;overflow:hidden}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none}
-.top{height:54px;margin-top:env(safe-area-inset-top);background:var(--nav);color:#fff;display:flex;align-items:center;gap:8px;padding:0 10px;position:relative;z-index:5}
-.top h1{font-size:16px;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.top .ib{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:20px}
-.top .ib:active{background:#ffffff22}
-.seg{display:inline-flex;background:#ffffff1f;border-radius:10px;padding:3px}
-.seg button{color:#fff;padding:4px 10px;border-radius:8px;font-size:13px;white-space:nowrap}
-.seg button.on{background:#fff;color:var(--nav);font-weight:700}
-.view{position:absolute;inset:54px 0 0 0;display:none;flex-direction:column}
+/* brand: Taam red #a91a2c + charcoal */
+.top{height:58px;margin-top:env(safe-area-inset-top);background:var(--card);color:var(--ink);border-bottom:3px solid var(--acc);display:flex;align-items:center;gap:8px;padding:0 10px;position:relative;z-index:5;box-shadow:0 2px 10px #0000000f}
+.tt{flex:1;display:flex;flex-direction:column;line-height:1.2;overflow:hidden}.tt small{font-size:11.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand{height:34px;width:auto;flex:none}
+.top h1{font-size:16px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .ib{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:var(--ink);font-size:20px;flex:none}
+.top .ib:active{background:#0000000f}
+.help{width:32px!important;height:32px!important;border:1.5px solid var(--line)!important;border-radius:50%!important;font-size:16px!important;font-weight:700}
+.seg{display:inline-flex;flex:none;background:light-dark(#f0f1f3,#232c3a);border-radius:10px;padding:3px}
+.seg button{color:var(--ink);padding:4px 10px;border-radius:8px;font-size:13px;white-space:nowrap}
+.seg button.on{background:var(--acc);color:#fff;font-weight:700}
+.view{position:absolute;inset:calc(61px + env(safe-area-inset-top,0px)) 0 0 0;display:none;flex-direction:column}
 .view.on{display:flex}
-.stage{position:relative;flex:1;overflow:hidden;background:light-dark(#fff,#fff);touch-action:none}
+.stage{position:relative;flex:1;overflow:hidden;background:#fff url(img/logo_faint.png) center/min(70%,520px) no-repeat;touch-action:none}
+.list{background:url(img/logo_faint.png) center 70%/min(60%,360px) no-repeat fixed}
 .stage svg.main{position:absolute;inset:0;width:100%;height:100%;display:block}
 .hint{position:absolute;top:8px;inset-inline:8px;background:var(--acc);color:#fff;border-radius:10px;padding:8px 12px;font-size:14px;display:none;align-items:center;gap:8px;z-index:3}
 .hint.on{display:flex}.hint span{flex:1}.hint button{color:#fff;font-weight:700;padding:2px 8px;border:1px solid #fff8;border-radius:8px}
 .zoom{position:absolute;bottom:10px;left:10px;display:flex;flex-direction:column;gap:6px;z-index:2}
-.zoom button{width:42px;height:42px;border-radius:12px;background:#13294bdd;color:#fff;font-size:20px}
+.zoom button{width:42px;height:42px;border-radius:12px;background:#2b2b30dd;color:#fff;font-size:20px}
 .tools{display:flex;gap:8px;align-items:center;padding:8px 10px;background:var(--card);border-bottom:1px solid var(--line);flex-wrap:wrap}
 .chip{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .chip button{padding:6px 12px;font-size:14px}
@@ -61,13 +66,13 @@ button{cursor:pointer;border:0;background:none}
 .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;font-size:12px;color:var(--mute)}
 .tag{border-radius:6px;padding:0 6px;background:light-dark(#eef1f5,#243042)}
 .tag.sh{background:#0f8a8322;color:var(--sh);font-weight:700}
-.tag.new{background:#e0462b22;color:var(--acc);font-weight:700}
+.tag.new{background:#a91a2c1f;color:var(--acc);font-weight:700}
 .tag.cnt{background:#e0462b;color:#fff}
 .acts{display:flex;flex-direction:column;gap:6px}
 .acts button{border:1px solid var(--line);border-radius:9px;padding:4px 8px;font-size:12.5px;white-space:nowrap;background:var(--card)}
 .acts button.pin{border-color:var(--acc);color:var(--acc);font-weight:700}
 .notes{margin-top:6px;display:flex;flex-direction:column;gap:4px}
-.note{font-size:13px;background:light-dark(#fff7f2,#2a211b);border-inline-start:3px solid var(--acc);padding:4px 8px;border-radius:6px}
+.note{font-size:13px;background:light-dark(#fdf2f3,#2a1b1e);border-inline-start:3px solid var(--acc);padding:4px 8px;border-radius:6px}
 .note button{font-size:12px;color:var(--acc);font-weight:700;margin-inline-start:6px}
 .search{display:flex;gap:8px;padding:8px 10px;background:var(--card);border-bottom:1px solid var(--line);align-items:center}
 .search input{flex:1;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:16px;background:var(--bg)}
@@ -87,13 +92,34 @@ button{cursor:pointer;border:0;background:none}
 .ph button{position:absolute;top:-6px;left:-6px;width:24px;height:24px;border-radius:50%;background:var(--acc);color:#fff;font-size:14px}
 .file{display:inline-flex;align-items:center;gap:6px;border:1px dashed var(--mute);border-radius:10px;padding:8px 12px;font-size:14px;cursor:pointer}
 .file input{display:none}
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#13294b;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:30;display:none;max-width:92vw;text-align:center}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#2b2b30;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:30;display:none;max-width:92vw;text-align:center}
 .toast.on{display:block}
 .warn{background:#fff4d6;color:#6b4a00;font-size:13px;padding:6px 12px;display:none}
 .warn.on{display:block}
 .empty{padding:30px 16px;text-align:center;color:var(--mute)}
 .busy{position:fixed;inset:0;background:#0009;color:#fff;display:none;place-items:center;z-index:40;font-size:16px;text-align:center}
 .busy.on{display:grid}
+#wel{position:fixed;inset:0;z-index:50;background:var(--card);display:none;flex-direction:column}
+#wel.on{display:flex}
+.wtrack{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.wtrack::-webkit-scrollbar{display:none}
+.wslide{flex:0 0 100%;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 26px;gap:14px}
+.wslide img{width:min(260px,64vw)}
+.wslide h2{margin:0;font-size:24px;line-height:1.3}
+.wslide p{margin:0;max-width:420px;color:var(--mute);font-size:16px;line-height:1.75}
+.wslide .en{font-size:13px;letter-spacing:.3px;color:var(--acc);font-weight:700}
+.wic{width:84px;height:84px;border-radius:24px;background:#a91a2c14;color:var(--acc);display:grid;place-items:center;font-size:40px}
+.wsteps{display:flex;flex-direction:column;gap:8px;text-align:start;max-width:420px;width:100%}
+.wsteps div{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.wsteps b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-size:13px}
+.wfoot{display:flex;align-items:center;gap:12px;padding:14px 20px calc(18px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+.dots{flex:1;display:flex;gap:6px;justify-content:center}
+.dots i{width:8px;height:8px;border-radius:4px;background:var(--line);transition:width .2s}
+.dots i.on{width:22px;background:var(--acc)}
+.summ{font-size:12.5px;color:var(--mute);white-space:nowrap}
+.summ b{color:var(--acc)}
+@media(prefers-reduced-motion:reduce){.dots i{transition:none}}
+@media(max-width:480px){.brand{height:26px}.seg button{padding:4px 7px;font-size:12px}.top h1{font-size:14.5px}.help{width:28px!important;height:28px!important;font-size:14px!important}.top{gap:6px;padding:0 6px}}
 @media(min-width:900px){
   .vv{flex-direction:row}
   .vv .left{flex:1;display:flex;flex-direction:column}
@@ -105,15 +131,17 @@ button{cursor:pointer;border:0;background:none}
 <body>
 <div class="top">
   <button class="ib" id="back" aria-label="رجوع" style="display:none">→</button>
-  <h1 id="ttl">سناج ليست – بلوك 5 ضاحية سمو</h1>
+  <div class="tt"><h1 id="ttl">Sumow Suburb – Block 5</h1><small id="sub">سناج ليست · Snag List</small></div>
   <div class="seg" id="phase"><button data-p="1" class="on">المرحلة 1</button><button data-p="2">المرحلة 2</button></div>
+  <button class="ib help" id="helpB" aria-label="شرح الاستخدام">؟</button>
+  <img class="brand" src="img/mark.png" alt="TAAM">
 </div>
 <div class="warn" id="warn"></div>
 
 <section class="view on" id="vPlan">
   <div class="search">
     <input id="q" inputmode="numeric" placeholder="اكتب رقم الفيلا… مثلاً 225">
-    <div class="legend"><span><i style="background:#e0462b"></i>فيها تعليم</span><span><i style="background:#dfe7f2;border:1px solid #9fb0c8"></i>بدون</span></div>
+    <div class="legend"><span class="summ" id="summ"></span><span><i style="background:#e8a1aa"></i>فيها تعليم</span><span><i style="background:#dfe7f2;border:1px solid #9fb0c8"></i>بدون</span></div>
   </div>
   <div class="stage" id="planStage"><svg class="main" id="planSvg" xmlns="http://www.w3.org/2000/svg"></svg>
     <div class="zoom"><button data-z="in" data-t="plan">+</button><button data-z="out" data-t="plan">−</button><button data-z="fit" data-t="plan">⤢</button></div>
@@ -140,6 +168,24 @@ button{cursor:pointer;border:0;background:none}
   </div>
 </section>
 
+<div id="wel" role="dialog" aria-label="مرحباً">
+  <div class="wtrack" id="wtrack">
+    <section class="wslide"><img src="img/logo.png" alt="TAAM — شركة تام للإنشاء والتعمير"><div class="en">SUMOW SUBURB – BLOCK 5 · SNAG LIST</div>
+      <h2>أهلاً بيك في تطبيق سناج ليست</h2><p>أداة فريق شركة تام للإنشاء والتعمير لتسجيل ملاحظات الاستلام على لوحات فلل بلوك 5 بضاحية سمو، وتطلّع لكل فيلا ملف Excel و ملف PDF جاهزين.</p></section>
+    <section class="wslide"><div class="wic">🗺️</div><h2>اختار الفيلا</h2><p>من فوق حدّد المرحلة الأولى أو التانية. بعدها اضغط على الفيلا في مخطط البلوك، أو اكتب رقمها في خانة البحث.</p><p>الفلل اللي فيها ملاحظات بتظهر باللون الأحمر.</p></section>
+    <section class="wslide"><div class="wic">📐</div><h2>اللوحة</h2><div class="wsteps">
+      <div><b>1</b><span>اختار الدور: أرضي أو أول.</span></div>
+      <div><b>2</b><span>اختار <strong>الأصل</strong> أو <strong>Mirror</strong> حسب الفيلا.</span></div>
+      <div><b>3</b><span>قرّب بإصبعين، واسحب بإصبع واحد، والزرار ⟳ بيلف اللوحة.</span></div></div></section>
+    <section class="wslide"><div class="wic">📍</div><h2>سجّل الملاحظة</h2><div class="wsteps">
+      <div><b>1</b><span>في القائمة دوس <strong>📍 حدد مكانه</strong> على البند.</span></div>
+      <div><b>2</b><span>اضغط على المكان في اللوحة، فيظهر رقم البند.</span></div>
+      <div><b>3</b><span>اكتب تفاصيل الملاحظة وصوّر بالكاميرا، ودوس حفظ.</span></div>
+      <div><b>4</b><span>البند ينفع يتعلّم في أكتر من مكان، وتقدر تضيف <strong>بند جديد</strong>.</span></div></div></section>
+    <section class="wslide"><div class="wic">⬇️</div><h2>استخرج ملف الفيلا</h2><p>دوس <strong>استخراج</strong> فيطلع ملف Excel فيه السناج والملاحظات والصور، وملف PDF للوحات بأرقام البنود. بعدها تقدر تبعتهم واتساب أو إيميل.</p><p>الزرار <strong>؟</strong> اللي فوق بيرجّعك للشرح ده في أي وقت.</p></section>
+  </div>
+  <div class="wfoot"><button class="btn g" id="wSkip">تخطّي</button><div class="dots" id="wdots"></div><button class="btn" id="wNext">التالي</button></div>
+</div>
 <div class="dlg" id="dlg"><div class="box" id="box"></div></div>
 <div class="toast" id="toast"></div>
 <div class="busy" id="busy"><div id="busyT">جاري التجهيز…</div></div>
@@ -253,9 +299,9 @@ function drawPlan(){
     const xs=v.poly.map(p=>p[0]),ys=v.poly.map(p=>-p[1]);
     const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2;
     const fs=Math.min(6,(Math.max(...xs)-Math.min(...xs))/4.2);
-    h+=`<g data-code="${esc(code)}" class="vl"><polygon points="${pts}" stroke="#7f91ab" stroke-width="0.5"/>`+
-       `<text x="${cx}" y="${cy-fs*0.15}" text-anchor="middle" font-size="${fs}" font-weight="700" fill="#13294b" font-family="Cairo,Arial" direction="ltr">${esc(n)}</text>`+
-       `<text x="${cx}" y="${cy+fs*0.95}" text-anchor="middle" font-size="${fs*0.72}" fill="#0f8a83" font-family="Cairo,Arial" direction="ltr">${esc(m)}</text></g>`;
+    h+=`<g data-code="${esc(code)}" class="vl"><polygon points="${pts}" stroke="#8d8d96" stroke-width="0.5"/>`+
+       `<text x="${cx}" y="${cy-fs*0.15}" text-anchor="middle" font-size="${fs}" font-weight="700" fill="#2b2b30" font-family="Cairo,Arial" direction="ltr">${esc(n)}</text>`+
+       `<text x="${cx}" y="${cy+fs*0.95}" text-anchor="middle" font-size="${fs*0.72}" fill="#a91a2c" font-family="Cairo,Arial" direction="ltr">${esc(m)}</text></g>`;
   }
   h+='</g>';svg.innerHTML=h;
   planPZ=PanZoom(svg,(x,y,e,t)=>{const g=t.closest&&t.closest('.vl');if(g)openVilla(g.dataset.code)});
@@ -263,9 +309,9 @@ function drawPlan(){
   planPZ.fit([Math.min(...xs),Math.min(...ys),Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys)]);
   colorPlan();
 }
-function colorPlan(){
+function colorPlan(){let n=0;
   document.querySelectorAll('#villas .vl').forEach(g=>{const r=REC[g.dataset.code];const has=r&&r.p[phase]&&r.p[phase].marks.length+Object.values(r.p[phase].gen||{}).filter(Boolean).length>0;
-    g.querySelector('polygon').setAttribute('fill',has?'#f6b3a6':'#dfe7f2')});
+    g.querySelector('polygon').setAttribute('fill',has?'#e8a1aa':'#eef1f5cc');if(has)n++});const sm=$('#summ');if(sm)sm.innerHTML=`<b>${n}</b> / 149`;
 }
 
 /* ---------- villa view ---------- */
@@ -273,7 +319,7 @@ let drPZ;
 function openVilla(code){
   cur=code;const v=D.villas[code];const r=rec(code);mirror=!!r.mirror;
   const fls=D.floors[v.model]||[];floor=fls[0]||'G';pending=null;
-  $('#ttl').textContent=`فيلا ${code.split('-')[1]} — ${v.model}`;
+  $('#ttl').textContent=`فيلا ${code.split('-')[1]} — ${v.model}`;$('#sub').textContent='Sumow Suburb – Block 5 · '+code;
   $('#back').style.display='';
   $('#vPlan').classList.remove('on');$('#vVilla').classList.add('on');
   $('#floors').innerHTML=fls.map(f=>`<button data-f="${f}">${FLs[f]}</button>`).join('')||'<button disabled>لا توجد لوحة</button>';
@@ -294,7 +340,7 @@ async function loadDrawing(){
   const name=`${v.model}_${floor}${mirror?'_m':''}`;const [W,H]=D.meta[`${v.model}_${floor}`];
   svg.innerHTML='<text x="20" y="60" font-size="40">…</text>';
   let t;try{t=await getSvg(name)}catch(e){no.style.display='block';no.textContent='تعذّر تحميل اللوحة';return}
-  const inner=t.replace(/^[\s\S]*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'');
+  const inner=t.replace(/^[\s\S]*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'').replace('<rect width="100%" height="100%" fill="#fff"/>','');
   svg.innerHTML=`<g id="rotg" transform="${rotT(W,H)}"><g id="dwg">${inner}</g><g id="mk"></g></g>`;
   if(!drPZ){drPZ=PanZoom(svg,onDrawTap);svg.addEventListener('vb',drawMarks)}
   drPZ.fit(rot%180?[0,0,H,W]:[0,0,W,H]);drawMarks();
@@ -308,7 +354,7 @@ function drawMarks(){
   const svg=$('#drSvg');const r=svg.getBoundingClientRect();const k=drPZ?drPZ.st.w/Math.max(r.width,1):1;
   const R=15*k;const its=items(cur,phase);const byKey=Object.fromEntries(its.map(i=>[i.key,i]));
   g.innerHTML=marksOf(cur,phase).filter(m=>m.floor===floor&&byKey[m.key]).map(m=>{const n=byKey[m.key].n;const x=disp(m.x),y=m.y;
-    return `<g class="mkr" data-id="${esc(m.id)}"><circle cx="${x}" cy="${y}" r="${R}" fill="#e0462b" stroke="#fff" stroke-width="${2.5*k}"/>`+
+    return `<g class="mkr" data-id="${esc(m.id)}"><circle cx="${x}" cy="${y}" r="${R}" fill="#a91a2c" stroke="#fff" stroke-width="${2.5*k}"/>`+
       `<text transform="rotate(${-rot} ${x} ${y})" x="${x}" y="${y+R*0.36}" text-anchor="middle" font-size="${R*1.05}" font-weight="700" fill="#fff" font-family="Cairo,Arial" direction="ltr">${n}</text></g>`}).join('');
 }
 function onDrawTap(X,Y,e,t){
@@ -346,7 +392,7 @@ function refresh(){if(cur&&$('#vVilla').classList.contains('on')){mirror=!!rec(c
 /* ---------- dialogs ---------- */
 function dlg(html){$('#box').innerHTML=html;$('#dlg').classList.add('on')}
 function close(){$('#dlg').classList.remove('on')}
-$('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg')close()});
+let dlgDown=false;$('#dlg').addEventListener('pointerdown',e=>{dlgDown=e.target.id==='dlg'});$('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg'&&dlgDown)close();dlgDown=false});
 function photoUrl(p){return p.startsWith('data:')?p:(PURL[p]||'')}
 function openMark(id,isNew){
   const m=marksOf(cur,phase).find(x=>x.id===id);if(!m)return;const it=items(cur,phase).find(i=>i.key===m.key);
@@ -397,7 +443,7 @@ $('#phase').onclick=e=>{const b=e.target.closest('button');if(!b)return;phase=+b
   document.querySelectorAll('#phase button').forEach(x=>x.classList.toggle('on',x===b));pending=null;showHint();
   if(cur&&$('#vVilla').classList.contains('on')){renderList();drawMarks()}else colorPlan()};
 $('#back').onclick=()=>{$('#vVilla').classList.remove('on');$('#vPlan').classList.add('on');$('#back').style.display='none';
-  $('#ttl').textContent='سناج ليست – بلوك 5 ضاحية سمو';cur=null;pending=null;showHint();colorPlan();planPZ&&planPZ.refit()};
+  $('#ttl').textContent='Sumow Suburb – Block 5';$('#sub').textContent='سناج ليست · Snag List';cur=null;pending=null;showHint();colorPlan();planPZ&&planPZ.refit()};
 $('#floors').onclick=e=>{const b=e.target.closest('button[data-f]');if(!b)return;floor=b.dataset.f;setChips();loadDrawing()};
 $('#mir').onclick=e=>{const b=e.target.closest('button');if(!b)return;mirror=b.dataset.m==='1';rec(cur).mirror=mirror;save(cur);setChips();loadDrawing()};
 $('#list').onclick=e=>{const b=e.target.closest('button');if(!b)return;
@@ -431,20 +477,21 @@ async function floorCanvas(code,p,f){
   const its=items(code,p);const byKey=Object.fromEntries(its.map(i=>[i.key,i]));
   const R=Math.max(24,Math.min(W,H)*sc*0.022);
   r.p[p].marks.filter(m=>m.floor===f&&byKey[m.key]).forEach(m=>{const px=(mir?W-m.x:m.x)*sc,py=m.y*sc;
-    x.beginPath();x.arc(px,py,R,0,7);x.fillStyle='#e0462b';x.fill();x.lineWidth=R*0.18;x.strokeStyle='#fff';x.stroke();
+    x.beginPath();x.arc(px,py,R,0,7);x.fillStyle='#a91a2c';x.fill();x.lineWidth=R*0.18;x.strokeStyle='#fff';x.stroke();
     x.fillStyle='#fff';x.font=`700 ${R*1.1}px Cairo,Arial`;x.textAlign='center';x.textBaseline='middle';x.fillText(String(byKey[m.key].n),px,py+R*0.05)});
   return c;
 }
+let _logo=null;async function logoImg(){if(_logo)return _logo;try{const i=new Image();await new Promise((ok,no)=>{i.onload=ok;i.onerror=no;i.src='img/logo.png'});return _logo=i}catch(e){return null}}
 async function sheetCanvas(code,p,f,fc){
   const v=D.villas[code];const PW=3307,PH_=2339,m=70,hh=230;
   const c=document.createElement('canvas');c.width=PW;c.height=PH_;const x=c.getContext('2d');
   x.fillStyle='#fff';x.fillRect(0,0,PW,PH_);x.strokeStyle='#13294b';x.lineWidth=5;x.strokeRect(m/2,m/2,PW-m,PH_-m);
   x.beginPath();x.moveTo(m/2,m/2+hh);x.lineTo(PW-m/2,m/2+hh);x.stroke();
-  x.fillStyle='#13294b';x.direction='rtl';x.textAlign='right';x.textBaseline='middle';
-  x.font='700 58px Cairo,Arial';x.fillText('إدارة مشروع ضاحية سمو',PW-m-20,m/2+70);
+  x.strokeStyle='#a91a2c';x.lineWidth=8;x.beginPath();x.moveTo(m/2,m/2+hh);x.lineTo(PW-m/2,m/2+hh);x.stroke();
+  x.fillStyle='#2b2b30';x.direction='rtl';x.textAlign='right';x.textBaseline='middle';
+  x.font='700 58px Cairo,Arial';x.fillText('إدارة مشروع ضاحية سمو — Sumow Suburb Block 5',PW-m-20,m/2+70);
   x.font='600 44px Cairo,Arial';x.fillText(`سناج ليست — فيلا ${code} — ${PH[p]} — ${FL[f]}${rec(code).mirror?' (Mirror)':''}`,PW-m-20,m/2+160);
-  x.textAlign='left';x.direction='ltr';x.font='700 54px Cairo,Arial';x.fillText('TAAM',m+20,m/2+70);
-  x.direction='rtl';x.textAlign='left';x.font='600 38px Cairo,Arial';x.fillText('شركة تام للإنشاء والتعمير',m+20,m/2+150);
+  const lg=await logoImg();if(lg){const lh=hh-40,lw=lh*lg.width/lg.height;x.drawImage(lg,m+20,m/2+20,lw,lh)}
   x.font='400 32px Cairo,Arial';x.fillStyle='#5b6b82';x.textAlign='center';x.fillText(new Date().toLocaleDateString('en-GB'),PW/2,m/2+150);
   const aw=PW-2*m-40,ah=PH_-m-hh-80;const k=Math.min(aw/fc.width,ah/fc.height);const dw=fc.width*k,dh=fc.height*k;
   x.drawImage(fc,(PW-dw)/2,m/2+hh+30+(ah-dh)/2,dw,dh);return c;
@@ -471,13 +518,13 @@ async function buildExport(code,p){
   const cols=[48,8,12,16,62,18,16,6];ws.columns=cols.map(w=>({width:w}));
   const thin={style:'thin',color:{argb:'FF9FB0C8'}};const bd={top:thin,left:thin,bottom:thin,right:thin};
   const R_=(c,t,o={})=>{c.value=t;c.alignment={horizontal:o.h||'right',vertical:'middle',wrapText:true,readingOrder:'rtl'};c.font={name:'Arial',size:o.s||11,bold:!!o.b,color:{argb:o.c||'FF13294B'}};if(o.f)c.fill={type:'pattern',pattern:'solid',fgColor:{argb:o.f}};if(o.bd)c.border=bd};
-  ws.mergeCells('A1:C1');R_(ws.getCell('A1'),ar('شركة تام للإنشاء والتعمير'),{h:'center',b:true,s:13});
-  ws.mergeCells('D1:H1');R_(ws.getCell('D1'),ar('إدارة مشروع ضاحية سمو'),{h:'center',b:true,s:13});
+  ws.mergeCells('A1:C1');try{const lb=await (await fetch('img/logo.png')).blob();const lid=wb.addImage({base64:await b64(lb),extension:'png'});ws.addImage(lid,{tl:{col:0.1,row:0.1},ext:{width:150,height:77}})}catch(e){R_(ws.getCell('A1'),ar('شركة تام للإنشاء والتعمير'),{h:'center',b:true,s:13})}
+  ws.mergeCells('D1:H1');R_(ws.getCell('D1'),ar('إدارة مشروع ضاحية سمو')+'\nSumow Suburb – Block 5',{h:'center',b:true,s:13});
   ws.mergeCells('A2:H2');R_(ws.getCell('A2'),ar(`سناج ليست — فيلا ${code} — نموذج ${v.model} — ${PH[p]}`),{h:'center',b:true,s:15});
   ws.mergeCells('A3:H3');R_(ws.getCell('A3'),ar(`تاريخ الاستخراج: ${new Date().toLocaleDateString('en-GB')}   |   الوضع: ${r.mirror?'Mirror':'الأصل'}   |   عدد البنود: ${its.length}`),{h:'center',s:11,c:'FF5B6B82'});
-  ws.getRow(1).height=26;ws.getRow(2).height=28;
+  ws.getRow(1).height=62;ws.getRow(2).height=28;
   const hdr=['ملاحظات الموقع','صور','الدور','المرحلة','البند','القسم','التخصص','م'];
-  const hr=ws.getRow(5);hdr.forEach((t,i)=>R_(hr.getCell(i+1),ar(t),{b:true,h:'center',c:'FFFFFFFF',f:'FF13294B',bd:1}));hr.height=24;
+  const hr=ws.getRow(5);hdr.forEach((t,i)=>R_(hr.getCell(i+1),ar(t),{b:true,h:'center',c:'FFFFFFFF',f:'FFA91A2C',bd:1}));hr.height=24;
   let rn=6;const photoRows=[];
   for(const it of its){
     const ms=marks.filter(m=>m.key===it.key);
@@ -508,7 +555,7 @@ async function buildExport(code,p){
   // photos sheet
   if(photoRows.length){busy('جاري إضافة الصور…');const wp=wb.addWorksheet('الصور',{views:[{showGridLines:false}]});
     wp.columns=[{width:46},{width:40},{width:12},{width:8}];
-    ['الصورة','الملاحظة','الدور','م'].forEach((t,i)=>R_(wp.getRow(1).getCell(i+1),ar(t),{b:true,h:'center',c:'FFFFFFFF',f:'FF13294B',bd:1}));
+    ['الصورة','الملاحظة','الدور','م'].forEach((t,i)=>R_(wp.getRow(1).getCell(i+1),ar(t),{b:true,h:'center',c:'FFFFFFFF',f:'FFA91A2C',bd:1}));
     let pr=2;for(const q of photoRows){try{const id=wb.addImage({base64:await photoB64(q.pid),extension:'jpeg'});
       R_(wp.getCell(pr,2),ar(q.note||''),{bd:1});R_(wp.getCell(pr,3),ar(FLs[q.floor]||''),{h:'center',bd:1});R_(wp.getCell(pr,4),q.n,{h:'center',b:true,bd:1});
       wp.getRow(pr).height=170;wp.addImage(id,{tl:{col:0.05,row:pr-1+0.05},ext:{width:300,height:220}});pr++}catch(e){}}}
@@ -538,12 +585,23 @@ $('#exp').onclick=()=>{
 try{const A=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.App;if(A)A.addListener('backButton',()=>{
   if($('#dlg').classList.contains('on'))close();else if(pending){pending=null;showHint();renderList()}
   else if($('#vVilla').classList.contains('on'))$('#back').click();else A.exitApp()})}catch(e){}
+/* ---------- welcome ---------- */
+function welcome(){const w=$('#wel'),tr=$('#wtrack'),n=tr.children.length;
+  $('#wdots').innerHTML='<i></i>'.repeat(n);const dots=[...$('#wdots').children];
+  const idx=()=>{const c=tr.getBoundingClientRect();const mid=c.left+c.width/2;let best=0,bd=1e9;[...tr.children].forEach((el,k)=>{const r=el.getBoundingClientRect();const d=Math.abs(r.left+r.width/2-mid);if(d<bd){bd=d;best=k}});return best};
+  const upd=()=>{const i=idx();dots.forEach((d,k)=>d.classList.toggle('on',k===i));$('#wNext').textContent=i>=n-1?'يلا نبدأ':'التالي'};
+  tr.onscroll=upd;w.classList.add('on');tr.children[0].scrollIntoView({inline:'center',block:'nearest'});setTimeout(upd,50);
+  const done=()=>{w.classList.remove('on');try{localStorage.setItem('snag5_welcomed','1')}catch(e){}};
+  $('#wNext').onclick=()=>{const i=idx();if(i>=n-1)done();else tr.children[i+1].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})};
+  $('#wSkip').onclick=done;}
+$('#helpB').onclick=welcome;
 /* ---------- start ---------- */
 (async()=>{
   try{
     const [a,b]=await Promise.all([fetch('data/snag.json').then(r=>r.json()),fetch('data/plan.json').then(r=>r.json())]);D=a;P=b;
   }catch(e){document.body.innerHTML='<div class="empty">تعذّر تحميل البيانات</div>';return}
   drawPlan();
+  let seen=null;try{seen=localStorage.getItem('snag5_welcomed')}catch(e){}if(!seen)welcome();
   const h=location.hash.slice(1);if(h.startsWith('v')&&D.villas[h.slice(1)])openVilla(h.slice(1));
   initCaps();
 })();
