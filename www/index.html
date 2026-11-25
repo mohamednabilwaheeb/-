@@ -99,6 +99,8 @@ button{cursor:pointer;border:0;background:none}
 .empty{padding:30px 16px;text-align:center;color:var(--mute)}
 .busy{position:fixed;inset:0;background:#0009;color:#fff;display:none;place-items:center;z-index:40;font-size:16px;text-align:center}
 .busy.on{display:grid}
+.upd{display:none;align-items:center;gap:8px;background:#0f8a83;color:#fff;padding:8px 12px;font-size:14px;position:relative;z-index:6}
+.upd.on{display:flex}.upd span{flex:1}.upd #updB{background:#fff;color:#0f8a83;font-weight:700;border-radius:9px;padding:5px 14px}.upd #updX{color:#fff;font-size:20px;padding:0 4px}
 #auth{position:fixed;inset:0;z-index:55;background:#fff url(img/logo_faint.png) center 85%/min(80%,420px) no-repeat;display:none;flex-direction:column;align-items:center;overflow:auto;padding:calc(30px + env(safe-area-inset-top,0px)) 20px 30px}
 #auth.on{display:flex}
 #auth .logo{width:min(200px,52vw);margin:10px 0 6px}
@@ -169,6 +171,7 @@ button{cursor:pointer;border:0;background:none}
   <img class="brand" src="img/mark.png" alt="TAAM">
 </div>
 <div class="warn" id="warn"></div>
+<div class="upd" id="upd"><span id="updT"></span><button id="updB">تحديث</button><button id="updX" aria-label="إغلاق">×</button></div>
 
 <section class="view on" id="vPlan">
   <div class="search">
@@ -231,6 +234,7 @@ button{cursor:pointer;border:0;background:none}
 <script src="lib/firebase-auth-compat.js"></script>
 <script src="lib/firebase-firestore-compat.js"></script>
 <script src="config.js"></script>
+<script src="app-version.js"></script>
 <script>
 {
 const $=s=>document.querySelector(s);
@@ -319,6 +323,30 @@ async function loadPhoto(id){if(PURL[id]||!id||id.startsWith('data:'))return PUR
     try{await idb('photos','readwrite',st=>st.put(b,id))}catch(e){}PURL[id]=URL.createObjectURL(b);return PURL[id]}catch(e){return ''}}
 function fillImgs(root){root.querySelectorAll('img[data-pid]').forEach(async im=>{if(!im.getAttribute('src')){const u=await loadPhoto(im.dataset.pid);if(u)im.src=u}})}
 
+/* ---------- in-app updates ---------- */
+const REPO='mohamednabilwaheeb/-';const BUILD=+(window.APP_BUILD||0),NATIVE=+(window.APP_NATIVE||1);
+const UPD=()=>{try{return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.CapacitorUpdater}catch(e){return null}};
+let NEWREL=null;
+async function checkUpdate(manual){
+  try{const r=await fetch(`https://api.github.com/repos/${REPO}/releases/latest`,{cache:'no-store'});if(!r.ok)throw new Error(r.status);const j=await r.json();
+    const body=j.body||'';const m=body.match(/\{[^{}]*"build"[^{}]*\}/);const info=m?JSON.parse(m[0]):{build:+(String(j.tag_name).replace(/\D/g,''))||0,native:NATIVE};
+    const asset=n=>(j.assets||[]).find(a=>a.name===n);
+    if(info.build>BUILD){NEWREL={...info,notes:body.replace(m?m[0]:'','').trim(),zip:asset('bundle.zip'),apk:asset('SnagBlock5.apk'),page:j.html_url};
+      $('#updT').textContent=`فيه تحديث جديد (نسخة ${info.build})`+(NEWREL.notes?' — '+NEWREL.notes.split('\n')[0].slice(0,60):'');$('#upd').classList.add('on')}
+    else if(manual)toast('عندك آخر نسخة ✓ ('+BUILD+')')}
+  catch(e){if(manual)toast('مقدرتش أتأكد من التحديثات — اتأكد من النت')}}
+async function applyUpdate(){const R=NEWREL;if(!R)return;const U=UPD();
+  const needApk=R.native>NATIVE||!U||!R.zip;
+  if(needApk){const url=R.apk?R.apk.browser_download_url:R.page;
+    dlg(`<h3>تحديث كامل للتطبيق</h3><p class="q">التحديث ده محتاج تنزّل نسخة جديدة من التطبيق وتسطّبها فوق القديمة (بياناتك مش هتضيع).</p>
+      <div class="row"><a class="btn" href="${esc(url)}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">⬇ تنزيل التحديث</a><span class="sp"></span><button class="btn g" id="uX2">بعدين</button></div>`);$('#uX2').onclick=close;return}
+  try{busy('جاري تحميل التحديث…');const b=await U.download({url:R.zip.browser_download_url,version:String(R.build)});busy('جاري التحديث…');await U.set(b)}
+  catch(e){busy();toast('التحديث مانجحش: '+(e&&e.message||e),4000)}}
+$('#updB').onclick=applyUpdate;$('#updX').onclick=()=>$('#upd').classList.remove('on');
+try{const U=UPD();if(U)U.notifyAppReady()}catch(e){}
+setTimeout(()=>checkUpdate(false),5000);setInterval(()=>checkUpdate(false),30*60*1000);
+try{const A=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.App;if(A)A.addListener('resume',()=>checkUpdate(false))}catch(e){}
+
 /* auth screens */
 function showAuth(kind,msg){$('#auth').classList.add('on');const c=$('#acard');const hasBio=lsGet('snag5_bio')==='1'&&BIO();
   if(kind==='loading'){c.innerHTML='<h3>جاري التحميل…</h3><p>بنجهّز حسابك.</p>';return}
@@ -381,7 +409,8 @@ function userMenu(){const bio=lsGet('snag5_bio')==='1';
   <p class="q"><span class="net ${navigator.onLine?'on':''}"></span>${navigator.onLine?'متصل — التعديلات بتظهر للفريق على طول':'مفيش نت — التعديلات محفوظة وهترتفع لما النت يرجع'}</p>
   <div class="row" style="flex-direction:column">${isAdmin()?'<button class="btn" id="mUsers">👥 إدارة المستخدمين</button>':''}
   <button class="btn g" id="mBio">${bio?'إلغاء الدخول بالبصمة':'تفعيل الدخول بالبصمة'}</button>
-  <button class="btn g" id="mOut">تسجيل خروج</button><button class="btn g" id="mX">إغلاق</button></div>`);
+  <button class="btn g" id="mUpd">🔄 البحث عن تحديث</button><button class="btn g" id="mOut">تسجيل خروج</button><button class="btn g" id="mX">إغلاق</button></div><p class="q" style="text-align:center;margin-top:10px">النسخة ${BUILD}</p>`);
+  $('#mUpd').onclick=()=>{close();checkUpdate(true)};
   if(isAdmin())$('#mUsers').onclick=usersPanel;
   $('#mBio').onclick=async()=>{if(bio){try{await BIO()&&BIO().deleteCredentials({server:BIO_SRV})}catch(e){}lsSet('snag5_bio',null);toast('اتلغت البصمة');close()}
     else{close();lsSet('snag5_bio_no',null);dlg(`<h3>تفعيل البصمة</h3><p class="q">اكتب كلمة السر مرة واحدة عشان نحفظها بأمان مع البصمة.</p><input type="password" id="bpw" dir="ltr"><div class="row"><button class="btn" id="bOk">تفعيل</button><span class="sp"></span><button class="btn g" id="bX">إلغاء</button></div>`);

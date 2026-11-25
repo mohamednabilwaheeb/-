@@ -15,6 +15,8 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: node scripts/copy-libs.js
+      - name: Stamp version
+        run: echo "window.APP_BUILD=${{ github.run_number }};window.APP_NATIVE=$(cat native-version.txt);" > www/app-version.js
       - run: npx cap sync android
       - uses: actions/setup-java@v4
         with:
@@ -25,6 +27,11 @@ jobs:
           chmod +x android/gradlew
           cd android && ./gradlew assembleDebug --no-daemon
       - run: cp android/app/build/outputs/apk/debug/app-debug.apk SnagBlock5.apk
+      - name: Web bundle for in-app updates
+        run: |
+          cd www && zip -qr ../bundle.zip . && cd ..
+          echo "{\"build\":${{ github.run_number }},\"native\":$(cat native-version.txt)}" > notes.md
+          git log -1 --pretty=%s >> notes.md
       - uses: actions/upload-artifact@v4
         with:
           name: SnagBlock5-apk
@@ -33,4 +40,7 @@ jobs:
         with:
           tag_name: build-${{ github.run_number }}
           name: Snag Block 5 - build ${{ github.run_number }}
-          files: SnagBlock5.apk
+          body_path: notes.md
+          files: |
+            SnagBlock5.apk
+            bundle.zip
