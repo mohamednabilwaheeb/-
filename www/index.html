@@ -177,7 +177,7 @@ button{cursor:pointer;border:0;background:none}
   <div class="seg" id="phase"><button data-p="1" class="on">المرحلة 1</button><button data-p="2">المرحلة 2</button></div>
   <button class="ib help" id="helpB" aria-label="شرح الاستخدام">؟</button>
   <button class="ib help" id="actB" aria-label="آخر التحديثات" style="display:none;position:relative">🔔<i id="actN" class="badge"></i></button>
-  <button class="ib help" id="userB" aria-label="حسابي" style="display:none">👤</button>
+  <button class="ib help" id="userB" aria-label="حسابي" style="display:none;position:relative">👤<i id="reqN" class="badge"></i></button>
   <img class="brand" src="img/mark.png" alt="TAAM">
 </div>
 <div class="warn" id="warn"></div>
@@ -321,7 +321,17 @@ function startSync(){if(unsubV)return;mode='fs';
   unsubV=FS.collection('v').onSnapshot(s=>{s.docChanges().forEach(ch=>{const id=ch.doc.id;
       if(ch.type==='removed'){delete SYNCED[id];if(!dirty[id])delete REC[id]}else{SYNCED[id]=ch.doc.data();if(!dirty[id])REC[id]=toLocal(SYNCED[id])}});
     setWarn('');if(!pending)refresh();migrate()},e=>setWarn('مشكلة في الاتصال بالسيرفر: '+(e.code||'')));}
-function stopSync(){if(unsubA){unsubA();unsubA=null}$('#actB').style.display='none';if(unsubV){unsubV();unsubV=null}for(const k in REC)delete REC[k];for(const k in SYNCED)delete SYNCED[k];refresh()}
+let unsubR=null,REQ=0;
+function startReq(){if(unsubR||!FS||!isAdmin())return;let first=true,seen=new Set();
+  unsubR=FS.collection('users').onSnapshot(s=>{const pend=s.docs.map(d=>({id:d.id,...d.data()})).filter(r=>!r.approved&&!r.disabled&&r.username!==ADMIN);REQ=pend.length;
+    const b=$('#reqN');b.textContent=REQ>9?'9+':REQ;b.classList.toggle('on',REQ>0);
+    const fresh=pend.filter(r=>!seen.has(r.id));pend.forEach(r=>seen.add(r.id));
+    if(first){first=false;if(REQ)setTimeout(()=>toast(`👥 ${REQ} من الفريق طالبين الدخول — دوس 👤 ثم «إدارة المستخدمين» للموافقة`,6000),2500);return}
+    for(const r of fresh){const t='طلب دخول جديد — Dhahiat Sumou',body=`${r.name||r.username} عمل حساب ومستني موافقتك`;toast('👥 '+body,6000);
+      try{if(!LN()&&'Notification' in window&&Notification.permission==='granted'&&document.hidden){const n=new Notification(t,{body,icon:'img/icon-192.png'});n.onclick=()=>{window.focus();usersPanel()}}}catch(e){}
+      const L=LN();if(L&&notifReady)L.schedule({notifications:[{id:Math.floor(Math.random()*2e9),title:t,body,extra:{code:'__USERS__'},smallIcon:'ic_stat_notify'}]}).catch(()=>{})}
+  },()=>{})}
+function stopSync(){if(unsubR){unsubR();unsubR=null;$('#reqN').classList.remove('on')}if(unsubA){unsubA();unsubA=null}$('#actB').style.display='none';if(unsubV){unsubV();unsubV=null}for(const k in REC)delete REC[k];for(const k in SYNCED)delete SYNCED[k];refresh()}
 let migrating=false;
 async function migrate(){if(migrating||lsGet('snag5_migrated'))return;migrating=true;
   try{const codes=Object.keys(LOCALREC);for(const code of codes){const L=LOCALREC[code];const R=rec(code);
@@ -355,7 +365,7 @@ setTimeout(showDua,25000);setInterval(showDua,6*60*1000);
 /* ---------- activity feed + notifications ---------- */
 let ACT=[],unsubA=null,notifReady=false;const LN=()=>{try{return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.LocalNotifications}catch(e){return null}};
 async function notifPerm(){const L=LN();if(!L){try{if(!NATIVE_APP&&'Notification' in window&&Notification.permission==='default')await Notification.requestPermission()}catch(e){}return}if(notifReady)return;try{let p=await L.checkPermissions();if(p.display!=='granted')p=await L.requestPermissions();notifReady=p.display==='granted';
-  L.addListener('localNotificationActionPerformed',a=>{const c=a.notification&&a.notification.extra&&a.notification.extra.code;if(c&&D&&D.villas[c])openVilla(c)})}catch(e){}}
+  L.addListener('localNotificationActionPerformed',a=>{const c=a.notification&&a.notification.extra&&a.notification.extra.code;if(c==='__USERS__'&&isAdmin()){usersPanel();return}if(c&&D&&D.villas[c])openVilla(c)})}catch(e){}}
 function villaNo(code){return String(code).split('-')[1]||code}
 function logAct(code,upd){if(!FS||!USER)return;const parts=[];
   for(const p of [1,2]){const o=upd['p'+p];if(!o)continue;const its=items(code,p);const nOf=k=>{const i=its.find(x=>x.key===k);return i?i.n:''};
@@ -457,7 +467,7 @@ async function unlock(){try{await BIO().verifyIdentity({reason:'فتح التط�
 function afterProfile(){if(!USER)return;ME=(PROFILE&&PROFILE.name)||USER.email.split('@')[0];$('#userB').style.display='';
   if(lockPending){showAuth('lock');return}
   lsSet('snag5_name',ME);
-  if(isAdmin()||(PROFILE&&PROFILE.approved)){const wasLocked=$('#auth').classList.contains('on');hideAuth();startSync();startAct();if(wasLocked)toast(greet(),3500)}
+  if(isAdmin()||(PROFILE&&PROFILE.approved)){const wasLocked=$('#auth').classList.contains('on');hideAuth();startSync();startAct();startReq();if(wasLocked)toast(greet(),3500)}
   else{stopSync();showAuth(PROFILE&&PROFILE.disabled?'disabled':'pending')}}
 function startFirebase(){
   firebase.initializeApp(CFG);FS=firebase.firestore();try{FS.enablePersistence({synchronizeTabs:false}).catch(()=>{})}catch(e){}
@@ -470,7 +480,7 @@ function startFirebase(){
 function userMenu(){const bio=lsGet('snag5_bio')==='1';
   dlg(`<h3>${esc(ME)}</h3><p class="q" dir="ltr" style="text-align:right">${esc(USER?USER.email.split('@')[0]:'')} ${isAdmin()?'· مدير':''}</p>
   <p class="q"><span class="net ${navigator.onLine?'on':''}"></span>${navigator.onLine?'متصل — التعديلات بتظهر للفريق على طول':'مفيش نت — التعديلات محفوظة وهترتفع لما النت يرجع'}</p>
-  <div class="row" style="flex-direction:column">${isAdmin()?'<button class="btn" id="mUsers">👥 إدارة المستخدمين</button>':''}
+  <div class="row" style="flex-direction:column">${isAdmin()?`<button class="btn" id="mUsers">👥 إدارة المستخدمين${REQ?` (${REQ} مستني موافقة)`:''}</button>`:''}
   <button class="btn g" id="mBio">${bio?'إلغاء الدخول بالبصمة':'تفعيل الدخول بالبصمة'}</button>
   <button class="btn g" id="mDua">${lsGet('snag5_dua')==='0'?'تشغيل الأذكار':'إيقاف الأذكار'}</button><button class="btn g" id="mUpd">🔄 البحث عن تحديث</button><button class="btn g" id="mOut">تسجيل خروج</button><button class="btn g" id="mX">إغلاق</button></div><p class="q" style="text-align:center;margin-top:10px">النسخة ${BUILD}</p>`);
   $('#mUpd').onclick=()=>{close();checkUpdate(true)};$('#mDua').onclick=()=>{lsSet('snag5_dua',lsGet('snag5_dua')==='0'?'1':'0');close();toast(lsGet('snag5_dua')==='0'?'اتوقفت الأذكار':'اتشغلت الأذكار');if(lsGet('snag5_dua')!=='0')showDua()};
