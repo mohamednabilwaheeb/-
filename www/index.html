@@ -198,6 +198,7 @@ button{cursor:pointer;border:0;background:none}
     <div class="tools">
       <div class="chip" id="floors"></div>
       <div class="chip" id="mir"><button data-m="0" class="on">الأصل</button><button data-m="1">Mirror</button></div>
+      <div class="chip" id="det"><button data-d="0" class="on">بدون اكسات</button><button data-d="1">اللوحة كاملة</button></div>
       <span class="sp"></span>
       <button class="btn" id="exp">⬇ استخراج</button>
     </div>
@@ -254,7 +255,7 @@ const FL={G:'الدور الأرضي',F:'الدور الأول',S:'الدور ا
 const FLs={G:'أرضي',F:'أول',S:'ثاني'};
 const PH={1:'المرحلة الأولى',2:'المرحلة الثانية'};
 let D=null,P=null;               // snag data, plan data
-let phase=1, cur=null, floor='G', mirror=false, pending=null, svgCache={};
+let phase=1, cur=null, floor='G', mirror=false, full=(()=>{try{return localStorage.getItem('snag5_full')==='1'}catch(e){return false}})(), pending=null, svgCache={};
 const REC={};                    // code -> record
 let db=null, uid=null, assets=null, downloads=null, mode='local';
 
@@ -590,6 +591,7 @@ function openVilla(code){
 function setChips(){
   document.querySelectorAll('#floors button').forEach(b=>b.classList.toggle('on',b.dataset.f===floor));
   document.querySelectorAll('#mir button').forEach(b=>b.classList.toggle('on',(b.dataset.m==='1')===mirror));
+  document.querySelectorAll('#det button').forEach(b=>b.classList.toggle('on',(b.dataset.d==='1')===full));
 }
 async function getSvg(name){
   if(svgCache[name])return svgCache[name];
@@ -599,7 +601,7 @@ async function loadDrawing(){
   const v=D.villas[cur];const fls=D.floors[v.model]||[];const svg=$('#drSvg');const no=$('#noDr');
   if(!fls.length){svg.innerHTML='';no.style.display='block';no.textContent=`نموذج ${v.model} ملهوش لوحة لسه. تقدر تكتب ملاحظات على البنود من القائمة.`;return}
   no.style.display='none';
-  const name=`${v.model}_${floor}${mirror?'_m':''}`;const [W,H]=D.meta[`${v.model}_${floor}`];
+  const name=`${v.model}_${floor}${full?'_x':''}${mirror?'_m':''}`;const [W,H]=D.meta[`${v.model}_${floor}`];
   svg.innerHTML='<text x="20" y="60" font-size="40">…</text>';
   let t;try{t=await getSvg(name)}catch(e){no.style.display='block';no.textContent='تعذّر تحميل اللوحة';return}
   const inner=t.replace(/^[\s\S]*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'').replace('<rect width="100%" height="100%" fill="#fff"/>','');
@@ -714,6 +716,7 @@ $('#phase').onclick=e=>{const b=e.target.closest('button');if(!b)return;phase=+b
 $('#back').onclick=()=>{$('#vVilla').classList.remove('on');$('#vPlan').classList.add('on');$('#back').style.display='none';
   $('#ttl').textContent='Dhahiat Sumou – Block 5';$('#sub').textContent='Snag List';cur=null;pending=null;showHint();colorPlan();planPZ&&planPZ.refit()};
 $('#floors').onclick=e=>{const b=e.target.closest('button[data-f]');if(!b)return;floor=b.dataset.f;setChips();loadDrawing()};
+$('#det').onclick=e=>{const b=e.target.closest('button');if(!b)return;full=b.dataset.d==='1';try{localStorage.setItem('snag5_full',full?'1':'0')}catch(_){};setChips();loadDrawing()};
 $('#mir').onclick=e=>{const b=e.target.closest('button');if(!b)return;mirror=b.dataset.m==='1';rec(cur).mirror=mirror;save(cur);setChips();loadDrawing()};
 $('#list').onclick=e=>{const b=e.target.closest('button');if(!b)return;
   if(b.dataset.pin){if(!(D.floors[D.villas[cur].model]||[]).length){toast('مفيش لوحة للنموذج ده');return}
@@ -741,7 +744,7 @@ async function svgToImage(text,W,H,scale){
 }
 async function floorCanvas(code,p,f){
   const v=D.villas[code];const r=rec(code);const mir=!!r.mirror;const [W,H]=D.meta[`${v.model}_${f}`];
-  const t=await getSvg(`${v.model}_${f}${mir?'_m':''}`);const sc=Math.min(1,2600/W);
+  const t=await getSvg(`${v.model}_${f}${full?'_x':''}${mir?'_m':''}`);const sc=Math.min(1,2600/W);
   const c=await svgToImage(t,W,H,sc);const x=c.getContext('2d');
   const its=items(code,p);const byKey=Object.fromEntries(its.map(i=>[i.key,i]));
   const R=Math.max(24,Math.min(W,H)*sc*0.022);
