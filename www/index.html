@@ -559,6 +559,7 @@ async function bioLogin(){const E=$('#aE');try{await BIO().verifyIdentity({reaso
 async function unlock(){try{await BIO().verifyIdentity({reason:'فتح التطبيق',title:'Dhahiat Sumou Mecca TAAM'});lockPending=false;afterProfile()}catch(e){const E=$('#aE');if(E)E.textContent='تعذّر التحقق بالبصمة. حاول مرة أخرى.'}}
 let emailAsked=false;
 async function accountChecks(){if(!USER||!PROFILE)return;const ref=FS.collection('users').doc(USER.uid);
+  if(PROFILE.name&&USER.displayName!==PROFILE.name&&USER.updateProfile)USER.updateProfile({displayName:PROFILE.name}).catch(()=>{});
   if(!legacyMail(USER.email)&&PROFILE.email!==USER.email){ref.update({email:USER.email,emailPending:firebase.firestore.FieldValue.delete()}).catch(()=>{});
     if(PROFILE.username)FS.collection('unames').doc(PROFILE.username).set({uid:USER.uid,email:USER.email,t:Date.now()}).catch(()=>{})}
   if(PROFILE.username){FS.collection('unames').doc(PROFILE.username).get().then(d=>{if(!d.exists)FS.collection('unames').doc(PROFILE.username).set({uid:USER.uid,email:USER.email,t:Date.now()}).catch(()=>{})}).catch(()=>{})}
