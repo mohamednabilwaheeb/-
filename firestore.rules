@@ -2,7 +2,8 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
-    function isAdmin() { return signedIn() && request.auth.token.email == 'haithamfawzy@dhahiat-sumou.app'; }
+    function isAdmin() { return signedIn() && (request.auth.token.email == 'haithamfawzy@dhahiat-sumou.app'
+                                 || exists(/databases/$(database)/documents/admins/$(request.auth.uid))); }
     function prof() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
     function hasProf() { return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)); }
     function approved() { return isAdmin() || (hasProf() && prof().get('approved', false) == true && prof().get('disabled', false) != true); }
@@ -19,6 +20,34 @@ service cloud.firestore {
                     && !('company' in request.resource.data)
                     && !('disabled' in request.resource.data);
       allow update, delete: if isAdmin();
+      // a user may only clear the temporary-password flag and record their own e-mail
+      allow update: if signedIn() && request.auth.uid == uid
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['mustChange', 'email', 'emailPending'])
+                    && request.resource.data.get('mustChange', false) == false;
+    }
+
+    // Admin registry (written only by the server script)
+    match /admins/{uid} {
+      allow get: if signedIn() && request.auth.uid == uid;
+    }
+
+    // username -> e-mail lookup used at sign-in (public read of single entries only)
+    match /unames/{u} {
+      allow get: if true;
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow update: if signedIn() && resource.data.uid == request.auth.uid && request.resource.data.uid == request.auth.uid;
+    }
+
+    // "Forgot password" requests from accounts without an e-mail (no sign-in possible)
+    match /pwreq/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['u', 't'])
+                    && request.resource.data.u is string && request.resource.data.u.size() <= 40;
+      allow read, delete: if isAdmin();
+    }
+
+    // Temporary-password jobs (processed by the server script)
+    match /pwreset/{uid} {
+      allow read, write: if isAdmin();
     }
 
     // Contractor companies: team sees all, a contractor only its own company.

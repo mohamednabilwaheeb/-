@@ -196,6 +196,8 @@ details.more{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.b
 .fl{display:block;font-size:13px;color:var(--mute);margin-top:10px}.pal{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.pal button{width:34px;height:34px;border-radius:17px;border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}.pal button.on{box-shadow:0 0 0 3px var(--ink)}
 .wtab{width:100%;border-collapse:collapse;font-size:12.5px}.wtab th{background:var(--acc);color:#fff;padding:5px}.wtab td{border-bottom:1px solid var(--line);padding:5px;text-align:center}.wtab td:first-child{text-align:right}
 .ureg{background:var(--sel);border-radius:10px;padding:8px;font-size:13px;margin:6px 0}
+.chk{display:flex!important;align-items:center;gap:8px;margin:10px 0 2px;color:var(--ink)!important;font-size:13.5px}.chk input{width:18px;height:18px;accent-color:#a91a2c}
+.okbox{background:#0f8a8318;color:#0b6b66;border-radius:10px;padding:10px;font-size:13.5px;margin:10px 0}.shic{font-size:30px;width:52px;height:52px;border-radius:26px;background:var(--sel);display:grid;place-items:center;margin-bottom:6px}.acard .lnk.sm{font-size:12.5px;padding:2px;margin-top:2px}
 </style>
 </head>
 <body>
@@ -220,8 +222,8 @@ details.more{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.b
   </div></div></section>
 <section class="view" id="vPlan">
   <div class="search">
-    <input id="q" inputmode="numeric" placeholder="اكتب رقم الفيلا… مثلاً 225">
-    <div class="legend"><span class="summ" id="summ"></span><span><i style="background:#e8a1aa"></i>فيها تعليم</span><span><i style="background:#dfe7f2;border:1px solid #9fb0c8"></i>بدون</span></div>
+    <input id="q" inputmode="numeric" placeholder="أدخل رقم الفيلا… مثال: 225">
+    <div class="legend"><span class="summ" id="summ"></span><span><i style="background:#e8a1aa"></i>بها ملاحظات</span><span><i style="background:#dfe7f2;border:1px solid #9fb0c8"></i>بدون</span></div>
   </div>
   <div class="stage" id="planStage"><svg class="main" id="planSvg" xmlns="http://www.w3.org/2000/svg"></svg>
     <div class="zoom"><button data-z="in" data-t="plan">+</button><button data-z="out" data-t="plan">−</button><button data-z="fit" data-t="plan">⤢</button></div>
@@ -241,13 +243,13 @@ details.more{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.b
     <div class="tools">
       <div class="chip" id="floors"></div>
       <div class="chip" id="mir"><button data-m="0" class="on">الأصل</button><button data-m="1">Mirror</button></div>
-      <div class="chip" id="det"><button data-d="0" class="on">بدون اكسات</button><button data-d="1">اللوحة كاملة</button></div>
+      <div class="chip" id="det"><button data-d="0" class="on">بدون علامات X</button><button data-d="1">اللوحة كاملة</button></div>
       <span class="sp"></span>
       <button class="btn" id="exp">⬇ استخراج</button>
     </div>
     <div class="stage" id="drStage"><svg class="main" id="drSvg" xmlns="http://www.w3.org/2000/svg"></svg>
       <div class="hint" id="hint"><span id="hintT"></span><button id="hintX">إلغاء</button></div>
-      <div class="zoom"><button data-z="rot" data-t="dr" aria-label="لف اللوحة">⟳</button><button data-z="in" data-t="dr">+</button><button data-z="out" data-t="dr">−</button><button data-z="fit" data-t="dr">⤢</button></div>
+      <div class="zoom"><button data-z="rot" data-t="dr" aria-label="تدوير اللوحة">⟳</button><button data-z="in" data-t="dr">+</button><button data-z="out" data-t="dr">−</button><button data-z="fit" data-t="dr">⤢</button></div>
       <div class="empty" id="noDr" style="display:none;position:absolute;inset:0;background:var(--card)"></div>
     </div>
   </div>
@@ -257,30 +259,30 @@ details.more{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.b
   </div>
 </section>
 
-<div id="auth"><img class="logo" src="img/logo.png" alt="TAAM"><div class="en">DHAHIAT SUMOU – BLOCK 5 · SNAG LIST</div><div class="acard" id="acard"></div></div>
-<div id="splash"><img src="img/logo.png" alt="TAAM"><h2 id="spH">أهلاً بيك</h2><div class="en">DHAHIAT SUMOU – BLOCK 5 · SNAG LIST</div><p>نظام Snag List لفلل بلوك 5 — شركة تام للإنشاء والتعمير</p><div class="bar"><i></i></div></div>
+<div id="auth"><img class="logo" src="img/logo.png" alt="TAAM"><div class="en">DHAHIAT SUMOU MECCA · BLOCK 5</div><div class="acard" id="acard"></div></div>
+<div id="splash"><img src="img/logo.png" alt="TAAM"><h2 id="spH">أهلاً بك</h2><div class="en">DHAHIAT SUMOU MECCA · BLOCK 5</div><p>منظومة متابعة مشروع Dhahiat Sumou — بلوك 5 — شركة تام للإنشاء والتعمير</p><div class="bar"><i></i></div></div>
 <div id="wel" role="dialog" aria-label="مرحباً">
   <div class="wtrack" id="wtrack">
     <section class="wslide"><img src="img/logo.png" alt="TAAM — شركة تام للإنشاء والتعمير"><div class="en">DHAHIAT SUMOU – BLOCK 5 · SNAG LIST</div>
-      <h2>أهلاً بيك في تطبيق Snag List</h2><p>أداة فريق شركة تام للإنشاء والتعمير لتسجيل ملاحظات الاستلام على لوحات فلل بلوك 5 بـ Dhahiat Sumou، وتطلّع لكل فيلا ملف Excel و ملف PDF جاهزين.</p></section>
-    <section class="wslide"><div class="wic">🗺️</div><h2>اختار الفيلا</h2><p>من فوق حدّد المرحلة الأولى أو التانية. بعدها اضغط على الفيلا في مخطط البلوك، أو اكتب رقمها في خانة البحث.</p><p>الفلل اللي فيها ملاحظات بتظهر باللون الأحمر.</p></section>
+      <h2>أهلاً بك في تطبيق Dhahiat Sumou Mecca TAAM</h2><p>منصة فريق شركة تام للإنشاء والتعمير لتسجيل ملاحظات الاستلام (Snag List) على لوحات فلل بلوك 5، ومتابعة تقارير المقاولين اليومية، واستخراج ملفات Excel وPDF جاهزة لكل فيلا.</p></section>
+    <section class="wslide"><div class="wic">🗺️</div><h2>اختر الفيلا</h2><p>حدّد المرحلة الأولى أو الثانية من أعلى الشاشة، ثم اضغط على الفيلا في مخطط البلوك أو أدخل رقمها في خانة البحث.</p><p>تظهر الفلل التي تحتوي على ملاحظات باللون الأحمر.</p></section>
     <section class="wslide"><div class="wic">📐</div><h2>اللوحة</h2><div class="wsteps">
-      <div><b>1</b><span>اختار الدور: أرضي أو أول.</span></div>
-      <div><b>2</b><span>اختار <strong>الأصل</strong> أو <strong>Mirror</strong> حسب الفيلا.</span></div>
-      <div><b>3</b><span>قرّب بإصبعين، واسحب بإصبع واحد، والزرار ⟳ بيلف اللوحة.</span></div></div></section>
-    <section class="wslide"><div class="wic">📍</div><h2>سجّل الملاحظة</h2><div class="wsteps">
-      <div><b>1</b><span>في القائمة دوس <strong>📍 حدد مكانه</strong> على البند.</span></div>
-      <div><b>2</b><span>اضغط على المكان في اللوحة، فيظهر رقم البند.</span></div>
-      <div><b>3</b><span>اكتب تفاصيل الملاحظة وصوّر بالكاميرا، ودوس حفظ.</span></div>
-      <div><b>4</b><span>البند ينفع يتعلّم في أكتر من مكان، وتقدر تضيف <strong>بند جديد</strong>.</span></div></div></section>
-    <section class="wslide"><div class="wic">⬇️</div><h2>استخرج ملف الفيلا</h2><p>دوس <strong>استخراج</strong> فيطلع ملف Excel فيه الـ Snag List والملاحظات والصور، وملف PDF للوحات بأرقام البنود. بعدها تقدر تبعتهم واتساب أو إيميل.</p><p>الزرار <strong>؟</strong> اللي فوق بيرجّعك للشرح ده في أي وقت.</p></section>
+      <div><b>1</b><span>اختر الدور: الأرضي أو الأول.</span></div>
+      <div><b>2</b><span>اختر <strong>الأصل</strong> أو <strong>Mirror</strong> بحسب الفيلا.</span></div>
+      <div><b>3</b><span>للتكبير استخدم إصبعين، وللتحريك اسحب بإصبع واحد، ويُستخدم الزر ⟳ لتدوير اللوحة.</span></div></div></section>
+    <section class="wslide"><div class="wic">📍</div><h2>تسجيل الملاحظة</h2><div class="wsteps">
+      <div><b>1</b><span>اضغط <strong>📍 حدد مكانه</strong> بجوار البند في القائمة.</span></div>
+      <div><b>2</b><span>اضغط على الموضع في اللوحة ليظهر رقم البند.</span></div>
+      <div><b>3</b><span>اكتب تفاصيل الملاحظة، وأرفق صورة بالكاميرا، ثم اضغط حفظ.</span></div>
+      <div><b>4</b><span>يمكن تحديد البند في أكثر من موضع، كما يمكنك إضافة <strong>بند جديد</strong>.</span></div></div></section>
+    <section class="wslide"><div class="wic">⬇️</div><h2>استخراج ملف الفيلا</h2><p>اضغط <strong>استخراج</strong> للحصول على ملف Excel يتضمن الـ Snag List والملاحظات والصور، وملف PDF للوحات مرقّمة بالبنود، ويمكنك بعد ذلك مشاركتهما عبر واتساب أو البريد الإلكتروني.</p><p>يعيدك الزر <strong>؟</strong> أعلى الشاشة إلى هذا الشرح في أي وقت.</p></section>
   </div>
-  <div class="wfoot"><button class="btn g" id="wSkip">تخطّي</button><div class="dots" id="wdots"></div><button class="btn" id="wNext">التالي</button></div>
+  <div class="wfoot"><button class="btn g" id="wSkip">تخطٍّ</button><div class="dots" id="wdots"></div><button class="btn" id="wNext">التالي</button></div>
 </div>
 <div class="dlg" id="dlg"><div class="box" id="box"></div></div>
 <div class="toast" id="toast"></div>
 <div class="dua" id="dua" role="status"></div>
-<div class="busy" id="busy"><div id="busyT">جاري التجهيز…</div></div>
+<div class="busy" id="busy"><div id="busyT">جارٍ التجهيز…</div></div>
 
 <script src="lib/jszip.min.js"></script>
 <script src="lib/exceljs.min.js"></script>
@@ -317,7 +319,7 @@ function save(code){
       if(mode==='fs'){pushDoc(code);delete dirty[code];return}
       if(!IDB)return; await idb('recs','readwrite',st=>st.put(body,code));
       if(JSON.stringify(REC[code])===JSON.stringify(body))delete dirty[code];
-    }catch(e){ toast('تعذّر الحفظ: '+(e&&e.code||'')+' — هيتحاول تاني'); setTimeout(()=>save(code),3000); }
+    }catch(e){ toast('تعذّر الحفظ: '+(e&&e.code||'')+' — ستُعاد المحاولة تلقائياً'); setTimeout(()=>save(code),3000); }
   },500);
 }
 function loadLocal(){
@@ -334,7 +336,7 @@ const CFG=window.FIREBASE_CONFIG||null;const DOMAIN='dhahiat-sumou.app',ADMIN='h
 let FS=null,AUTH=null,USER=null,PROFILE=null,unsubV=null,unsubU=null,ME='',lockPending=false,LOCALREC={};const SYNCED={};
 const BIO=()=>{try{return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.NativeBiometric}catch(e){return null}};
 const mail=u=>u.trim().toLowerCase()+'@'+DOMAIN;
-const isAdmin=()=>!!(USER&&USER.email===mail(ADMIN));
+let ADMIN_UID=null;const isAdmin=()=>!!(USER&&(USER.email===mail(ADMIN)||ADMIN_UID===USER.uid));
 const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}};
 function canon(o){if(Array.isArray(o))return '['+o.map(canon).join(',')+']';if(o&&typeof o==='object')return '{'+Object.keys(o).sort().filter(k=>o[k]!==undefined).map(k=>JSON.stringify(k)+':'+canon(o[k])).join(',')+'}';return JSON.stringify(o)}
 function toLocal(d){d=JSON.parse(JSON.stringify(d));const r=blank();r.mirror=!!d.mirror;for(const p of [1,2]){const q=d['p'+p]||{};
@@ -365,17 +367,18 @@ window.addEventListener('online',netDot);window.addEventListener('offline',netDo
 function startSync(){if(unsubV)return;mode='fs';
   unsubV=FS.collection(C('v')).onSnapshot(s=>{s.docChanges().forEach(ch=>{const id=ch.doc.id;
       if(ch.type==='removed'){delete SYNCED[id];if(!dirty[id])delete REC[id]}else{SYNCED[id]=ch.doc.data();if(!dirty[id])REC[id]=toLocal(SYNCED[id])}});
-    setWarn('');if(!pending)refresh();migrate()},e=>setWarn('مشكلة في الاتصال بالسيرفر: '+(e.code||'')));}
+    setWarn('');if(!pending)refresh();migrate()},e=>setWarn('مشكلة في الاتصال بالخادم: '+(e.code||'')));}
 let unsubR=null,REQ=0;
-function startReq(){if(unsubR||!FS||!isAdmin())return;let first=true,seen=new Set();
-  unsubR=FS.collection('users').onSnapshot(s=>{const pend=s.docs.map(d=>({id:d.id,...d.data()})).filter(r=>!r.approved&&!r.disabled&&r.username!==ADMIN);REQ=pend.length;
-    const b=$('#reqN');b.textContent=REQ>9?'9+':REQ;b.classList.toggle('on',REQ>0);
+function startReq(){if(unsubR||!FS||!isAdmin())return;let first=true,seen=new Set(),PU=0,PQ=0,PD=0;const badge=()=>{REQ=PU+PQ;const b=$('#reqN');b.textContent=REQ>9?'9+':REQ;b.classList.toggle('on',REQ>0)};
+  const push=(t,body)=>{toast('👥 '+body,6000);try{if(!LN()&&'Notification' in window&&Notification.permission==='granted'&&document.hidden){const n=new Notification(t,{body,icon:'img/icon-192.png'});n.onclick=()=>{window.focus();usersPanel()}}}catch(e){}
+    const L=LN();if(L&&notifReady)L.schedule({notifications:[{id:Math.floor(Math.random()*2e9),title:t,body,extra:{code:'__USERS__'},smallIcon:'ic_stat_notify'}]}).catch(()=>{})};
+  const u1=FS.collection('users').onSnapshot(s=>{const pend=s.docs.map(d=>({id:d.id,...d.data()})).filter(r=>!r.approved&&!r.disabled&&r.username!==ADMIN);PU=pend.length;badge();
     const fresh=pend.filter(r=>!seen.has(r.id));pend.forEach(r=>seen.add(r.id));
-    if(first){first=false;if(REQ)setTimeout(()=>toast(`👥 ${REQ} من الفريق طالبين الدخول — دوس 👤 ثم «إدارة المستخدمين» للموافقة`,6000),2500);return}
-    for(const r of fresh){const t='طلب دخول جديد — Dhahiat Sumou',body=`${r.name||r.username} عمل حساب ومستني موافقتك`;toast('👥 '+body,6000);
-      try{if(!LN()&&'Notification' in window&&Notification.permission==='granted'&&document.hidden){const n=new Notification(t,{body,icon:'img/icon-192.png'});n.onclick=()=>{window.focus();usersPanel()}}}catch(e){}
-      const L=LN();if(L&&notifReady)L.schedule({notifications:[{id:Math.floor(Math.random()*2e9),title:t,body,extra:{code:'__USERS__'},smallIcon:'ic_stat_notify'}]}).catch(()=>{})}
-  },()=>{})}
+    if(first){first=false;if(PU)setTimeout(()=>toast(`👥 يوجد ${PU} طلب انضمام بانتظار الاعتماد — من 👤 ثم «إدارة المستخدمين».`,6000),2500);return}
+    for(const r of fresh)push('طلب انضمام جديد — Dhahiat Sumou',`أنشأ ${r.name||r.username} حساباً وهو بانتظار اعتمادك.`)},()=>{});
+  let f2=true;const u2=FS.collection('pwreq').onSnapshot(s=>{PQ=s.docs.length;badge();if(!f2)s.docChanges().filter(c=>c.type==='added').forEach(c=>push('طلب استعادة كلمة المرور',`طلب المستخدم ${c.doc.data().u} إصدار كلمة مرور مؤقتة.`));f2=false},()=>{});
+  let f3=true;const u3=FS.collection('pwreset').onSnapshot(s=>{if(!f3)s.docChanges().filter(c=>c.type==='modified'&&c.doc.data().status==='done').forEach(c=>push('كلمة المرور المؤقتة جاهزة',`كلمة المرور المؤقتة لـ ${c.doc.data().name||''} جاهزة في «إدارة المستخدمين».`));f3=false},()=>{});
+  unsubR=()=>{u1();u2();u3()}}
 function stopSync(){stopRep();if(unsubR){unsubR();unsubR=null;$('#reqN').classList.remove('on')}if(unsubA){unsubA();unsubA=null}$('#actB').style.display='none';if(unsubV){unsubV();unsubV=null}for(const k in REC)delete REC[k];for(const k in SYNCED)delete SYNCED[k];refresh()}
 let migrating=false;
 async function migrate(){if(migrating||lsGet('snag5_migrated'))return;migrating=true;
@@ -386,7 +389,7 @@ async function migrate(){if(migrating||lsGet('snag5_migrated'))return;migrating=
         for(const x of lp.extra||[])if(!R.p[p].extra.find(y=>y.key===x.key))R.p[p].extra.push(x);
         for(const k in lp.gen||{})if(!(k in R.p[p].gen)){R.p[p].gen[k]=lp.gen[k];R.p[p].gb=R.p[p].gb||{};R.p[p].gb[k]={by:ME,uid:USER&&USER.uid,t:Date.now()}}}
       if(L.mirror&&!R.mirror)R.mirror=true;pushDoc(code)}
-    lsSet('snag5_migrated','1');if(codes.length)toast('اتنقلت بياناتك القديمة للسيرفر ✓')}finally{migrating=false}}
+    lsSet('snag5_migrated','1');if(codes.length)toast('تم نقل بياناتك السابقة إلى الخادم ✓')}finally{migrating=false}}
 function blobUrl(b){return new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(b)})}
 async function loadPhoto(id){if(PURL[id]||!id||id.startsWith('data:'))return PURL[id];
   try{const b=await idb('photos','readonly',st=>st.get(id));if(b){PURL[id]=URL.createObjectURL(b);return PURL[id]}}catch(e){}
@@ -396,11 +399,7 @@ function fillImgs(root){root.querySelectorAll('img[data-pid]').forEach(async im=
 
 /* ---------- greeting, duas ---------- */
 function greet(){const h=new Date().getHours();return (h<12?'صباح الخير':'مساء الخير')+' يا '+(ME||'').split(' ')[0]+' 👋'}
-const DUAS=['سبحان الله وبحمده، سبحان الله العظيم','لا حول ولا قوة إلا بالله','اللهم صلِّ وسلم على نبينا محمد','أستغفر الله العظيم وأتوب إليه',
- 'لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير','سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر',
- 'حسبي الله لا إله إلا هو، عليه توكلت وهو رب العرش العظيم','ربِّ اشرح لي صدري، ويسِّر لي أمري','اللهم إني أسألك علمًا نافعًا، ورزقًا طيبًا، وعملًا متقبلًا',
- 'يا حي يا قيوم، برحمتك أستغيث، أصلح لي شأني كله','بسم الله، توكلت على الله، ولا حول ولا قوة إلا بالله','اللهم بارك لنا في عملنا ووقتنا',
- 'ربنا آتنا في الدنيا حسنة، وفي الآخرة حسنة، وقنا عذاب النار','اللهم أعنّي على ذكرك وشكرك وحسن عبادتك','لا إله إلا أنت سبحانك إني كنت من الظالمين'];
+const DUAS=["سبحان الله وبحمده، سبحان الله العظيم", "لا حول ولا قوة إلا بالله", "اللهم صلِّ وسلم على نبينا محمد", "أستغفر الله العظيم وأتوب إليه", "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير", "سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر", "حسبي الله لا إله إلا هو، عليه توكلت وهو رب العرش العظيم", "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي", "يا حي يا قيوم، برحمتك أستغيث، أصلح لي شأني كله ولا تكلني إلى نفسي طرفة عين", "بسم الله، توكلت على الله، ولا حول ولا قوة إلا بالله", "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ", "لَا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ إِنِّي كُنتُ مِنَ الظَّالِمِينَ", "اللهم إني أسألك علماً نافعاً، ورزقاً طيباً، وعملاً متقبلاً", "اللهم بارك لنا في أعمالنا وأوقاتنا", "رَبِّ زِدْنِي عِلْمًا", "اللهم أعنّي على ذكرك وشكرك وحسن عبادتك", "سبحان الله وبحمده، عدد خلقه، ورضا نفسه، وزنة عرشه، ومداد كلماته", "اللهم إنك عفوٌّ تحب العفو فاعفُ عني", "اللهم اكفني بحلالك عن حرامك، وأغنني بفضلك عمن سواك", "اللهم إني أعوذ بك من الهم والحزن، والعجز والكسل، والبخل والجبن، وضلع الدين وغلبة الرجال", "اللهم إني أسألك العافية في الدنيا والآخرة", "يا مقلب القلوب ثبّت قلبي على دينك", "اللهم إني أعوذ بك من زوال نعمتك، وتحوّل عافيتك، وفجاءة نقمتك، وجميع سخطك", "رضيت بالله رباً، وبالإسلام ديناً، وبمحمد ﷺ نبياً", "اللهم أنت ربي لا إله إلا أنت، خلقتني وأنا عبدك، وأنا على عهدك ووعدك ما استطعت", "أصبحنا وأصبح الملك لله، والحمد لله", "أمسينا وأمسى الملك لله، والحمد لله", "بسم الله الذي لا يضر مع اسمه شيء في الأرض ولا في السماء وهو السميع العليم", "أعوذ بكلمات الله التامات من شر ما خلق", "اللهم بك أصبحنا، وبك أمسينا، وبك نحيا، وبك نموت، وإليك النشور", "اللهم ما أصبح بي من نعمة أو بأحد من خلقك فمنك وحدك لا شريك لك، فلك الحمد ولك الشكر", "اللهم عافني في بدني، اللهم عافني في سمعي، اللهم عافني في بصري", "سبحان الله وبحمده، أستغفر الله وأتوب إليه", "الحمد لله الذي بنعمته تتم الصالحات", "لا إله إلا الله الحليم الكريم، سبحان الله رب العرش العظيم", "اللهم لا سهل إلا ما جعلته سهلاً، وأنت تجعل الحزن إذا شئت سهلاً", "رَبِّ إِنِّي لِمَا أَنزَلْتَ إِلَيَّ مِنْ خَيْرٍ فَقِيرٌ", "رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِن لَّدُنكَ رَحْمَةً", "رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ", "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا", "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا", "رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ الَّتِي أَنْعَمْتَ عَلَيَّ", "وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ أُنِيبُ", "وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ", "إِنَّ مَعَ الْعُسْرِ يُسْرًا", "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ", "فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ", "وَقُلِ اعْمَلُوا فَسَيَرَى اللَّهُ عَمَلَكُمْ وَرَسُولُهُ وَالْمُؤْمِنُونَ", "إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ", "وَأَوْفُوا الْكَيْلَ وَالْمِيزَانَ بِالْقِسْطِ", "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ", "رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ", "رَبَّنَا اغْفِرْ لَنَا ذُنُوبَنَا وَإِسْرَافَنَا فِي أَمْرِنَا وَثَبِّتْ أَقْدَامَنَا", "سُبْحَانَ رَبِّكَ رَبِّ الْعِزَّةِ عَمَّا يَصِفُونَ، وَسَلَامٌ عَلَى الْمُرْسَلِينَ، وَالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", "قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ", "وَاصْبِرْ فَإِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ", "اللهم صلِّ على محمد وعلى آل محمد كما صليت على إبراهيم وعلى آل إبراهيم إنك حميد مجيد", "سبحان الله العظيم وبحمده", "لا إله إلا أنت سبحانك، اللهم وبحمدك، أستغفرك وأتوب إليك", "اللهم إني أسألك الهدى والتقى والعفاف والغنى", "اللهم اغفر لي، وارحمني، واهدني، وعافني، وارزقني", "اللهم آتِ نفسي تقواها، وزكّها أنت خير من زكّاها", "اللهم إني أعوذ بك من علم لا ينفع، ومن قلب لا يخشع، ومن نفس لا تشبع، ومن دعوة لا يُستجاب لها", "اللهم أصلح لي ديني الذي هو عصمة أمري، وأصلح لي دنياي التي فيها معاشي", "اللهم إني أسألك من الخير كله، عاجله وآجله، ما علمت منه وما لم أعلم", "اللهم اجعل خير عملي آخره، وخير أيامي يوم ألقاك", "اللهم ارزقنا الإخلاص في القول والعمل", "اللهم إنا نسألك الأمانة في أعمالنا والإتقان في صنعتنا", "إن الله يحب إذا عمل أحدكم عملاً أن يتقنه", "الكلمة الطيبة صدقة", "تبسّمك في وجه أخيك صدقة", "من سلك طريقاً يلتمس فيه علماً سهّل الله له به طريقاً إلى الجنة", "أحب الأعمال إلى الله أدومها وإن قلّ", "خير الناس أنفعهم للناس", "لا يشكر الله من لا يشكر الناس", "اللهم اجعلنا من الذين يستمعون القول فيتبعون أحسنه", "اللهم لك الحمد كما ينبغي لجلال وجهك وعظيم سلطانك", "سبحان الله وبحمده مائة مرة تُحطّ بها الخطايا وإن كانت مثل زبد البحر", "لا حول ولا قوة إلا بالله كنز من كنوز الجنة", "أفضل الذكر لا إله إلا الله، وأفضل الدعاء الحمد لله", "اللهم اغفر للمؤمنين والمؤمنات، الأحياء منهم والأموات", "اللهم احفظ بلاد الحرمين وأهلها، وسائر بلاد المسلمين", "اللهم ارحم والديّ واجزهما عني خير الجزاء", "اللهم اشفِ مرضانا ومرضى المسلمين", "اللهم يسّر لنا أعمالنا، وبارك لنا في رزقنا", "اللهم اجعل هذا المشروع خيراً وبركة على كل من عمل فيه"];
 let duaI=Math.floor(Math.random()*DUAS.length);
 function showDua(){if(lsGet('snag5_dua')==='0'||document.hidden)return;if($('#dlg').classList.contains('on')||$('#auth').classList.contains('on')||$('#wel').classList.contains('on'))return;
   const d=$('#dua');d.innerHTML='<small>ذكر</small>'+esc(DUAS[duaI++%DUAS.length]);d.classList.add('on');clearTimeout(d._t);d._t=setTimeout(()=>d.classList.remove('on'),9000)}
@@ -416,8 +415,8 @@ function logAct(code,upd){if(!FS||!USER)return;const parts=[];
   for(const p of [1,2]){const o=upd['p'+p];if(!o)continue;const its=items(code,p);const nOf=k=>{const i=its.find(x=>x.key===k);return i?i.n:''};
     const have=(SYNCED[code]&&SYNCED[code]['p'+p])||{};
     for(const id in o.marks||{}){const v=o.marks[id];const old=(have.marks||{})[id];
-      if(v&&v.id&&!old)parts.push(`علّم البند ${nOf(v.key)}`);else if(v&&v.id){if(!(old.uid===USER.uid&&Date.now()-(old.t||0)<180000))parts.push(`عدّل ملاحظة البند ${nOf(v.key)}`)}else parts.push('مسح تعليم')}
-    for(const k in o.extra||{}){if(o.extra[k]&&o.extra[k].key)parts.push('أضاف بند جديد')}
+      if(v&&v.id&&!old)parts.push(`حدّد موضع البند ${nOf(v.key)}`);else if(v&&v.id){if(!(old.uid===USER.uid&&Date.now()-(old.t||0)<180000))parts.push(`عدّل ملاحظة البند ${nOf(v.key)}`)}else parts.push('حذف موضع')}
+    for(const k in o.extra||{}){if(o.extra[k]&&o.extra[k].key)parts.push('أضاف بنداً جديداً')}
     for(const k in o.gen||{}){if(typeof o.gen[k]==='string')parts.push(`كتب ملاحظة على البند ${nOf(k)}`)}}
   if(!parts.length)return;const uniq=[...new Set(parts)];
   FS.collection(C('act')).add({by:ME,uid:USER.uid,code,txt:uniq.slice(0,3).join('، ')+` — فيلا ${villaNo(code)}`,t:Date.now()}).catch(()=>{})}
@@ -426,13 +425,13 @@ function startAct(){if(unsubA||!FS)return;notifPerm();$('#actB').style.display='
   unsubA=FS.collection(C('act')).orderBy('t','desc').limit(40).onSnapshot(s=>{ACT=s.docs.map(d=>d.data());
     const mine=USER&&USER.uid;const fresh=s.docChanges().filter(c=>c.type==='added').map(c=>c.doc.data()).filter(a=>a.uid!==mine);
     const unseen=ACT.filter(a=>a.uid!==mine&&a.t>+(lsGet('snag5_actseen')||0));const b=$('#actN');b.textContent=unseen.length>9?'9+':unseen.length;b.classList.toggle('on',unseen.length>0);
-    if(first){first=false;if(unseen.length)setTimeout(()=>toast(`🔔 ${unseen.length} تحديث من الفريق وانت مش موجود — دوس 🔔`,4500),3200);return}
+    if(first){first=false;if(unseen.length)setTimeout(()=>toast(`🔔 ${unseen.length} تحديثات من الفريق أثناء غيابك — اضغط 🔔`,4500),3200);return}
     for(const a of fresh){if(a.t<since)continue;toast('🔔 '+a.by+': '+a.txt,4500);
       try{if(!LN()&&'Notification' in window&&Notification.permission==='granted'&&document.hidden){const n=new Notification(a.by+' — Dhahiat Sumou',{body:a.txt,icon:'img/icon-192.png'});n.onclick=()=>{window.focus();if(D.villas[a.code])openVilla(a.code)}}}catch(e){}
       const L=LN();if(L&&notifReady)L.schedule({notifications:[{id:Math.floor(Math.random()*2e9),title:a.by+' — Dhahiat Sumou',body:a.txt,extra:{code:a.code},smallIcon:'ic_stat_notify'}]}).catch(()=>{})}
   },()=>{})}
 function actPanel(){const mine=USER&&USER.uid;const seen=+(lsGet('snag5_actseen')||0);
-  dlg(`<h3>آخر تحديثات الفريق</h3>`+(ACT.length?ACT.map(a=>`<div class="act ${a.uid!==mine&&a.t>seen?'new':''}" data-c="${esc(a.code)}"><div class="av">${esc((a.by||'?').trim()[0]||'?')}</div><div><p><b>${esc(a.by||'')}</b> ${esc(a.txt||'')}</p><small>${esc(new Date(a.t).toLocaleString('ar-EG',{dateStyle:'short',timeStyle:'short'}))}</small></div></div>`).join(''):'<p class="q">لسه مفيش تحديثات.</p>')+
+  dlg(`<h3>آخر تحديثات الفريق</h3>`+(ACT.length?ACT.map(a=>`<div class="act ${a.uid!==mine&&a.t>seen?'new':''}" data-c="${esc(a.code)}"><div class="av">${esc((a.by||'?').trim()[0]||'?')}</div><div><p><b>${esc(a.by||'')}</b> ${esc(a.txt||'')}</p><small>${esc(new Date(a.t).toLocaleString('ar-EG',{dateStyle:'short',timeStyle:'short'}))}</small></div></div>`).join(''):'<p class="q">لا توجد تحديثات حتى الآن.</p>')+
    '<div class="row"><span class="sp"></span><button class="btn g" id="aX">إغلاق</button></div>');
   lsSet('snag5_actseen',String(Date.now()));$('#actN').classList.remove('on');$('#aX').onclick=close;
   $('#box').querySelectorAll('.act[data-c]').forEach(e=>e.onclick=()=>{const c=e.dataset.c;close();if(D.villas[c])openVilla(c)})}
@@ -447,112 +446,200 @@ async function checkUpdate(manual){
     const body=j.body||'';const m=body.match(/\{[^{}]*"build"[^{}]*\}/);const info=m?JSON.parse(m[0]):{build:+(String(j.tag_name).replace(/\D/g,''))||0,native:NATIVE};
     const asset=n=>(j.assets||[]).find(a=>a.name===n);
     if(info.build>BUILD){NEWREL={...info,notes:body.replace(m?m[0]:'','').trim(),zip:asset('bundle.zip'),apk:(j.assets||[]).find(a=>/\.apk$/i.test(a.name)),page:j.html_url};
-      $('#updT').textContent=`فيه تحديث جديد (نسخة ${info.build})`+(NEWREL.notes?' — '+NEWREL.notes.split('\n')[0].slice(0,60):'');$('#upd').classList.add('on')}
-    else if(manual)toast('عندك آخر نسخة ✓ ('+BUILD+')')}
-  catch(e){if(manual)toast('مقدرتش أتأكد من التحديثات — اتأكد من النت')}}
+      $('#updT').textContent=`يتوفر تحديث جديد (الإصدار ${info.build})`+(NEWREL.notes?' — '+NEWREL.notes.split('\n')[0].slice(0,60):'');$('#upd').classList.add('on')}
+    else if(manual)toast('لديك أحدث إصدار ✓ ('+BUILD+')')}
+  catch(e){if(manual)toast('تعذّر التحقق من التحديثات. يُرجى التحقق من الاتصال بالإنترنت.')}}
 const NATIVE_APP=!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());
 async function applyUpdate(){const R=NEWREL;if(!R)return;const U=UPD();
-  if(!NATIVE_APP){busy('جاري التحديث…');try{const rs=await caches.keys();await Promise.all(rs.map(k=>caches.delete(k)))}catch(e){}location.replace(location.pathname+'?v='+R.build);return}
+  if(!NATIVE_APP){busy('جارٍ التحديث…');try{const rs=await caches.keys();await Promise.all(rs.map(k=>caches.delete(k)))}catch(e){}location.replace(location.pathname+'?v='+R.build);return}
   const needApk=R.native>NATIVE||!U||!R.zip;
   if(needApk){const url=R.apk?R.apk.browser_download_url:R.page;
-    dlg(`<h3>تحديث كامل للتطبيق</h3><p class="q">التحديث ده محتاج تنزّل نسخة جديدة من التطبيق وتسطّبها فوق القديمة (بياناتك مش هتضيع).</p>
-      <div class="row"><a class="btn" href="${esc(url)}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">⬇ تنزيل التحديث</a><span class="sp"></span><button class="btn g" id="uX2">بعدين</button></div>`);$('#uX2').onclick=close;return}
-  try{busy('جاري تحميل التحديث…');const b=await U.download({url:R.zip.browser_download_url,version:String(R.build)});busy('جاري التحديث…');await U.set(b)}
-  catch(e){busy();toast('التحديث مانجحش: '+(e&&e.message||e),4000)}}
+    dlg(`<h3>تحديث كامل للتطبيق</h3><p class="q">يتطلب هذا التحديث تنزيل إصدار جديد من التطبيق وتثبيته فوق الإصدار الحالي، ولن تتأثر بياناتك.</p>
+      <div class="row"><a class="btn" href="${esc(url)}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">⬇ تنزيل التحديث</a><span class="sp"></span><button class="btn g" id="uX2">لاحقاً</button></div>`);$('#uX2').onclick=close;return}
+  try{busy('جارٍ تحميل التحديث…');const b=await U.download({url:R.zip.browser_download_url,version:String(R.build)});busy('جارٍ التحديث…');await U.set(b)}
+  catch(e){busy();toast('تعذّر التحديث: '+(e&&e.message||e),4000)}}
 $('#updB').onclick=applyUpdate;$('#updX').onclick=()=>$('#upd').classList.remove('on');
 try{const U=UPD();if(U)U.notifyAppReady()}catch(e){}
 setTimeout(()=>checkUpdate(false),5000);setInterval(()=>checkUpdate(false),30*60*1000);
 try{const A=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.App;if(A)A.addListener('resume',()=>checkUpdate(false))}catch(e){}
 
 /* auth screens */
+/* ---------- accounts: sign-in by e-mail or username, recovery, remember-me ---------- */
+const P_LOCAL=()=>firebase.auth.Auth&&firebase.auth.Auth.Persistence?firebase.auth.Auth.Persistence.LOCAL:'local';
+const P_SESSION=()=>firebase.auth.Auth&&firebase.auth.Auth.Persistence?firebase.auth.Auth.Persistence.SESSION:'session';
+const legacyMail=e=>String(e||'').toLowerCase().endsWith('@'+DOMAIN);
+const maskMail=e=>{const [a,b]=String(e).split('@');return (a.length<=2?a[0]+'*':a.slice(0,2)+'*'.repeat(Math.min(6,a.length-2)))+'@'+b};
+async function resolveId(id){id=String(id||'').trim().toLowerCase();if(id.includes('@'))return {email:id,legacy:null,u:null};
+  let em=null;try{const d=await FS.collection('unames').doc(id).get();if(d.exists)em=d.data().email||null}catch(e){}
+  return {email:em||mail(id),legacy:mail(id),u:id,real:em&&!legacyMail(em)?em:null}}
+async function signInId(id,p){const r=await resolveId(id);
+  try{return await AUTH.signInWithEmailAndPassword(r.email,p)}
+  catch(e){if(r.legacy&&r.email!==r.legacy&&/invalid|not-found|wrong-password/.test(e.code||''))return await AUTH.signInWithEmailAndPassword(r.legacy,p);throw e}}
 function showAuth(kind,msg){$('#auth').classList.add('on');const c=$('#acard');const hasBio=lsGet('snag5_bio')==='1'&&BIO();
-  if(kind==='loading'){c.innerHTML='<h3>جاري التحميل…</h3><p>بنجهّز حسابك.</p>';return}
-  if(kind==='login'){c.innerHTML=`<h3>تسجيل الدخول</h3><p>ادخل باسم المستخدم وكلمة السر بتوعك.</p>
-    <label for="aU">اسم المستخدم</label><input id="aU" autocomplete="username" autocapitalize="none" spellcheck="false" dir="ltr" value="${esc(lsGet('snag5_lastuser')||'')}">
-    <label for="aP">كلمة السر</label><input id="aP" type="password" autocomplete="current-password" dir="ltr">
+  if(kind==='loading'){c.innerHTML='<h3>جارٍ التحميل…</h3><p>يجري تجهيز حسابك.</p>';return}
+  if(kind==='login'){const lid=lsGet('snag5_lastid')||lsGet('snag5_lastuser')||'';const nm=(lsGet('snag5_name')||'').split(' ')[0];
+    c.innerHTML=`<h3>تسجيل الدخول</h3><p>${lid?`أهلاً بك${nm?' '+esc(nm):''}، يُرجى إدخال كلمة المرور للمتابعة.`:'أدخل بريدك الإلكتروني أو اسم المستخدم، ثم كلمة المرور.'}</p>
+    <label for="aU">البريد الإلكتروني أو اسم المستخدم</label><input id="aU" autocomplete="username" autocapitalize="none" spellcheck="false" dir="ltr" value="${esc(lid)}" placeholder="name@example.com">
+    ${lid?`<button class="lnk sm" id="aNot">لست ${esc(nm||'أنت')}؟ الدخول بحساب آخر</button>`:''}
+    <label for="aP">كلمة المرور</label><input id="aP" type="password" autocomplete="current-password" dir="ltr">
+    <label class="chk"><input type="checkbox" id="aRem" ${lsGet('snag5_rem')==='0'?'':'checked'}> تذكّرني على هذا الجهاز</label>
     <div class="aerr" id="aE">${esc(msg||'')}</div><button class="btn" id="aGo">دخول</button>
-    ${hasBio?'<button class="btn g bio" id="aBio">☝️ دخول بالبصمة</button>':''}
-    <button class="lnk" id="aReg">معندكش حساب؟ اعمل حساب جديد</button>`;
-    $('#aGo').onclick=doLogin;$('#aP').onkeydown=e=>{if(e.key==='Enter')doLogin()};$('#aReg').onclick=()=>showAuth('register');
-    if(hasBio){$('#aBio').onclick=bioLogin}return}
-  if(kind==='register'){c.innerHTML=`<h3>حساب جديد</h3><p>بعد ما تعمل الحساب، المدير م. هيثم فوزي لازم يوافق عليه قبل ما تقدر تستخدم التطبيق.</p>
-    <label for="rN">الاسم بالكامل</label><input id="rN" autocomplete="name">
-    <label for="rU">اسم المستخدم (حروف إنجليزي وأرقام)</label><input id="rU" autocapitalize="none" spellcheck="false" dir="ltr" placeholder="ahmedali">
-    <label for="rP">كلمة السر (6 حروف أو أكتر)</label><input id="rP" type="password" autocomplete="new-password" dir="ltr">
-    <label for="rP2">تأكيد كلمة السر</label><input id="rP2" type="password" autocomplete="new-password" dir="ltr">
-    <label for="rJ">كود شركة المقاولات (للمقاولين بس)</label><input id="rJ" dir="ltr" autocapitalize="characters" placeholder="مثلاً 8K3F-Q7M2" value="${esc(lsGet('snag5_join')||'')}">
-    ${lsGet('snag5_join')?'<div class="ureg">🏗 إنت بتسجّل كمقاول — حسابك هيتربط بشركتك بعد موافقة م. هيثم.</div>':''}
-    <div class="aerr" id="aE"></div><button class="btn" id="rGo">إنشاء الحساب</button><button class="lnk" id="aBack">عندي حساب — دخول</button>`;
+    ${hasBio?'<button class="btn g bio" id="aBio">☝️ الدخول بالبصمة</button>':''}
+    <button class="lnk" id="aFor">نسيت كلمة المرور؟</button>
+    <button class="lnk" id="aReg">ليس لديك حساب؟ إنشاء حساب جديد</button>`;
+    $('#aGo').onclick=doLogin;$('#aP').onkeydown=e=>{if(e.key==='Enter')doLogin()};$('#aReg').onclick=()=>showAuth('register');$('#aFor').onclick=()=>showAuth('forgot');
+    if($('#aNot'))$('#aNot').onclick=()=>{lsSet('snag5_lastid',null);lsSet('snag5_lastuser',null);lsSet('snag5_name',null);showAuth('login')};
+    if(lid)setTimeout(()=>$('#aP')&&$('#aP').focus(),50);if(hasBio){$('#aBio').onclick=bioLogin}return}
+  if(kind==='register'){const jc=lsGet('snag5_join')||'';c.innerHTML=`<h3>إنشاء حساب جديد</h3><p>بعد إنشاء الحساب، يلزم اعتماده من مدير النظام م. هيثم فوزي قبل استخدام التطبيق.</p>
+    <label for="rN">الاسم الكامل</label><input id="rN" autocomplete="name">
+    <label for="rM">البريد الإلكتروني</label><input id="rM" type="email" autocomplete="email" dir="ltr" placeholder="name@example.com">
+    <label for="rU">اسم المستخدم (أحرف إنجليزية وأرقام)</label><input id="rU" autocapitalize="none" spellcheck="false" dir="ltr" placeholder="ahmedali">
+    <label for="rP">كلمة المرور (6 أحرف على الأقل)</label><input id="rP" type="password" autocomplete="new-password" dir="ltr">
+    <label for="rP2">تأكيد كلمة المرور</label><input id="rP2" type="password" autocomplete="new-password" dir="ltr">
+    <label for="rJ">رمز شركة المقاولات (للمقاولين فقط)</label><input id="rJ" dir="ltr" autocapitalize="characters" placeholder="8K3F-Q7M2" value="${esc(jc)}">
+    ${jc?'<div class="ureg">🏗 أنت تسجّل بصفتك مقاولاً، وسيُربط حسابك بشركتك بعد اعتماد مدير النظام.</div>':''}
+    <div class="aerr" id="aE"></div><button class="btn" id="rGo">إنشاء الحساب</button><button class="lnk" id="aBack">لديك حساب بالفعل؟ تسجيل الدخول</button>`;
     $('#rGo').onclick=doRegister;$('#aBack').onclick=()=>showAuth('login');return}
-  if(kind==='pending'){c.innerHTML=`<h3>حسابك مستني الموافقة ⏳</h3><p>أهلاً ${esc(ME)}. حسابك اتعمل، وهيتفتح أول ما المدير م. هيثم فوزي يوافق عليه. هيفتح لوحده هنا أول ما الموافقة توصل.</p>
-    <button class="btn g" id="aOut">تسجيل خروج</button>`;$('#aOut').onclick=()=>AUTH.signOut();return}
-  if(kind==='disabled'){c.innerHTML=`<h3>الحساب موقوف</h3><p>الحساب ده اتوقف من المدير. كلّم م. هيثم فوزي.</p><button class="btn g" id="aOut">تسجيل خروج</button>`;$('#aOut').onclick=()=>AUTH.signOut();return}
-  if(kind==='lock'){c.innerHTML=`<h3>أهلاً ${esc(ME||'')} 👋</h3><p>استخدم البصمة عشان تفتح التطبيق.</p>
-    <button class="btn bio" id="lBio">☝️ افتح بالبصمة</button><div class="aerr" id="aE">${esc(msg||'')}</div><button class="lnk" id="lPw">ادخل بكلمة السر بدل البصمة</button>`;
+  if(kind==='forgot'){c.innerHTML=`<h3>استعادة كلمة المرور</h3><p>أدخل البريد الإلكتروني أو اسم المستخدم المسجّل في حسابك، وسنرسل إليك رابطاً لتعيين كلمة مرور جديدة.</p>
+    <label for="fU">البريد الإلكتروني أو اسم المستخدم</label><input id="fU" autocapitalize="none" spellcheck="false" dir="ltr" value="${esc(lsGet('snag5_lastid')||'')}">
+    <div class="aerr" id="aE"></div><div id="fOk"></div><button class="btn" id="fGo">متابعة</button><button class="lnk" id="aBack">العودة لتسجيل الدخول</button>`;
+    $('#fGo').onclick=doForgot;$('#aBack').onclick=()=>showAuth('login');return}
+  if(kind==='newpw'){c.innerHTML=`<h3>تعيين كلمة مرور جديدة</h3><p>دخلت بكلمة مرور مؤقتة. يُرجى تعيين كلمة مرور جديدة خاصة بك للمتابعة.</p>
+    <label for="nP">كلمة المرور الجديدة (6 أحرف على الأقل)</label><input id="nP" type="password" autocomplete="new-password" dir="ltr">
+    <label for="nP2">تأكيد كلمة المرور</label><input id="nP2" type="password" autocomplete="new-password" dir="ltr">
+    <div class="aerr" id="aE"></div><button class="btn" id="nGo">حفظ كلمة المرور</button><button class="lnk" id="aOut">تسجيل الخروج</button>`;
+    $('#nGo').onclick=doNewPw;$('#aOut').onclick=()=>AUTH.signOut();return}
+  if(kind==='pending'){c.innerHTML=`<h3>الحساب بانتظار الاعتماد ⏳</h3><p>أهلاً بك ${esc(ME)}. تم إنشاء حسابك بنجاح، وسيُفعَّل تلقائياً فور اعتماده من مدير النظام م. هيثم فوزي.</p>
+    <button class="btn g" id="aOut">تسجيل الخروج</button>`;$('#aOut').onclick=()=>AUTH.signOut();return}
+  if(kind==='disabled'){c.innerHTML=`<h3>الحساب موقوف</h3><p>تم إيقاف هذا الحساب من قِبل مدير النظام. للاستفسار يُرجى التواصل مع م. هيثم فوزي.</p><button class="btn g" id="aOut">تسجيل الخروج</button>`;$('#aOut').onclick=()=>AUTH.signOut();return}
+  if(kind==='lock'){c.innerHTML=`<h3>أهلاً بك ${esc(ME||'')} 👋</h3><p>استخدم البصمة لفتح التطبيق.</p>
+    <button class="btn bio" id="lBio">☝️ الفتح بالبصمة</button><div class="aerr" id="aE">${esc(msg||'')}</div><button class="lnk" id="lPw">الدخول بكلمة المرور بدلاً من البصمة</button>`;
     $('#lBio').onclick=unlock;$('#lPw').onclick=()=>{lockPending=false;AUTH.signOut()};return}}
 function hideAuth(){$('#auth').classList.remove('on')}
-function authErr(e){const c=e&&e.code||'';return c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found')?'اسم المستخدم أو كلمة السر غلط':
-  c.includes('email-already-in-use')?'اسم المستخدم ده مستخدم قبل كده — اختار اسم تاني':c.includes('weak-password')?'كلمة السر لازم تكون 6 حروف أو أكتر':
-  c.includes('network')?'مفيش نت — اتأكد من الاتصال وحاول تاني':c.includes('too-many')?'محاولات كتير — استنى شوية وحاول تاني':'حصلت مشكلة: '+c}
-async function doLogin(){const u=$('#aU').value.trim(),p=$('#aP').value;if(!u||!p){$('#aE').textContent='اكتب اسم المستخدم وكلمة السر';return}
-  $('#aGo').disabled=true;try{await AUTH.signInWithEmailAndPassword(mail(u),p);lsSet('snag5_lastuser',u);offerBio(u,p)}catch(e){$('#aE').textContent=authErr(e);$('#aGo').disabled=false}}
-async function doRegister(){const n=$('#rN').value.trim(),u=$('#rU').value.trim().toLowerCase(),p=$('#rP').value,p2=$('#rP2').value;const E=$('#aE');
-  if(n.length<3){E.textContent='اكتب اسمك بالكامل';return}if(!/^[a-z0-9._-]{3,24}$/.test(u)){E.textContent='اسم المستخدم: حروف إنجليزي صغيرة وأرقام بس، من 3 لـ 24 حرف';return}
-  if(p.length<6){E.textContent='كلمة السر لازم تكون 6 حروف أو أكتر';return}if(p!==p2){E.textContent='كلمتين السر مش زي بعض';return}
-  $('#rGo').disabled=true;try{const cr=await AUTH.createUserWithEmailAndPassword(mail(u),p);
-    const jc=(($('#rJ')||{}).value||'').trim().toUpperCase();await FS.collection('users').doc(cr.user.uid).set({name:n,username:u,approved:false,t:Date.now(),role:jc?'contractor':'team',...(jc?{join:jc}:{})});lsSet('snag5_lastuser',u);offerBio(u,p)}
+function authErr(e){const c=e&&e.code||'';return c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found')||c.includes('invalid-login')?'بيانات الدخول غير صحيحة.':
+  c.includes('email-already-in-use')?'هذا البريد الإلكتروني مسجّل مسبقاً. استخدم «نسيت كلمة المرور؟» إن كان الحساب لك.':c.includes('invalid-email')?'صيغة البريد الإلكتروني غير صحيحة.':c.includes('weak-password')?'يجب ألا تقل كلمة المرور عن 6 أحرف.':
+  c.includes('requires-recent-login')?'لأسباب أمنية، يُرجى إدخال كلمة المرور الحالية.':c.includes('network')?'تعذّر الاتصال بالإنترنت. تحقّق من الاتصال وحاول مرة أخرى.':c.includes('too-many')?'تجاوزت عدد المحاولات المسموح به. يُرجى المحاولة بعد قليل.':'تعذّر إتمام العملية ('+c+').'}
+async function doLogin(){const u=$('#aU').value.trim(),p=$('#aP').value;if(!u||!p){$('#aE').textContent='يُرجى إدخال بيانات الدخول وكلمة المرور.';return}
+  const rem=$('#aRem').checked;lsSet('snag5_rem',rem?'1':'0');$('#aGo').disabled=true;
+  try{try{await AUTH.setPersistence(rem?P_LOCAL():P_SESSION())}catch(e){}await signInId(u,p);lsSet('snag5_lastid',u);offerBio(u,p)}
+  catch(e){$('#aE').textContent=authErr(e);$('#aGo').disabled=false}}
+async function doRegister(){const n=$('#rN').value.trim(),m=$('#rM').value.trim().toLowerCase(),u=$('#rU').value.trim().toLowerCase(),p=$('#rP').value,p2=$('#rP2').value;const E=$('#aE');
+  if(n.length<3){E.textContent='يُرجى إدخال الاسم الكامل.';return}
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)||legacyMail(m)){E.textContent='يُرجى إدخال بريد إلكتروني صحيح.';return}
+  if(!/^[a-z0-9._-]{3,24}$/.test(u)){E.textContent='اسم المستخدم: أحرف إنجليزية صغيرة وأرقام فقط، من 3 إلى 24 حرفاً.';return}
+  if(p.length<6){E.textContent='يجب ألا تقل كلمة المرور عن 6 أحرف.';return}if(p!==p2){E.textContent='كلمتا المرور غير متطابقتين.';return}
+  $('#rGo').disabled=true;
+  try{try{const d=await FS.collection('unames').doc(u).get();if(d.exists){E.textContent='اسم المستخدم مستخدَم مسبقاً، يُرجى اختيار اسم آخر.';$('#rGo').disabled=false;return}}catch(e){}
+    try{await AUTH.setPersistence(P_LOCAL())}catch(e){}
+    const cr=await AUTH.createUserWithEmailAndPassword(m,p);const jc=(($('#rJ')||{}).value||'').trim().toUpperCase();
+    await FS.collection('users').doc(cr.user.uid).set({name:n,username:u,email:m,approved:false,t:Date.now(),role:jc?'contractor':'team',...(jc?{join:jc}:{})});
+    FS.collection('unames').doc(u).set({uid:cr.user.uid,email:m,t:Date.now()}).catch(()=>{});lsSet('snag5_lastid',m);offerBio(m,p)}
   catch(e){E.textContent=authErr(e);$('#rGo').disabled=false}}
+async function doForgot(){const id=$('#fU').value.trim();const E=$('#aE'),O=$('#fOk');E.textContent='';if(!id){E.textContent='يُرجى إدخال البريد الإلكتروني أو اسم المستخدم.';return}
+  $('#fGo').disabled=true;AUTH.languageCode='ar';
+  try{const r=await resolveId(id);const target=id.includes('@')?id.toLowerCase():r.real;
+    if(target){await AUTH.sendPasswordResetEmail(target).catch(e=>{if(!/user-not-found/.test(e.code||''))throw e});
+      O.innerHTML=`<div class="okbox">✓ تم إرسال رابط إعادة التعيين إلى ${esc(maskMail(target))}. يُرجى مراجعة صندوق الوارد أو البريد غير الهام (Spam).</div>`}
+    else{await FS.collection('pwreq').add({u:id.toLowerCase().slice(0,40),t:Date.now()});
+      O.innerHTML='<div class="okbox">لا يوجد بريد إلكتروني مسجّل لهذا الحساب، لذلك أُرسل طلبك إلى مدير النظام م. هيثم فوزي لإصدار كلمة مرور مؤقتة، وسيتواصل معك قريباً.</div>'}
+    $('#fGo').style.display='none'}
+  catch(e){E.textContent=authErr(e);$('#fGo').disabled=false}}
+async function doNewPw(){const p=$('#nP').value,p2=$('#nP2').value,E=$('#aE');if(p.length<6){E.textContent='يجب ألا تقل كلمة المرور عن 6 أحرف.';return}if(p!==p2){E.textContent='كلمتا المرور غير متطابقتين.';return}
+  $('#nGo').disabled=true;try{await USER.updatePassword(p);await FS.collection('users').doc(USER.uid).update({mustChange:false});
+    if(lsGet('snag5_bio')==='1'&&BIO()){try{await BIO().setCredentials({username:USER.email,password:p,server:BIO_SRV})}catch(e){}}
+    toast('تم حفظ كلمة المرور الجديدة ✓',3000)}catch(e){E.textContent=authErr(e);$('#nGo').disabled=false}}
 async function bioOK(){const B=BIO();if(!B)return false;try{const r=await B.isAvailable();return !!(r&&r.isAvailable)}catch(e){return false}}
 async function offerBio(u,p){if(lsGet('snag5_bio')==='1'||lsGet('snag5_bio_no')===u||!(await bioOK()))return;
-  setTimeout(()=>{dlg(`<h3>الدخول بالبصمة ☝️</h3><p class="q">تحب تفتح التطبيق بالبصمة بعد كده بدل ما تكتب كلمة السر؟</p>
-    <div class="row"><button class="btn" id="bY">فعّل البصمة</button><span class="sp"></span><button class="btn g" id="bN">مش دلوقتي</button></div>`);
-    $('#bY').onclick=async()=>{try{await BIO().verifyIdentity({reason:'تفعيل الدخول بالبصمة',title:'تفعيل البصمة'});await BIO().setCredentials({username:u,password:p,server:BIO_SRV});lsSet('snag5_bio','1');toast('اتفعّلت البصمة ✓')}catch(e){toast('متفعّلتش البصمة')}close()};
+  setTimeout(()=>{dlg(`<h3>الدخول بالبصمة ☝️</h3><p class="q">هل ترغب في فتح التطبيق بالبصمة مستقبلاً بدلاً من إدخال كلمة المرور؟</p>
+    <div class="row"><button class="btn" id="bY">تفعيل البصمة</button><span class="sp"></span><button class="btn g" id="bN">ليس الآن</button></div>`);
+    $('#bY').onclick=async()=>{try{await BIO().verifyIdentity({reason:'تفعيل الدخول بالبصمة',title:'تفعيل البصمة'});await BIO().setCredentials({username:u,password:p,server:BIO_SRV});lsSet('snag5_bio','1');toast('تم تفعيل البصمة ✓')}catch(e){toast('لم يتم تفعيل البصمة.')}close()};
     $('#bN').onclick=()=>{lsSet('snag5_bio_no',u);close()}},800)}
-async function bioLogin(){const E=$('#aE');try{await BIO().verifyIdentity({reason:'تسجيل الدخول',title:'Dhahiat Sumou – Snag List'});
-  const c=await BIO().getCredentials({server:BIO_SRV});await AUTH.signInWithEmailAndPassword(mail(c.username),c.password)}catch(e){E.textContent=e&&e.code&&e.code.startsWith('auth/')?authErr(e):'البصمة مانجحتش — حاول تاني أو استخدم كلمة السر'}}
-async function unlock(){try{await BIO().verifyIdentity({reason:'فتح التطبيق',title:'Dhahiat Sumou – Snag List'});lockPending=false;afterProfile()}catch(e){const E=$('#aE');if(E)E.textContent='البصمة مانجحتش — حاول تاني'}}
+async function bioLogin(){const E=$('#aE');try{await BIO().verifyIdentity({reason:'تسجيل الدخول',title:'Dhahiat Sumou Mecca TAAM'});
+  const c=await BIO().getCredentials({server:BIO_SRV});try{await AUTH.setPersistence(P_LOCAL())}catch(e){}await signInId(c.username,c.password)}catch(e){E.textContent=e&&e.code&&e.code.startsWith('auth/')?authErr(e):'تعذّر التحقق بالبصمة. حاول مرة أخرى أو استخدم كلمة المرور.'}}
+async function unlock(){try{await BIO().verifyIdentity({reason:'فتح التطبيق',title:'Dhahiat Sumou Mecca TAAM'});lockPending=false;afterProfile()}catch(e){const E=$('#aE');if(E)E.textContent='تعذّر التحقق بالبصمة. حاول مرة أخرى.'}}
+let emailAsked=false;
+async function accountChecks(){if(!USER||!PROFILE)return;const ref=FS.collection('users').doc(USER.uid);
+  if(!legacyMail(USER.email)&&PROFILE.email!==USER.email){ref.update({email:USER.email,emailPending:firebase.firestore.FieldValue.delete()}).catch(()=>{});
+    if(PROFILE.username)FS.collection('unames').doc(PROFILE.username).set({uid:USER.uid,email:USER.email,t:Date.now()}).catch(()=>{})}
+  if(PROFILE.username){FS.collection('unames').doc(PROFILE.username).get().then(d=>{if(!d.exists)FS.collection('unames').doc(PROFILE.username).set({uid:USER.uid,email:USER.email,t:Date.now()}).catch(()=>{})}).catch(()=>{})}
+  if(legacyMail(USER.email)&&!emailAsked&&!(PROFILE.emailPending)){emailAsked=true;setTimeout(emailPrompt,1800)}}
+function emailPrompt(pre){dlg(`<div class="shic">🛡️</div><h3>تحديث بيانات الحساب</h3><p class="q">حرصاً على أمان حسابك، وتمكينك من استعادة كلمة المرور بنفسك عند الحاجة، يُرجى إضافة بريدك الإلكتروني. وسيمكنك بعد ذلك تسجيل الدخول بالبريد الإلكتروني أو باسم المستخدم.</p>
+  <label class="fl">البريد الإلكتروني<input id="emI" type="email" dir="ltr" placeholder="name@example.com" value="${esc(pre||'')}"></label>
+  <div id="emPw" style="display:none"><label class="fl">كلمة المرور الحالية<input id="emP" type="password" dir="ltr"></label></div>
+  <div class="aerr" id="emE"></div>
+  <div class="row" style="flex-direction:column"><button class="btn" id="emGo">إرسال رابط التأكيد</button><button class="btn g" id="emL">تذكيري لاحقاً</button></div>
+  <p class="q" style="margin-top:8px">سيصلك رابط تأكيد على البريد المُدخل، ولن يتغير شيء في حسابك أو بياناتك.</p>`);
+  $('#emL').onclick=close;
+  $('#emGo').onclick=async()=>{const m=$('#emI').value.trim().toLowerCase(),E=$('#emE');if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)||legacyMail(m)){E.textContent='يُرجى إدخال بريد إلكتروني صحيح.';return}
+    $('#emGo').disabled=true;AUTH.languageCode='ar';
+    try{const pw=$('#emP').value;if(pw){await USER.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(USER.email,pw))}
+      await USER.verifyBeforeUpdateEmail(m);
+      await FS.collection('users').doc(USER.uid).update({emailPending:m});
+      if(PROFILE.username)await FS.collection('unames').doc(PROFILE.username).set({uid:USER.uid,email:m,pending:true,t:Date.now()});
+      $('#box').innerHTML=`<div class="shic">✉️</div><h3>تم إرسال رابط التأكيد</h3><p class="q">أرسلنا رابط التأكيد إلى <b dir="ltr">${esc(m)}</b>. افتح الرابط لإتمام إضافة البريد، ثم سجّل الدخول من جديد بالبريد الإلكتروني أو اسم المستخدم وكلمة المرور الحالية.</p><div class="row"><span class="sp"></span><button class="btn" id="emOk">حسناً</button></div>`;$('#emOk').onclick=close}
+    catch(e){$('#emGo').disabled=false;if(/requires-recent-login/.test(e.code||'')){$('#emPw').style.display='';E.textContent='لأسباب أمنية، يُرجى إدخال كلمة المرور الحالية ثم المتابعة.'}else E.textContent=authErr(e)}}}
 function afterProfile(){if(!USER)return;ME=(PROFILE&&PROFILE.name)||USER.email.split('@')[0];$('#userB').style.display='';
   if(lockPending){showAuth('lock');return}
   lsSet('snag5_name',ME);
-  if(isAdmin()||(PROFILE&&PROFILE.approved)){const wasLocked=$('#auth').classList.contains('on');hideAuth();
+  if(isAdmin()||(PROFILE&&PROFILE.approved)){
+    if(PROFILE&&PROFILE.mustChange){stopSync();showAuth('newpw');return}
+    const wasLocked=$('#auth').classList.contains('on');hideAuth();
     if(ROLE()==='contractor'){startRepBase();scheduleReminders()}else{startSync();startAct();startReq();startRepBase();startTeamWatch()}
     if(!navDone){navDone=true;if(!(cur&&$('#vVilla').classList.contains('on')))nav(ROLE()==='contractor'?'rep':'home')}
-    if(wasLocked)toast(greet(),3500)}
+    accountChecks();if(wasLocked)toast(greet(),3500)}
   else{stopSync();showAuth(PROFILE&&PROFILE.disabled?'disabled':'pending')}}
 function startFirebase(){
   firebase.initializeApp(CFG);FS=firebase.firestore();try{FS.enablePersistence({synchronizeTabs:false}).catch(()=>{})}catch(e){}
-  AUTH=firebase.auth();showAuth('loading');let first=true;
-  AUTH.onAuthStateChanged(u=>{USER=u;if(unsubU){unsubU();unsubU=null}
-    if(!u){PROFILE=null;ME='';$('#userB').style.display='none';stopSync();showAuth('login');first=false;return}
+  AUTH=firebase.auth();AUTH.languageCode='ar';showAuth('loading');let first=true;
+  AUTH.onAuthStateChanged(u=>{USER=u;ADMIN_UID=null;if(unsubU){unsubU();unsubU=null}
+    if(!u){PROFILE=null;ME='';emailAsked=false;$('#userB').style.display='none';stopSync();showAuth('login');first=false;return}
     if(first&&lsGet('snag5_bio')==='1'&&BIO())lockPending=true;first=false;
+    FS.collection('admins').doc(u.uid).get().then(d=>{if(d.exists&&USER&&USER.uid===u.uid){ADMIN_UID=u.uid;afterProfile()}}).catch(()=>{});
     unsubU=FS.collection('users').doc(u.uid).onSnapshot(s=>{PROFILE=s.exists?s.data():null;afterProfile()},e=>{PROFILE=null;afterProfile()})});
 }
-function userMenu(){const bio=lsGet('snag5_bio')==='1';
-  dlg(`<h3>${esc(ME)}</h3><p class="q" dir="ltr" style="text-align:right">${esc(USER?USER.email.split('@')[0]:'')} ${isAdmin()?'· مدير':''}</p>
-  <p class="q"><span class="net ${navigator.onLine?'on':''}"></span>${navigator.onLine?'متصل — التعديلات بتظهر للفريق على طول':'مفيش نت — التعديلات محفوظة وهترتفع لما النت يرجع'}</p>
-  <div class="row" style="flex-direction:column">${TEST&&isTeam()?'<button class="btn g" id="mCopy">📋 انسخ البيانات الحقيقية للتجربة</button>':''}${isAdmin()?`<button class="btn" id="mUsers">👥 إدارة المستخدمين${REQ?` (${REQ} مستني موافقة)`:''}</button>`:''}
+function userMenu(){const bio=lsGet('snag5_bio')==='1';const lg=USER&&legacyMail(USER.email);
+  dlg(`<h3>${esc(ME)}</h3><p class="q" dir="ltr" style="text-align:right">${esc(USER?(lg?(PROFILE&&PROFILE.username)||USER.email.split('@')[0]:USER.email):'')} ${isAdmin()?'· مدير النظام':''}</p>
+  <p class="q"><span class="net ${navigator.onLine?'on':''}"></span>${navigator.onLine?'متصل — تظهر التعديلات لجميع أعضاء الفريق فوراً.':'غير متصل — التعديلات محفوظة وستُرفع تلقائياً عند عودة الاتصال.'}</p>
+  <div class="row" style="flex-direction:column">${TEST&&isTeam()?'<button class="btn g" id="mCopy">📋 نسخ البيانات الفعلية إلى النسخة التجريبية</button>':''}${isAdmin()?`<button class="btn" id="mUsers">👥 إدارة المستخدمين${REQ?` (${REQ} بانتظار الإجراء)`:''}</button>`:''}
+  ${lg?'<button class="btn g" id="mMail">✉️ إضافة البريد الإلكتروني</button>':''}
   <button class="btn g" id="mBio">${bio?'إلغاء الدخول بالبصمة':'تفعيل الدخول بالبصمة'}</button>
-  <button class="btn g" id="mDua">${lsGet('snag5_dua')==='0'?'تشغيل الأذكار':'إيقاف الأذكار'}</button><button class="btn g" id="mUpd">🔄 البحث عن تحديث</button><button class="btn g" id="mOut">تسجيل خروج</button><button class="btn g" id="mX">إغلاق</button></div><p class="q" style="text-align:center;margin-top:10px">النسخة ${BUILD}</p>`);
-  $('#mUpd').onclick=()=>{close();checkUpdate(true)};$('#mDua').onclick=()=>{lsSet('snag5_dua',lsGet('snag5_dua')==='0'?'1':'0');close();toast(lsGet('snag5_dua')==='0'?'اتوقفت الأذكار':'اتشغلت الأذكار');if(lsGet('snag5_dua')!=='0')showDua()};
-  if(isAdmin())$('#mUsers').onclick=usersPanel;
-  if(TEST&&isTeam())$('#mCopy').onclick=async()=>{close();busy('جاري نسخ البيانات الحقيقية…');try{const s=await FS.collection('v').get();for(const d of s.docs)await FS.collection('t_v').doc(d.id).set(d.data());busy();toast(`اتنسخت بيانات ${s.docs.length} فيلا للنسخة التجريبية ✓ (الأصلية متتأثرش)`,4500)}catch(e){busy();toast('تعذّر النسخ: '+(e.code||e.message),4000)}};
-  $('#mBio').onclick=async()=>{if(bio){try{await BIO()&&BIO().deleteCredentials({server:BIO_SRV})}catch(e){}lsSet('snag5_bio',null);toast('اتلغت البصمة');close()}
-    else{close();lsSet('snag5_bio_no',null);dlg(`<h3>تفعيل البصمة</h3><p class="q">اكتب كلمة السر مرة واحدة عشان نحفظها بأمان مع البصمة.</p><input type="password" id="bpw" dir="ltr"><div class="row"><button class="btn" id="bOk">تفعيل</button><span class="sp"></span><button class="btn g" id="bX">إلغاء</button></div>`);
-      $('#bX').onclick=close;$('#bOk').onclick=async()=>{const pw=$('#bpw').value;const u=USER.email.split('@')[0];
-        try{await AUTH.signInWithEmailAndPassword(USER.email,pw);if(!(await bioOK())){toast('الموبايل ده مفيهوش بصمة');close();return}
-          await BIO().verifyIdentity({reason:'تفعيل الدخول بالبصمة',title:'تفعيل البصمة'});await BIO().setCredentials({username:u,password:pw,server:BIO_SRV});lsSet('snag5_bio','1');toast('اتفعّلت البصمة ✓');close()}
-        catch(e){toast(e&&e.code&&e.code.startsWith('auth/')?authErr(e):'متفعّلتش البصمة',3500)}}}};
+  <button class="btn g" id="mDua">${lsGet('snag5_dua')==='0'?'تشغيل الأذكار':'إيقاف الأذكار'}</button><button class="btn g" id="mUpd">🔄 البحث عن تحديث</button><button class="btn g" id="mOut">تسجيل الخروج</button><button class="btn g" id="mX">إغلاق</button></div><p class="q" style="text-align:center;margin-top:10px">الإصدار ${BUILD}</p>`);
+  $('#mUpd').onclick=()=>{close();checkUpdate(true)};$('#mDua').onclick=()=>{lsSet('snag5_dua',lsGet('snag5_dua')==='0'?'1':'0');close();toast(lsGet('snag5_dua')==='0'?'تم إيقاف الأذكار.':'تم تشغيل الأذكار.');if(lsGet('snag5_dua')!=='0')showDua()};
+  if(isAdmin())$('#mUsers').onclick=usersPanel;if($('#mMail'))$('#mMail').onclick=()=>emailPrompt();
+  if(TEST&&isTeam())$('#mCopy').onclick=async()=>{close();busy('جارٍ نسخ البيانات الفعلية…');try{const s=await FS.collection('v').get();for(const d of s.docs)await FS.collection('t_v').doc(d.id).set(d.data());busy();toast(`تم نسخ بيانات ${s.docs.length} فيلا إلى النسخة التجريبية ✓ (لم تتأثر النسخة الأصلية)`,4500)}catch(e){busy();toast('تعذّر النسخ: '+(e.code||e.message),4000)}};
+  $('#mBio').onclick=async()=>{if(bio){try{await BIO()&&BIO().deleteCredentials({server:BIO_SRV})}catch(e){}lsSet('snag5_bio',null);toast('تم إلغاء الدخول بالبصمة.');close()}
+    else{close();lsSet('snag5_bio_no',null);dlg(`<h3>تفعيل البصمة</h3><p class="q">أدخل كلمة المرور مرة واحدة ليتم حفظها بأمان مع البصمة.</p><input type="password" id="bpw" dir="ltr"><div class="row"><button class="btn" id="bOk">تفعيل</button><span class="sp"></span><button class="btn g" id="bX">إلغاء</button></div>`);
+      $('#bX').onclick=close;$('#bOk').onclick=async()=>{const pw=$('#bpw').value;
+        try{await USER.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(USER.email,pw));if(!(await bioOK())){toast('هذا الجهاز لا يدعم البصمة.');close();return}
+          await BIO().verifyIdentity({reason:'تفعيل الدخول بالبصمة',title:'تفعيل البصمة'});await BIO().setCredentials({username:USER.email,password:pw,server:BIO_SRV});lsSet('snag5_bio','1');toast('تم تفعيل البصمة ✓');close()}
+        catch(e){toast(e&&e.code&&e.code.startsWith('auth/')?authErr(e):'لم يتم تفعيل البصمة.',3500)}}}};
   $('#mOut').onclick=()=>{close();lockPending=false;AUTH.signOut()};$('#mX').onclick=close}
-async function usersPanel(){dlg('<h3>إدارة المستخدمين</h3><p class="q">جاري التحميل…</p>');
-  try{const s=await FS.collection('users').get();const rows=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.approved===b.approved?0:a.approved?1:-1)||(b.t||0)-(a.t||0));
-    $('#box').innerHTML=`<h3>إدارة المستخدمين (${rows.length})</h3><p class="q">وافق على حسابات الفريق أو وقّفها.</p>`+rows.map(r=>`<div class="urow"><div><b>${esc(r.name||'')}</b> ${r.username===ADMIN?'':`<span class="st ${r.approved?'ok':'wait'}">${r.approved?'مفعّل':(r.disabled?'موقوف':'مستني موافقة')}</span>`} ${r.role==='contractor'?`<span class="st bad">🏗 مقاول${r.company&&COS[r.company]?' – '+esc(COS[r.company].name):(()=>{const c=Object.values(COS).find(c=>c.code===r.join);return c?' – '+esc(c.name):' – كود '+esc(r.join||'؟')})()}</span>`:''}<small dir="ltr" style="text-align:right">${esc(r.username||'')}</small></div>
-      <div>${r.username===ADMIN?'<span class="st ok">المدير</span>':r.approved?`<button class="btn g" data-off="${esc(r.id)}">إيقاف</button>`:`<button class="btn" data-on="${esc(r.id)}">موافقة</button>`}</div></div>`).join('')+'<div class="row"><span class="sp"></span><button class="btn g" id="uX">إغلاق</button></div>';
+async function usersPanel(){dlg('<h3>إدارة المستخدمين</h3><p class="q">جارٍ التحميل…</p>');
+  try{const [s,rq,rs]=await Promise.all([FS.collection('users').get(),FS.collection('pwreq').get().catch(()=>({docs:[]})),FS.collection('pwreset').get().catch(()=>({docs:[]}))]);
+    const rows=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.approved===b.approved?0:a.approved?1:-1)||(b.t||0)-(a.t||0));
+    const RS=Object.fromEntries(rs.docs.map(d=>[d.id,d.data()]));const reqs=rq.docs.map(d=>({id:d.id,...d.data()}));
+    const isAdm=r=>r.username===ADMIN;
+    const resetCell=r=>{const x=RS[r.id];if(!x)return `<button class="btn g sm" data-pw="${esc(r.id)}">🔑 كلمة مرور مؤقتة</button>`;
+      if(x.status!=='done')return '<span class="st wait">⏳ جارٍ الإصدار (5–10 دقائق)</span>';
+      return `<span class="st ok" dir="ltr">${esc(x.temp)}</span> <button class="btn sm wa" data-pwa="${esc(r.id)}">واتساب</button>`};
+    $('#box').innerHTML=`<h3>إدارة المستخدمين (${rows.length})</h3>
+      ${reqs.length?`<div class="cocard" style="border-inline-start:5px solid #e07b00"><b>طلبات استعادة كلمة المرور (${reqs.length})</b>${reqs.map(q=>{const u=rows.find(r=>r.username===q.u);return `<div class="urow"><div><b>${esc(u?u.name:q.u)}</b><small dir="ltr" style="text-align:right">${esc(q.u)}</small></div><div>${u?`<button class="btn sm" data-pw="${esc(u.id)}" data-rq="${esc(q.id)}">إصدار كلمة مؤقتة</button>`:'<span class="st bad">غير مسجّل</span>'} <button class="btn g sm" data-rqx="${esc(q.id)}">تجاهل</button></div></div>`}).join('')}</div>`:''}
+      <p class="q">اعتماد حسابات الفريق أو إيقافها، وإصدار كلمات مرور مؤقتة عند الحاجة.</p>`+rows.map(r=>`<div class="urow"><div><b>${esc(r.name||'')}</b> ${isAdm(r)?'':`<span class="st ${r.approved?'ok':'wait'}">${r.approved?'مفعّل':(r.disabled?'موقوف':'بانتظار الاعتماد')}</span>`} ${r.role==='contractor'?`<span class="st bad">🏗 مقاول${r.company&&COS[r.company]?' – '+esc(COS[r.company].name):(()=>{const c=Object.values(COS).find(c=>c.code===r.join);return c?' – '+esc(c.name):' – رمز '+esc(r.join||'؟')})()}</span>`:''}<small dir="ltr" style="text-align:right">${esc(r.username||'')}${r.email?' · '+esc(r.email):''}</small>
+        ${!isAdm(r)&&r.approved?`<div style="margin-top:4px">${resetCell(r)}</div>`:''}</div>
+      <div>${isAdm(r)?'<span class="st ok">مدير النظام</span>':r.approved?`<button class="btn g" data-off="${esc(r.id)}">إيقاف</button>`:`<button class="btn" data-on="${esc(r.id)}">اعتماد</button>`}</div></div>`).join('')+'<div class="row"><span class="sp"></span><button class="btn g" id="uX">إغلاق</button></div>';
     $('#uX').onclick=close;
+    $('#box').querySelectorAll('[data-rqx]').forEach(b=>b.onclick=async()=>{try{await FS.collection('pwreq').doc(b.dataset.rqx).delete()}catch(e){}usersPanel()});
+    $('#box').querySelectorAll('[data-pw]').forEach(b=>b.onclick=async()=>{const r=rows.find(x=>x.id===b.dataset.pw);if(!confirm(`إصدار كلمة مرور مؤقتة لـ ${r.name}؟ ستُلغى كلمة المرور الحالية، وسيُطلب منه تعيين كلمة جديدة عند الدخول.`))return;b.disabled=true;
+      try{await FS.collection('pwreset').doc(r.id).set({uid:r.id,name:r.name||'',status:'pending',by:ME,t:Date.now()});if(b.dataset.rq)await FS.collection('pwreq').doc(b.dataset.rq).delete().catch(()=>{});
+        toast('تم تسجيل الطلب، وستظهر كلمة المرور المؤقتة هنا خلال 5–10 دقائق.',4500);usersPanel()}catch(e){toast('تعذّر تنفيذ الطلب: '+(e.code||''));b.disabled=false}});
+    $('#box').querySelectorAll('[data-pwa]').forEach(b=>b.onclick=()=>{const r=rows.find(x=>x.id===b.dataset.pwa),x=RS[r.id];
+      const msg=`السلام عليكم ${r.name||''}،\nتم إصدار كلمة مرور مؤقتة لحسابك في تطبيق Dhahiat Sumou Mecca TAAM:\nاسم المستخدم: ${r.username||r.email||''}\nكلمة المرور المؤقتة: ${x.temp}\n\nسيُطلب منك تعيين كلمة مرور جديدة عند تسجيل الدخول.`;
+      window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')});
     $('#box').querySelectorAll('[data-on],[data-off]').forEach(b=>b.onclick=async()=>{b.disabled=true;const on=!!b.dataset.on;
       const uid=b.dataset.on||b.dataset.off,ur=rows.find(x=>x.id===uid)||{};const upd={approved:on,disabled:!on,by:ME,at:Date.now()};
       if(on&&ur.role==='contractor'&&!ur.company){let co=Object.values(COS).find(c=>c.code===ur.join);
-        if(!co){const ls=Object.values(COS).filter(c=>c.active!==false);if(!ls.length){toast('ضيف شركة المقاول الأول من «تقارير المقاولين ← 🏗 المقاولين»',4500);b.disabled=false;return}
-          const pick=prompt('الكود مش مطابق لأي شركة. اكتب رقم الشركة:\n'+ls.map((c,i)=>`${i+1}- ${c.name}`).join('\n'));co=ls[(+pick||0)-1];if(!co){b.disabled=false;return}}
+        if(!co){const ls=Object.values(COS).filter(c=>c.active!==false);if(!ls.length){toast('يُرجى إضافة شركة المقاول أولاً من «تقارير المقاولين ← 🏗 المقاولين».',4500);b.disabled=false;return}
+          const pick=prompt('الرمز غير مطابق لأي شركة. أدخل رقم الشركة:\n'+ls.map((c,i)=>`${i+1}- ${c.name}`).join('\n'));co=ls[(+pick||0)-1];if(!co){b.disabled=false;return}}
         upd.company=co.id}
       try{await FS.collection('users').doc(uid).update(upd);usersPanel()}catch(e){toast('تعذّر التعديل: '+(e.code||''));b.disabled=false}})}
   catch(e){$('#box').innerHTML='<h3>إدارة المستخدمين</h3><p class="q">تعذّر التحميل: '+esc(e.code||e.message)+'</p>'}}
@@ -562,7 +649,7 @@ async function initCaps(){
   try{IDB=await openIDB();if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
     LOCALREC=await idbAll('recs');const ph=await idbAll('photos');for(const[k,b] of Object.entries(ph))PURL[k]=URL.createObjectURL(b);
     if(CFG&&window.firebase){startFirebase()}else{Object.assign(REC,LOCALREC);mode='idb';refresh()}
-  }catch(e){setWarn('مشكلة في الحفظ على الموبايل: '+e);if(CFG&&window.firebase&&!FS)startFirebase()}
+  }catch(e){setWarn('مشكلة في الحفظ على الجهاز: '+e);if(CFG&&window.firebase&&!FS)startFirebase()}
   downloads={save:nativeSave};
 }
 async function nativeSave({filename,data}){
@@ -571,8 +658,8 @@ async function nativeSave({filename,data}){
     const {Filesystem,Share}=C.Plugins;const b=await b64(blob);let saved='';
     try{await Filesystem.writeFile({path:'SnagBlock5/'+filename,data:b,directory:'DOCUMENTS',recursive:true});saved='Documents/SnagBlock5'}catch(e){}
     const w=await Filesystem.writeFile({path:filename,data:b,directory:'CACHE'});
-    try{await Share.share({title:filename,files:[w.uri],dialogTitle:'ابعت الملف'})}catch(e){}
-    if(saved)toast('اتحفظ في '+saved,4000);
+    try{await Share.share({title:filename,files:[w.uri],dialogTitle:'إرسال الملف'})}catch(e){}
+    if(saved)toast('تم الحفظ في '+saved,4000);
     return {status:'saved'};
   }
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();return {status:'saved'};
@@ -666,7 +753,7 @@ async function getSvg(name){
 }
 async function loadDrawing(){
   const v=D.villas[cur];const fls=D.floors[v.model]||[];const svg=$('#drSvg');const no=$('#noDr');
-  if(!fls.length){svg.innerHTML='';no.style.display='block';no.textContent=`نموذج ${v.model} ملهوش لوحة لسه. تقدر تكتب ملاحظات على البنود من القائمة.`;return}
+  if(!fls.length){svg.innerHTML='';no.style.display='block';no.textContent=`نموذج ${v.model} ليس له لوحة بعد، ويمكنك إضافة الملاحظات على البنود من القائمة.`;return}
   no.style.display='none';
   const name=`${v.model}_${floor}${full?'_x':''}${mirror?'_m':''}`;const [W,H]=D.meta[`${v.model}_${floor}`];
   svg.innerHTML='<text x="20" y="60" font-size="40">…</text>';
@@ -691,7 +778,7 @@ function drawMarks(){
 function onDrawTap(X,Y,e,t){
   const mk=t.closest&&t.closest('.mkr');
   if(mk&&!pending){openMark(mk.dataset.id);return}
-  if(!pending){toast('اختار بند من القائمة الأول واضغط "حدد مكانه"');return}
+  if(!pending){toast('اختر بنداً من القائمة أولاً ثم اضغط "حدد مكانه"');return}
   const v=D.villas[cur];const [W,H]=D.meta[`${v.model}_${floor}`];
   const [x,y]=unrot(X,Y,W,H);
   if(x<0||y<0||x>W||y>H)return;
@@ -704,7 +791,7 @@ function showHint(){const h=$('#hint');if(pending){const it=items(cur,phase).fin
 function renderList(){
   const its=items(cur,phase);const marks=marksOf(cur,phase);const gen=rec(cur).p[phase].gen||{};
   $('#shT').textContent=`بنود ${PH[phase]} (${its.length})`;
-  if(!its.length){$('#list').innerHTML='<div class="empty">مفيش بنود للفيلا دي في المرحلة دي.</div>';return}
+  if(!its.length){$('#list').innerHTML='<div class="empty">لا توجد بنود لهذه الفيلا في هذه المرحلة.</div>';return}
   let h='',ls='';
   for(const it of its){
     const head=(it.spec||'')+' — '+(it.sec||'');if(head!==ls){h+=`<div class="sec">${esc(head)}</div>`;ls=head}
@@ -729,21 +816,21 @@ function openMark(id,isNew){
   const m=marksOf(cur,phase).find(x=>x.id===id);if(!m)return;const it=items(cur,phase).find(i=>i.key===m.key);
   if(m.floor!==floor){floor=m.floor;setChips();loadDrawing()}
   dlg(`<h3>البند رقم ${it?it.n:''} — ${esc(FL[m.floor]||'')}</h3><p class="q">${esc(it?it.text:'')}</p>
-    <textarea id="mNote" placeholder="اكتب تفاصيل الملاحظة في المكان ده…">${esc(m.note)}</textarea>
+    <textarea id="mNote" placeholder="اكتب تفاصيل الملاحظة في هذا الموضع…">${esc(m.note)}</textarea>
     <div class="ph" id="mPh"></div>
     <div class="row"><label class="file">📷 صورة<input type="file" id="mFile" accept="image/*" capture="environment"></label>
     <label class="file">🖼 من المعرض<input type="file" id="mFile2" accept="image/*" multiple></label></div>
     <div class="row"><button class="btn" id="mOk">حفظ</button><button class="btn g" id="mDel">حذف المكان</button><span class="sp"></span><button class="btn g" id="mX">إغلاق</button></div>`);
   const ph=()=>{$('#mPh').innerHTML=(m.photos||[]).map((p,i)=>`<div><img data-pid="${esc(p)}" src="${esc(photoUrl(p))}" alt=""><button data-i="${i}">×</button></div>`).join('');fillImgs($('#mPh'))};ph();
   $('#mPh').onclick=e=>{const b=e.target.closest('button');if(b){m.photos.splice(+b.dataset.i,1);ph();save(cur);renderList()}};
-  const add=async e=>{for(const f of e.target.files){try{busy('جاري رفع الصورة…');const id=await storePhoto(f);m.photos.push(id);ph();save(cur);renderList()}catch(err){toast('تعذّر حفظ الصورة')}finally{busy()}}e.target.value=''};
+  const add=async e=>{for(const f of e.target.files){try{busy('جارٍ رفع الصورة…');const id=await storePhoto(f);m.photos.push(id);ph();save(cur);renderList()}catch(err){toast('تعذّر حفظ الصورة')}finally{busy()}}e.target.value=''};
   $('#mFile').onchange=add;$('#mFile2').onchange=add;
   if(!canEdit(m)){$('#mNote').readOnly=true;['mDel','mOk'].forEach(i=>$('#'+i).style.display='none');$('#box').querySelectorAll('.file,#mPh button').forEach(e=>e.style.display='none');
-    $('#mNote').insertAdjacentHTML('beforebegin',`<p class="q">🔒 سجّلها <b>${esc(m.by||'')}</b> — التعديل لصاحبها والمدير بس.</p>`);
+    $('#mNote').insertAdjacentHTML('beforebegin',`<p class="q">🔒 سجّلها <b>${esc(m.by||'')}</b> — التعديل متاح لكاتب الملاحظة ومدير النظام فقط.</p>`);
     $('#mX').onclick=close;return}
   $('#mOk').onclick=()=>{m.note=$('#mNote').value.trim();save(cur);close();renderList();drawMarks()};
   $('#mX').onclick=()=>{const n=$('#mNote').value.trim();if(n!==m.note){m.note=n;save(cur);renderList()}close()};
-  $('#mDel').onclick=()=>{if($('#mDel').dataset.c){const a=rec(cur).p[phase].marks;a.splice(a.indexOf(m),1);save(cur);close();renderList();drawMarks()}else{$('#mDel').dataset.c=1;$('#mDel').textContent='اضغط تاني للتأكيد'}};
+  $('#mDel').onclick=()=>{if($('#mDel').dataset.c){const a=rec(cur).p[phase].marks;a.splice(a.indexOf(m),1);save(cur);close();renderList();drawMarks()}else{$('#mDel').dataset.c=1;$('#mDel').textContent='اضغط مرة أخرى للتأكيد'}};
   if(isNew)setTimeout(()=>$('#mNote').focus(),50);
 }
 async function shrink(file,max=1600,q=0.82){
@@ -760,14 +847,14 @@ async function storePhoto(file){
 }
 function editGen(key){
   const it=items(cur,phase).find(i=>i.key===key);const g=rec(cur).p[phase].gen||(rec(cur).p[phase].gen={});
-  dlg(`<h3>ملاحظة على البند رقم ${it.n}</h3><p class="q">${esc(it.text)}</p><textarea id="gN" placeholder="ملاحظة عامة على البند (من غير مكان على اللوحة)">${esc(g[key]||'')}</textarea>
+  dlg(`<h3>ملاحظة على البند رقم ${it.n}</h3><p class="q">${esc(it.text)}</p><textarea id="gN" placeholder="ملاحظة عامة على البند (دون تحديد موضع على اللوحة)">${esc(g[key]||'')}</textarea>
   <div class="row"><button class="btn" id="gOk">حفظ</button><span class="sp"></span><button class="btn g" id="gX">إلغاء</button></div>`);
   const P=rec(cur).p[phase];P.gb=P.gb||{};const own=P.gb[key];
-  if(g[key]&&!canEdit(own)){$('#gN').readOnly=true;$('#gOk').style.display='none';$('#gN').insertAdjacentHTML('beforebegin',`<p class="q">🔒 كتبها <b>${esc(own&&own.by||'')}</b> — التعديل لصاحبها والمدير بس.</p>`);$('#gX').textContent='إغلاق';$('#gX').onclick=close;return}
+  if(g[key]&&!canEdit(own)){$('#gN').readOnly=true;$('#gOk').style.display='none';$('#gN').insertAdjacentHTML('beforebegin',`<p class="q">🔒 كتبها <b>${esc(own&&own.by||'')}</b> — التعديل متاح لكاتب الملاحظة ومدير النظام فقط.</p>`);$('#gX').textContent='إغلاق';$('#gX').onclick=close;return}
   $('#gOk').onclick=()=>{const v=$('#gN').value.trim();if(v){g[key]=v;if(!own)P.gb[key]={by:ME||undefined,uid:(USER&&USER.uid)||undefined,t:Date.now()}}else{delete g[key];delete P.gb[key]}save(cur);close();renderList()};$('#gX').onclick=close;
 }
 function addItem(){
-  dlg(`<h3>بند جديد — ${PH[phase]}</h3><p class="q">هياخد الرقم اللي بعد آخر بند، ويطلع في ملف الـ Snag List.</p>
+  dlg(`<h3>بند جديد — ${PH[phase]}</h3><p class="q">سيأخذ الرقم التالي لآخر بند، ويظهر في ملف الـ Snag List.</p>
   <select id="nS"><option>معماري وإنشائي</option><option>إلكتروميكانيك</option></select>
   <div style="height:8px"></div><textarea id="nT" placeholder="وصف البند…"></textarea>
   <div class="row"><button class="btn" id="nOk">إضافة</button><span class="sp"></span><button class="btn g" id="nX">إلغاء</button></div>`);
@@ -786,7 +873,7 @@ $('#floors').onclick=e=>{const b=e.target.closest('button[data-f]');if(!b)return
 $('#det').onclick=e=>{const b=e.target.closest('button');if(!b)return;full=b.dataset.d==='1';try{localStorage.setItem('snag5_full',full?'1':'0')}catch(_){};setChips();loadDrawing()};
 $('#mir').onclick=e=>{const b=e.target.closest('button');if(!b)return;mirror=b.dataset.m==='1';rec(cur).mirror=mirror;save(cur);setChips();loadDrawing()};
 $('#list').onclick=e=>{const b=e.target.closest('button');if(!b)return;
-  if(b.dataset.pin){if(!(D.floors[D.villas[cur].model]||[]).length){toast('مفيش لوحة للنموذج ده');return}
+  if(b.dataset.pin){if(!(D.floors[D.villas[cur].model]||[]).length){toast('لا توجد لوحة لهذا النموذج');return}
     pending=b.dataset.pin;showHint();renderList();if(innerWidth<900)$('#sheet').classList.remove('big')}
   else if(b.dataset.gen)editGen(b.dataset.gen);
   else if(b.dataset.open)openMark(b.dataset.open);
@@ -797,7 +884,7 @@ $('#grip').onclick=()=>$('#sheet').classList.toggle('big');
 document.querySelectorAll('.zoom button').forEach(b=>b.onclick=()=>{const pz=b.dataset.t==='plan'?planPZ:drPZ;if(!pz)return;
   if(b.dataset.z==='rot'){rot=(rot+90)%360;loadDrawing();return}if(b.dataset.z==='fit')pz.refit();else pz.zoom(b.dataset.z==='in'?1/1.4:1.4)});
 $('#q').addEventListener('keydown',e=>{if(e.key==='Enter')goto()});$('#q').addEventListener('input',()=>{const v=$('#q').value.trim();if(v.length===3&&P.villas[v])goto()});
-function goto(){const v=$('#q').value.trim().replace(/\D/g,'');const pv=P.villas[v];if(pv){$('#q').value='';openVilla(pv.code)}else toast('رقم الفيلا مش موجود في بلوك 5')}
+function goto(){const v=$('#q').value.trim().replace(/\D/g,'');const pv=P.villas[v];if(pv){$('#q').value='';openVilla(pv.code)}else toast('رقم الفيلا غير موجود في بلوك 5')}
 window.addEventListener('resize',()=>{setTimeout(()=>{planPZ&&planPZ.refit();drPZ&&drPZ.refit();drawMarks()},250)});
 
 /* ---------- export ---------- */
@@ -842,7 +929,7 @@ async function photoB64(p){if(p.startsWith('data:'))return p.split(',')[1];const
 async function buildExport(code,p){
   await document.fonts.load('700 40px Cairo');await document.fonts.load('400 40px Cairo');
   const v=D.villas[code];const fls=D.floors[v.model]||[];const its=items(code,p);const r=rec(code);const marks=r.p[p].marks;const gen=r.p[p].gen||{};
-  const floorsC={};for(const f of fls){busy(`جاري تجهيز ${FL[f]}…`);floorsC[f]=await floorCanvas(code,p,f)}
+  const floorsC={};for(const f of fls){busy(`جارٍ تجهيز ${FL[f]}…`);floorsC[f]=await floorCanvas(code,p,f)}
   // ---------- PDF
   let pdfBlob=null;
   if(fls.length){const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a3',compress:true});
@@ -850,7 +937,7 @@ async function buildExport(code,p){
       pdf.addImage(sc.toDataURL('image/jpeg',0.9),'JPEG',0,0,420,297,undefined,'FAST')}
     pdfBlob=pdf.output('blob')}
   // ---------- Excel (columns run physically right-to-left: م on the far right)
-  busy('جاري تجهيز ملف الإكسيل…');
+  busy('جارٍ تجهيز ملف الإكسيل…');
   const wb=new ExcelJS.Workbook();wb.creator='Snag Block 5';
   const ws=wb.addWorksheet('Snag List',{views:[{rightToLeft:false,showGridLines:false}],pageSetup:{paperSize:9,orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0}});
   // A..H  : ملاحظات الموقع | الصور | الدور | المرحلة | البند | القسم | التخصص | م
@@ -892,7 +979,7 @@ async function buildExport(code,p){
     const fc=floorsC[f];const id=wb.addImage({base64:await b64(await c2b(fc)),extension:'png'});const w=1150,h=Math.round(w*fc.height/fc.width);
     ws.addImage(id,{tl:{col:0,row:rn},ext:{width:w,height:h}});rn+=Math.ceil(h/20)+2}
   // photos sheet
-  if(photoRows.length){busy('جاري إضافة الصور…');const wp=wb.addWorksheet('الصور',{views:[{showGridLines:false}]});
+  if(photoRows.length){busy('جارٍ إضافة الصور…');const wp=wb.addWorksheet('الصور',{views:[{showGridLines:false}]});
     wp.columns=[{width:46},{width:40},{width:12},{width:8}];
     ['الصورة','الملاحظة','الدور','م'].forEach((t,i)=>R_(wp.getRow(1).getCell(i+1),ar(t),{b:true,h:'center',c:'FFFFFFFF',f:'FFA91A2C',bd:1}));
     let pr=2;for(const q of photoRows){try{const id=wb.addImage({base64:await photoB64(q.pid),extension:'jpeg'});
@@ -904,19 +991,19 @@ async function buildExport(code,p){
 async function doExport(kind){
   close();
   const code=cur,p=phase;const base=`Snag_${code}_P${p}`;
-  try{busy('جاري التجهيز…');const r=await buildExport(code,p);busy();
+  try{busy('جارٍ التجهيز…');const r=await buildExport(code,p);busy();
     let data,name;
     if(kind==='xlsx'){data=r.xlsx;name=base+'.xlsx'}
-    else if(kind==='pdf'){if(!r.pdf){toast('مفيش لوحة للنموذج ده');return}data=r.pdf;name=base+'_Drawings.pdf'}
+    else if(kind==='pdf'){if(!r.pdf){toast('لا توجد لوحة لهذا النموذج');return}data=r.pdf;name=base+'_Drawings.pdf'}
     else{const z=new JSZip();z.file(base+'.xlsx',r.xlsx);if(r.pdf)z.file(base+'_Drawings.pdf',r.pdf);data=await z.generateAsync({type:'blob'});name=base+'.zip'}
     await downloads.save({filename:name,data});
   }catch(e){busy();const c=e&&e.code;
-    toast(c==='declined'?'اتلغى الحفظ':c==='host_unavailable'?'التطبيق مش بيحفظ ملفات — افتح الصفحة من Chrome':'حصلت مشكلة في الاستخراج: '+(c||e.message||e),4500)}
+    toast(c==='declined'?'تم إلغاء الحفظ':c==='host_unavailable'?'لا يدعم هذا العرض حفظ الملفات — افتح الصفحة من Chrome':'تعذّر الاستخراج: '+(c||e.message||e),4500)}
 }
 $('#exp').onclick=()=>{
-  dlg(`<h3>استخراج ملف فيلا ${esc(cur)}</h3><p class="q">${PH[phase]} — شيت إكسيل فيه الـ Snag List والملاحظات واللوحات، وملف PDF للوحات بأرقام الـ Snag List.</p>
+  dlg(`<h3>استخراج ملف فيلا ${esc(cur)}</h3><p class="q">${PH[phase]} — ملف Excel يتضمن الـ Snag List والملاحظات واللوحات، وملف PDF للوحات مرقّمة ببنود الـ Snag List.</p>
   <div class="row" style="flex-direction:column"><button class="btn" data-k="zip">ملف مجمّع (Excel + PDF) — ZIP</button>
-  <button class="btn g" data-k="xlsx">Excel بس</button><button class="btn g" data-k="pdf">PDF اللوحات بس</button><button class="btn g" data-k="x">إلغاء</button></div>`);
+  <button class="btn g" data-k="xlsx">Excel فقط</button><button class="btn g" data-k="pdf">PDF اللوحات فقط</button><button class="btn g" data-k="x">إلغاء</button></div>`);
   $('#box').onclick=e=>{const b=e.target.closest('button[data-k]');if(!b)return;$('#box').onclick=null;if(b.dataset.k==='x')close();else doExport(b.dataset.k)};
 };
 
@@ -928,7 +1015,7 @@ try{const A=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.App;if(A)A.ad
 function welcome(){const w=$('#wel'),tr=$('#wtrack'),n=tr.children.length;
   $('#wdots').innerHTML='<i></i>'.repeat(n);const dots=[...$('#wdots').children];
   const idx=()=>{const c=tr.getBoundingClientRect();const mid=c.left+c.width/2;let best=0,bd=1e9;[...tr.children].forEach((el,k)=>{const r=el.getBoundingClientRect();const d=Math.abs(r.left+r.width/2-mid);if(d<bd){bd=d;best=k}});return best};
-  const upd=()=>{const i=idx();dots.forEach((d,k)=>d.classList.toggle('on',k===i));$('#wNext').textContent=i>=n-1?'يلا نبدأ':'التالي'};
+  const upd=()=>{const i=idx();dots.forEach((d,k)=>d.classList.toggle('on',k===i));$('#wNext').textContent=i>=n-1?'ابدأ الآن':'التالي'};
   tr.onscroll=upd;w.classList.add('on');tr.children[0].scrollIntoView({inline:'center',block:'nearest'});setTimeout(upd,50);
   const done=()=>{w.classList.remove('on');try{localStorage.setItem('snag5_welcomed','1')}catch(e){}};
   $('#wNext').onclick=()=>{const i=idx();if(i>=n-1)done();else tr.children[i+1].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})};
@@ -958,7 +1045,7 @@ const APK_URL=TEST?'https://github.com/mohamednabilwaheeb/-/releases/download/te
 const DEADLINE=10,REMIND=9,WEEKLY_H=12;
 const DEF_WORK=['إزالة لياسة قديمة','إزالة عزل قديم','لياسة','عزل أسطح','عزل حمامات','بلاط / سيراميك أرضيات','سيراميك حوائط','بحص أسطح','دهانات','جبس بورد','كهرباء','سباكة','ألمنيوم / شبابيك','أبواب / نجارة','تنظيف ونقل مخلفات'];
 const REMOVAL=n=>/^إزالة/.test(n);
-const OBST=['مفيش مياه','مفيش كهرباء','مفيش مواد','مستني استلام','مستني اعتماد','ظروف الجو'];
+const OBST=['انقطاع المياه','انقطاع الكهرباء','عدم توفر المواد','بانتظار الاستلام','بانتظار الاعتماد','الظروف الجوية'];
 const UNITS=['م²','م.ط','م³','عدد'];
 const PALETTE=['#1f6fd1','#e07b00','#0f8a83','#8e44ad','#c0392b','#2e7d32','#b8860b','#d81b60','#00838f','#5d4037'];
 const pad2=n=>String(n).padStart(2,'0');
@@ -990,16 +1077,16 @@ function nav(sec){
   SECTION=sec;['vHome','vPlan','vVilla','vRep'].forEach(id=>$('#'+id).classList.remove('on'));
   $('#phase').style.display=sec==='snag'?'':'none';
   const contr=ROLE()==='contractor';$('#helpB').style.display=contr?'none':'';
-  if(sec==='home'){$('#vHome').classList.add('on');$('#ttl').textContent='Dhahiat Sumou Mecca TAAM';$('#sub').textContent='اختار القسم';$('#back').style.display='none';renderHome()}
+  if(sec==='home'){$('#vHome').classList.add('on');$('#ttl').textContent='Dhahiat Sumou Mecca TAAM';$('#sub').textContent='اختر القسم';$('#back').style.display='none';renderHome()}
   else if(sec==='snag'){$('#vPlan').classList.add('on');$('#ttl').textContent='Dhahiat Sumou – Block 5';$('#sub').textContent='Snag List';$('#back').style.display='';cur=null;pending=null;colorPlan();setTimeout(()=>planPZ&&planPZ.refit(),30)}
-  else if(sec==='rep'){$('#vRep').classList.add('on');$('#ttl').textContent=contr?'تقرير الأعمال اليومي':'تقارير المقاولين';$('#back').style.display=contr?'none':'';
+  else if(sec==='rep'){$('#vRep').classList.add('on');$('#ttl').textContent=contr?'تقرير الأعمال اليومي':'تقارير المقاولين';$('#sub').textContent=contr?coName(myCo()):'Dhahiat Sumou – Block 5';$('#back').style.display=contr?'none':'';
     if(!repPZ)drawRepPlan();renderRep();setTimeout(()=>repPZ&&repPZ.refit(),30)}
 }
 function renderHome(){$('#hHi').textContent=greet();
   const t=Object.values(REPS).filter(r=>r.date===todayS()&&r.status==='sent').length,n=Object.values(COS).filter(c=>c.active!==false).length;
-  $('#hRep').textContent=n?`النهارده: ${t} من ${n} مقاول أرسلوا التقرير`:'التقارير اليومية والأسبوعية'}
+  $('#hRep').textContent=n?`اليوم: أرسل ${t} من أصل ${n} مقاولين تقاريرهم`:'التقارير اليومية والأسبوعية'}
 $('#vHome').onclick=e=>{const b=e.target.closest('[data-sec]');if(!b)return;const s=b.dataset.sec;
-  if(s==='boq'){toast('قسم حصر الكميات تحت التجهيز — هينزل قريب إن شاء الله',3500);return}nav(s)};
+  if(s==='boq'){toast('قسم حصر الكميات قيد التطوير، وسيُتاح قريباً بإذن الله.',3500);return}nav(s)};
 
 /* ---------- live data ---------- */
 function startRepBase(){if(unsubCo||!FS)return;
@@ -1016,12 +1103,13 @@ function stopRep(){[unsubCo,unsubW,unsubRep,unsubToday].forEach(u=>u&&u());unsub
 function notify(title,body,extra){toast(body,6000);
   try{const L=LN();if(L&&notifReady){L.schedule({notifications:[{id:Math.floor(Math.random()*2e9),title,body,extra:extra||{},smallIcon:'ic_stat_notify'}]}).catch(()=>{});return}
     if(!NATIVE_APP&&'Notification' in window&&Notification.permission==='granted'&&document.hidden){const n=new Notification(title,{body,icon:'img/icon-192.png'});n.onclick=()=>{window.focus();if(extra&&extra.rep)openFromNotif(extra)}}}catch(e){}}
-function openFromNotif(x){if(x.rep==='week'){nav('rep');weeklyPanel()}else nav('rep')}
+function openFromNotif(x){nav('rep');if(x.rep==='week')weeklyPanel();else if(x.rep==='month')monthlyPanel()}
 function startTeamWatch(){if(unsubToday||!FS||!isTeam())return;let first=true;const seen=new Set();
   unsubToday=repCol().where('date','==',todayS()).onSnapshot(s=>{const now=Date.now();
     s.docs.forEach(d=>{const r=d.data();if(r.status!=='sent')return;if(seen.has(d.id))return;seen.add(d.id);if(first)return;
-      const t=repTot(r);notify('تقرير مقاول — Dhahiat Sumou',`${coName(r.cid)} أرسلت تقرير اليوم: ${t.v} فيلا – ${t.w} عامل${r.late?' (متأخر ⏰)':''}`,{rep:'day'});
-      const d0=parseD(r.date);d0.setHours(WEEKLY_H,0,0,0);if(isAdmin()&&parseD(r.date).getDay()===4&&r.sentAt>d0.getTime())notify('التقرير الأسبوعي اتحدّث',`وصل تقرير متأخر من ${coName(r.cid)} واتضاف للتقرير الأسبوعي`,{rep:'week'})});
+      const t=repTot(r);notify('تقرير مقاول — Dhahiat Sumou',`أرسلت ${coName(r.cid)} تقرير اليوم: ${t.v} فيلا – ${t.w} عامل${r.late?' (متأخر ⏰)':''}`,{rep:'day'});
+      const d0=parseD(r.date);d0.setHours(WEEKLY_H,0,0,0);if(isAdmin()&&parseD(r.date).getDay()===4&&r.sentAt>d0.getTime())notify('تحديث التقرير الأسبوعي',`ورد تقرير متأخر من ${coName(r.cid)} وأُضيف إلى التقرير الأسبوعي.`,{rep:'week'});
+      if(isAdmin()&&r.date===monthEnd(r.date)&&r.sentAt>d0.getTime())notify('تحديث التقرير الشهري',`ورد تقرير متأخر من ${coName(r.cid)} وأُضيف إلى التقرير الشهري.`,{rep:'month'})});
     first=false},()=>{})}
 async function tick(){if(!USER||!FS)return;const now=new Date(),t=todayS(),h=now.getHours()+now.getMinutes()/60;
   if(SECTION==='rep'&&repDate===t)renderRepHead();
@@ -1029,15 +1117,16 @@ async function tick(){if(!USER||!FS)return;const now=new Date(),t=todayS(),h=now
     if(h>=DEADLINE&&lsGet('snag5_miss')!==t){lsSet('snag5_miss',t);
       try{const s=await repCol().where('date','==',t).get();const sent=new Set(s.docs.filter(d=>d.data().status==='sent').map(d=>d.data().cid));
         const miss=Object.values(COS).filter(c=>c.active!==false&&!sent.has(c.id)).map(c=>c.name);
-        if(miss.length&&now.getDay()!==5)notify('تقارير لم تُرسل',`لسه ما أرسلوش تقرير النهارده: ${miss.join('، ')}`,{rep:'day'})}catch(e){}}
-    const ws=weekStart(t);if(now.getDay()===4&&h>=WEEKLY_H&&lsGet('snag5_weekly')!==ws){lsSet('snag5_weekly',ws);notify('التقرير الأسبوعي جاهز 📊',`التقرير الأسبوعي للمقاولين (${shortD(ws)} – ${shortD(addD(ws,5))}) جاهز`,{rep:'week'})}}
+        if(miss.length&&now.getDay()!==5)notify('تقارير لم تُرسَل',`لم يُرسَل تقرير اليوم بعد من: ${miss.join('، ')}`,{rep:'day'})}catch(e){}}
+    if(t===monthEnd(t)&&h>=WEEKLY_H&&lsGet('snag5_monthly')!==t){lsSet('snag5_monthly',t);notify('التقرير الشهري جاهز 📅',`صدر التقرير الشهري لأعمال المقاولين عن شهر ${monthLabel(t)}.`,{rep:'month'})}
+    const ws=weekStart(t);if(now.getDay()===4&&h>=WEEKLY_H&&lsGet('snag5_weekly')!==ws){lsSet('snag5_weekly',ws);notify('التقرير الأسبوعي جاهز 📊',`صدر التقرير الأسبوعي لأعمال المقاولين (${shortD(ws)} – ${shortD(addD(ws,5))}).`,{rep:'week'})}}
   else{const mine=REPS[repId(t,myCo())];const sent=mine&&mine.status==='sent'&&repDate===t;
-    if(!sent&&repDate===t&&h>=REMIND&&h<DEADLINE&&lsGet('snag5_rem')!==t&&now.getDay()!==5){lsSet('snag5_rem',t);if(!LN())notify('تذكير — تقرير اليوم','فاضل أقل من ساعة على آخر ميعاد لإرسال تقرير النهارده (10 الصبح)',{rep:'day'})}}}
+    if(!sent&&repDate===t&&h>=REMIND&&h<DEADLINE&&lsGet('snag5_rem')!==t&&now.getDay()!==5){lsSet('snag5_rem',t);if(!LN())notify('تذكير — تقرير اليوم','تبقّى أقل من ساعة على الموعد النهائي لإرسال تقرير اليوم (10:00 صباحاً).',{rep:'day'})}}}
 async function scheduleReminders(){const L=LN();if(!L||ROLE()!=='contractor')return;await notifPerm();if(!notifReady)return;
   try{await L.cancel({notifications:[0,1,2,3,4,5,6,7].map(k=>({id:7700+k}))})}catch(e){}
   const t=todayS(),mine=REPS[repId(t,myCo())],sent=mine&&mine.status==='sent';const list=[];
   for(let k=0;k<8;k++){const ds=addD(t,k);const d=parseD(ds);if(d.getDay()===5)continue;if(k===0&&sent)continue;d.setHours(REMIND,0,0,0);if(d.getTime()<=Date.now())continue;
-    list.push({id:7700+k,title:'تذكير — تقرير اليوم',body:'باقي ساعة على آخر ميعاد لإرسال تقرير النهارده (10 الصبح)',schedule:{at:d},extra:{rep:'day'},smallIcon:'ic_stat_notify'})}
+    list.push({id:7700+k,title:'تذكير — تقرير اليوم',body:'تبقّت ساعة على الموعد النهائي لإرسال تقرير اليوم (10:00 صباحاً).',schedule:{at:d},extra:{rep:'day'},smallIcon:'ic_stat_notify'})}
   try{if(list.length)await L.schedule({notifications:list})}catch(e){}}
 
 /* ---------- block plan for reports ---------- */
@@ -1065,24 +1154,24 @@ const canEditRep=()=>ROLE()==='contractor'&&repDate===todayS()&&!(myRep()&&myRep
 
 /* ---------- report screen ---------- */
 function renderRepHead(){const el=$('#repStatus');if(!el)return;if(ROLE()!=='contractor'||repDate!==todayS()){el.textContent='';return}
-  const r=myRep();if(r&&r.status==='sent'){el.innerHTML=`<span class="st ok">✓ اتأرسل ${hm(r.sentAt)}${r.late?' ⏰ متأخر':''}</span>`;return}
+  const r=myRep();if(r&&r.status==='sent'){el.innerHTML=`<span class="st ok">✓ أُرسل ${hm(r.sentAt)}${r.late?' ⏰ متأخر':''}</span>`;return}
   const dl=new Date();dl.setHours(DEADLINE,0,0,0);const m=Math.round((dl-Date.now())/60000);
-  el.innerHTML=m>0?`<span class="st wait">باقي ${Math.floor(m/60)?Math.floor(m/60)+' س ':''}${m%60} د على آخر ميعاد (10:00)</span>`:`<span class="st wait">⏰ فات آخر ميعاد — التقرير هيتسجّل متأخر</span>`}
+  el.innerHTML=m>0?`<span class="st wait">متبقٍّ ${Math.floor(m/60)?Math.floor(m/60)+' س ':''}${m%60} د على الموعد النهائي (10:00)</span>`:`<span class="st wait">⏰ انقضى الموعد النهائي — سيُسجَّل التقرير متأخراً</span>`}
 function renderRep(){if(!$('#vRep').classList.contains('on'))return;const contr=ROLE()==='contractor';
-  if(contr&&COS[myCo()]&&COS[myCo()].active===false){$('#repTools').innerHTML='';$('#repFoot').innerHTML='<div class="empty">⛔ حساب الشركة موقوف — كلّم م. هيثم فوزي.</div>';return}
+  if(contr&&COS[myCo()]&&COS[myCo()].active===false){$('#repTools').innerHTML='';$('#repFoot').innerHTML='<div class="empty">⛔ حساب الشركة موقوف. للاستفسار يُرجى التواصل مع م. هيثم فوزي.</div>';return}
   const t=todayS();
   $('#repTools').innerHTML=`${contr?coBadge(myCo(),34):''}
-    <div class="chip dnav"><button id="rPrev" aria-label="اليوم اللي قبله">→</button><label class="dl"><span>${repDate===t?'النهارده · ':''}${dayLabel(repDate)}</span><input type="date" id="rDate" value="${repDate}" max="${t}"></label><button id="rNext" aria-label="اليوم اللي بعده" ${repDate>=t?'disabled':''}>←</button></div>
-    ${isTeam()?`<select id="rCo" class="sel"><option value="">كل المقاولين</option>${Object.values(COS).sort((a,b)=>(a.t||0)-(b.t||0)).map(c=>`<option value="${esc(c.id)}" ${repCo===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`:''}
+    <div class="chip dnav"><button id="rPrev" aria-label="اليوم السابق">→</button><label class="dl"><span>${repDate===t?'اليوم · ':''}${dayLabel(repDate)}</span><input type="date" id="rDate" value="${repDate}" max="${t}"></label><button id="rNext" aria-label="اليوم التالي" ${repDate>=t?'disabled':''}>←</button></div>
+    ${isTeam()?`<select id="rCo" class="sel"><option value="">جميع المقاولين</option>${Object.values(COS).sort((a,b)=>(a.t||0)-(b.t||0)).map(c=>`<option value="${esc(c.id)}" ${repCo===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`:''}
     <span id="repStatus"></span><span class="sp"></span>
-    ${canEditRep()?'<button class="btn g" id="rCopy">📋 نفس تقرير امبارح</button>':''}
-    <button class="btn g" id="rWeek">📊 الأسبوعي</button>${isTeam()?'<button class="btn g" id="rDay">⬇ تقرير اليوم</button>':''}
+    ${canEditRep()?'<button class="btn g" id="rCopy">📋 نسخ تقرير الأمس</button>':''}
+    <button class="btn g" id="rWeek">📊 الأسبوعي</button><button class="btn g" id="rMon">📅 الشهري</button>${isTeam()?'<button class="btn g" id="rDay">⬇ تقرير اليوم</button>':''}
     ${isAdmin()?'<button class="btn g" id="rCos">🏗 المقاولين</button><button class="btn g" id="rWork">⚙ البنود</button>':''}`;
   renderRepHead();
   $('#rPrev').onclick=()=>setRepDate(addD(repDate,-1));$('#rNext').onclick=()=>{if(repDate<t)setRepDate(addD(repDate,1))};
   $('#rDate').onchange=e=>{if(e.target.value)setRepDate(e.target.value>t?t:e.target.value)};
   if($('#rCo'))$('#rCo').onchange=e=>{repCo=e.target.value;colorRepPlan();renderRepFoot()};
-  if($('#rCopy'))$('#rCopy').onclick=copyYesterday;$('#rWeek').onclick=()=>weeklyPanel();
+  if($('#rCopy'))$('#rCopy').onclick=copyYesterday;$('#rWeek').onclick=()=>weeklyPanel();$('#rMon').onclick=()=>monthlyPanel();
   if($('#rDay'))$('#rDay').onclick=()=>exportPanel(repDate,repDate,'daily');
   if($('#rCos'))$('#rCos').onclick=companiesPanel;if($('#rWork'))$('#rWork').onclick=workPanel;
   colorRepPlan();renderRepFoot()}
@@ -1090,15 +1179,15 @@ function setRepDate(d){repDate=d;repSel.clear();subRep();renderRep()}
 function renderRepFoot(){const f=$('#repFoot');const nx=$('#repNext');
   if(ROLE()==='contractor'){const r=myRep();const t=r?repTot(r):{v:0,w:0,i:0};const ed=canEditRep();
     nx.style.display=ed&&repSel.size?'':'none';nx.textContent=`التالي (${repSel.size} فيلا) ←`;
-    f.innerHTML=`<div class="rsum">${repDate===todayS()?'النهارده':dayLabel(repDate)}: <b>${t.v}</b> فيلا – <b>${t.w}</b> عامل – <b>${t.i}</b> بند
-      ${ed?`<span class="hint2">${repSel.size?'':'دوس على الفيلا (أو أكتر من فيلا) عشان تسجّل الشغل'}</span>`:''}</div>
-      ${ed?`<button class="btn send" id="rSend" ${t.v?'':'disabled'}>✓ إرسال تقرير اليوم</button>`:r&&r.status==='sent'?`<span class="st ok">✓ اتأرسل ${hm(r.sentAt)}${r.late?' — متأخر ⏰':''}</span>`:repDate!==todayS()?'<span class="st wait">ما اتأرسلش</span>':''}`;
+    f.innerHTML=`<div class="rsum">${repDate===todayS()?'اليوم':dayLabel(repDate)}: <b>${t.v}</b> فيلا – <b>${t.w}</b> عامل – <b>${t.i}</b> بند
+      ${ed?`<span class="hint2">${repSel.size?'':'اضغط على الفيلا (أو أكثر من فيلا) لتسجيل الأعمال'}</span>`:''}</div>
+      ${ed?`<button class="btn send" id="rSend" ${t.v?'':'disabled'}>✓ إرسال تقرير اليوم</button>`:r&&r.status==='sent'?`<span class="st ok">✓ أُرسل ${hm(r.sentAt)}${r.late?' — متأخر ⏰':''}</span>`:repDate!==todayS()?'<span class="st wait">لم يُرسَل</span>':''}`;
     if($('#rSend'))$('#rSend').onclick=sendReport;return}
   nx.style.display='none';
   const cos=Object.values(COS).filter(c=>c.active!==false||Object.values(REPS).some(r=>r.cid===c.id));
-  if(!cos.length){f.innerHTML=`<div class="rsum">مفيش مقاولين متسجلين لسه.${isAdmin()?' دوس «🏗 المقاولين» عشان تضيف شركة وتبعتلها رابط الدعوة.':''}</div>`;return}
+  if(!cos.length){f.innerHTML=`<div class="rsum">لا يوجد مقاولون مسجّلون حتى الآن.${isAdmin()?' اضغط «🏗 المقاولين» لإضافة شركة وإرسال رابط الدعوة إليها.':''}</div>`;return}
   let tv=0,tw=0;f.innerHTML='<div class="cos">'+cos.map(c=>{const r=REPS[repId(repDate,c.id)];const t=r?repTot(r):{v:0,w:0};if(r&&r.status==='sent'){tv+=t.v;tw+=t.w}
-    const st=!r?'<span class="st bad">✗ لم يُرسل</span>':r.status!=='sent'?`<span class="st wait">✎ مسودة ${t.v} فيلا</span>`:`<span class="st ok">✓ ${hm(r.sentAt)}</span>${r.late?'<span class="st wait">⏰ متأخر</span>':''}`;
+    const st=!r?'<span class="st bad">✗ لم يُرسَل</span>':r.status!=='sent'?`<span class="st wait">✎ مسودة ${t.v} فيلا</span>`:`<span class="st ok">✓ ${hm(r.sentAt)}</span>${r.late?'<span class="st wait">⏰ متأخر</span>':''}`;
     return `<button class="coc ${repCo===c.id?'on':''}" data-co="${esc(c.id)}">${coBadge(c.id,26)}<span><b style="border-bottom:3px solid ${c.color}">${esc(c.name)}</b><small>${st} ${r?`${t.v} فيلا · ${t.w} عامل`:''}</small></span></button>`}).join('')+
     `</div><div class="rsum">الإجمالي المرسل: <b>${tv}</b> فيلا – <b>${tw}</b> عامل</div>`;
   f.querySelectorAll('[data-co]').forEach(b=>b.onclick=()=>{repCo=repCo===b.dataset.co?'':b.dataset.co;renderRep()})}
@@ -1109,13 +1198,13 @@ $('#repNext').onclick=()=>{if(repSel.size)editVillas([...repSel],myCo())};
 
 /* ---------- villa detail (read) ---------- */
 function entryHtml(e){const its=Object.entries(e.items||{});
-  return `<div class="ritems">${its.map(([n,i])=>`<div class="rit ${REMOVAL(n)?'rm':''}"><b>${esc(n)}${i.custom?' ✏️':''}</b><span>👷 ${+i.w||0}</span>${i.pct!=null&&i.pct!==''?`<span>${i.pct}%</span>`:''}${i.qty?`<span>${esc(i.qty)} ${esc(i.unit||'')}</span>`:''}</div>`).join('')||'<p class="q">مفيش بنود</p>'}</div>
+  return `<div class="ritems">${its.map(([n,i])=>`<div class="rit ${REMOVAL(n)?'rm':''}"><b>${esc(n)}${i.custom?' ✏️':''}</b><span>👷 ${+i.w||0}</span>${i.pct!=null&&i.pct!==''?`<span>${i.pct}%</span>`:''}${i.qty?`<span>${esc(i.qty)} ${esc(i.unit||'')}</span>`:''}</div>`).join('')||'<p class="q">لا توجد بنود.</p>'}</div>
     ${(e.obst||[]).length?`<p class="q">⚠️ المعوقات: ${esc(e.obst.join('، '))}</p>`:''}${e.note?`<p class="q">📝 ${esc(e.note)}</p>`:''}
     ${(e.photos||[]).length?`<div class="thumbs">${e.photos.map(p=>`<img data-rph="${esc(p)}" alt="">`).join('')}</div>`:''}`}
 function villaDetail(code){const en=villaEntries(code);const v=D.villas[code];
   dlg(`<h3>فيلا ${esc(villaNo(code))} — ${esc(v.model)}</h3><p class="q">${dayLabel(repDate)}</p>`+
     (en.length?en.map(({r,e})=>`<div class="rco"><div class="rch">${coBadge(r.cid,30)}<b>${esc(coName(r.cid))}</b><span class="sp"></span>${r.status==='sent'?`<span class="st ok">✓ ${hm(r.sentAt)}</span>`:'<span class="st wait">مسودة</span>'}${r.late?'<span class="st wait">⏰</span>':''}
-      ${isAdmin()?`<button class="btn g sm" data-aed="${esc(r.cid)}">تعديل</button>`:''}</div>${entryHtml(e)}</div>`).join(''):'<p class="q">مفيش شغل متسجّل في الفيلا دي اليوم ده.</p>')+
+      ${isAdmin()?`<button class="btn g sm" data-aed="${esc(r.cid)}">تعديل</button>`:''}</div>${entryHtml(e)}</div>`).join(''):'<p class="q">لا توجد أعمال مسجّلة في هذه الفيلا في هذا اليوم.</p>')+
     '<div class="row"><span class="sp"></span><button class="btn g" id="vdX">إغلاق</button></div>');
   $('#vdX').onclick=close;fillRph($('#box'));
   $('#box').querySelectorAll('[data-aed]').forEach(b=>b.onclick=()=>editVillas([code],b.dataset.aed))}
@@ -1136,20 +1225,20 @@ function editVillas(codes,cid){
   const title=codes.length===1?`فيلا ${villaNo(codes[0])} — ${D.villas[codes[0]].model}`:`${codes.length} فلل: ${codes.map(villaNo).join('، ')}`;
   const draw=()=>{const sel=Object.keys(S.items);
     $('#box').innerHTML=`<h3>${esc(title)}</h3>${isAdmin()&&ROLE()!=='contractor'?`<p class="q">تعديل المدير — ${esc(coName(cid))}</p>`:''}
-    <p class="q">اختار الأعمال اللي شغالة النهارده:</p>
-    <div class="wchips">${names().map(n=>`<button class="wc ${S.items[n]?'on':''} ${REMOVAL(n)?'rm':''}" data-w="${esc(n)}">${esc(n)}${S.items[n]&&S.items[n].custom?' ✏️':''}</button>`).join('')}<button class="wc add" id="wAdd">✏️ اكتب بند</button></div>
+    <p class="q">اختر الأعمال الجارية اليوم:</p>
+    <div class="wchips">${names().map(n=>`<button class="wc ${S.items[n]?'on':''} ${REMOVAL(n)?'rm':''}" data-w="${esc(n)}">${esc(n)}${S.items[n]&&S.items[n].custom?' ✏️':''}</button>`).join('')}<button class="wc add" id="wAdd">✏️ إضافة بند</button></div>
     ${sel.length?`<div class="wlist">${sel.map(n=>{const i=S.items[n];return `<div class="wrow" data-n="${esc(n)}"><div class="wh"><b>${esc(n)}</b><span class="sp"></span>
         <span class="ctr"><button data-d="-1">−</button><input type="number" inputmode="numeric" min="0" value="${+i.w||0}" data-ww><button data-d="1">+</button></span><small>عامل${codes.length>1?' لكل فيلا':''}</small></div>
-        ${codes.length>1?`<button class="lnk2" data-split>${S.split[n]?'▲ نفس العدد للكل':'▼ عدد مختلف لكل فيلا'}</button>${S.split[n]?`<div class="pergrid">${codes.map(c=>`<label>${esc(villaNo(c))}<input type="number" inputmode="numeric" min="0" data-pv="${esc(c)}" value="${(S.per[n]&&S.per[n][c]!=null)?S.per[n][c]:(+i.w||0)}"></label>`).join('')}</div>`:''}`:''}
+        ${codes.length>1?`<button class="lnk2" data-split>${S.split[n]?'▲ العدد نفسه لجميع الفلل':'▼ عدد مختلف لكل فيلا'}</button>${S.split[n]?`<div class="pergrid">${codes.map(c=>`<label>${esc(villaNo(c))}<input type="number" inputmode="numeric" min="0" data-pv="${esc(c)}" value="${(S.per[n]&&S.per[n][c]!=null)?S.per[n][c]:(+i.w||0)}"></label>`).join('')}</div>`:''}`:''}
         <details ${i.pct!=null||i.qty?'open':''}><summary>+ إنجاز / كمية (اختياري)</summary><div class="wx"><label>نسبة الإنجاز <b data-pl>${i.pct!=null?i.pct+'%':'—'}</b><input type="range" min="0" max="100" step="5" value="${i.pct!=null?i.pct:0}" data-pct></label>
-          <label>الكمية المنفذة<span class="qrow"><input type="number" inputmode="decimal" step="any" value="${esc(i.qty||'')}" data-qty placeholder="مثلاً 45"><select data-unit>${UNITS.map(u=>`<option ${u===(i.unit||'م²')?'selected':''}>${u}</option>`).join('')}</select></span></label></div></details></div>`}).join('')}</div>`:''}
-    <details class="more" ${S.obst.length||S.note||S.photos.length?'open':''}><summary>+ تفاصيل أكتر (صور، معوقات، ملاحظات)</summary>
+          <label>الكمية المنفذة<span class="qrow"><input type="number" inputmode="decimal" step="any" value="${esc(i.qty||'')}" data-qty placeholder="45"><select data-unit>${UNITS.map(u=>`<option ${u===(i.unit||'م²')?'selected':''}>${u}</option>`).join('')}</select></span></label></div></details></div>`}).join('')}</div>`:''}
+    <details class="more" ${S.obst.length||S.note||S.photos.length?'open':''}><summary>+ تفاصيل إضافية (صور، معوّقات، ملاحظات)</summary>
       <p class="q">المعوقات:</p><div class="wchips">${OBST.map(o=>`<button class="wc ${S.obst.includes(o)?'on':''}" data-ob="${esc(o)}">${esc(o)}</button>`).join('')}</div>
-      <input id="obO" placeholder="معوق تاني (أخرى)…" value="${esc(S.obst.filter(o=>!OBST.includes(o)).join('، '))}">
-      <p class="q" style="margin-top:8px">ملاحظات:</p><textarea id="vNote" placeholder="اكتب أو استخدم 🎤 من الكيبورد…">${esc(S.note)}</textarea>
-      <p class="q" style="margin-top:8px">صور الشغل:</p><div class="thumbs">${S.photos.map(p=>`<span class="tw"><img data-rph="${esc(p)}" alt=""><button data-rmp="${esc(p)}">×</button></span>`).join('')}<label class="addph">📷<input type="file" accept="image/*" capture="environment" multiple id="phIn" hidden></label></div>
+      <input id="obO" placeholder="معوّق آخر…" value="${esc(S.obst.filter(o=>!OBST.includes(o)).join('، '))}">
+      <p class="q" style="margin-top:8px">ملاحظات:</p><textarea id="vNote" placeholder="اكتب ملاحظاتك، أو استخدم الإدخال الصوتي 🎤 من لوحة المفاتيح…">${esc(S.note)}</textarea>
+      <p class="q" style="margin-top:8px">صور الأعمال:</p><div class="thumbs">${S.photos.map(p=>`<span class="tw"><img data-rph="${esc(p)}" alt=""><button data-rmp="${esc(p)}">×</button></span>`).join('')}<label class="addph">📷<input type="file" accept="image/*" capture="environment" multiple id="phIn" hidden></label></div>
     </details>
-    <div class="row"><button class="btn" id="eOk" ${sel.length?'':'disabled'}>حفظ</button>${r&&codes.some(c=>r.villas&&r.villas[c])?'<button class="btn g" id="eDel">🗑 مسح من التقرير</button>':''}<span class="sp"></span><button class="btn g" id="eX">إلغاء</button></div>`;
+    <div class="row"><button class="btn" id="eOk" ${sel.length?'':'disabled'}>حفظ</button>${r&&codes.some(c=>r.villas&&r.villas[c])?'<button class="btn g" id="eDel">🗑 حذف من التقرير</button>':''}<span class="sp"></span><button class="btn g" id="eX">إلغاء</button></div>`;
     fillRph($('#box'));bind()};
   const keep=()=>{S.note=($('#vNote')||{}).value??S.note;const o=($('#obO')||{}).value;if(o!=null){S.obst=S.obst.filter(x=>OBST.includes(x));o.split(/[،,]/).map(s=>s.trim()).filter(Boolean).forEach(x=>S.obst.push(x))}};
   const bind=()=>{const B=$('#box');
@@ -1164,75 +1253,75 @@ function editVillas(codes,cid){
       rw.querySelector('[data-qty]').oninput=e=>{i.qty=e.target.value;if(!i.unit)i.unit=rw.querySelector('[data-unit]').value};rw.querySelector('[data-unit]').onchange=e=>i.unit=e.target.value});
     B.querySelectorAll('[data-ob]').forEach(b=>b.onclick=()=>{keep();const o=b.dataset.ob;S.obst=S.obst.includes(o)?S.obst.filter(x=>x!==o):[...S.obst,o];draw()});
     B.querySelectorAll('[data-rmp]').forEach(b=>b.onclick=()=>{keep();S.photos=S.photos.filter(p=>p!==b.dataset.rmp);draw()});
-    $('#phIn').onchange=async e=>{keep();busy('جاري تجهيز الصور…');try{for(const f of e.target.files){const d=await shrinkR(f);const id='r'+Date.now().toString(36)+rid(4);RPH[id]=d;
+    $('#phIn').onchange=async e=>{keep();busy('جارٍ تجهيز الصور…');try{for(const f of e.target.files){const d=await shrinkR(f);const id='r'+Date.now().toString(36)+rid(4);RPH[id]=d;
         FS.collection(C('rph')).doc(id).set({d,cid,by:ME,t:Date.now(),date:repDate}).catch(er=>toast('تعذّر رفع الصورة: '+(er.code||'')));S.photos.push(id)}}catch(er){toast('تعذّرت قراءة الصورة')}busy();draw()};
     $('#eX').onclick=()=>close();
-    if($('#eDel'))$('#eDel').onclick=async()=>{if(!confirm('تمسح الفيلا دي من تقرير النهارده؟'))return;const FV=firebase.firestore.FieldValue,FP=firebase.firestore.FieldPath;
-      try{const id=repId(repDate,cid);for(const c of codes)await repCol().doc(id).update(new FP('villas',c),FV.delete(),'ut',Date.now(),'ub',ME)}catch(er){toast('تعذّر المسح: '+(er.code||''))}close();repSel.clear();colorRepPlan();renderRepFoot()};
+    if($('#eDel'))$('#eDel').onclick=async()=>{if(!confirm('هل تريد حذف هذه الفيلا من تقرير اليوم؟'))return;const FV=firebase.firestore.FieldValue,FP=firebase.firestore.FieldPath;
+      try{const id=repId(repDate,cid);for(const c of codes)await repCol().doc(id).update(new FP('villas',c),FV.delete(),'ut',Date.now(),'ub',ME)}catch(er){toast('تعذّر الحذف: '+(er.code||''))}close();repSel.clear();colorRepPlan();renderRepFoot()};
     $('#eOk').onclick=async()=>{keep();const FP=firebase.firestore.FieldPath;$('#eOk').disabled=true;
       try{const id=await ensureRep(cid);const ups=[];
         for(const c of codes){const items={};for(const [n,i] of Object.entries(S.items)){const w=codes.length>1&&S.split[n]&&S.per[n]&&S.per[n][c]!=null?S.per[n][c]:(+i.w||0);
             const o={w};if(i.pct!=null)o.pct=i.pct;if(i.qty){o.qty=i.qty;o.unit=i.unit||'م²'}if(i.custom)o.custom=true;items[n]=o}
           ups.push(new FP('villas',c),{items,obst:S.obst,note:S.note.trim(),photos:S.photos,ut:Date.now(),by:ME})}
         repCol().doc(id).update(...ups,'ut',Date.now(),'ub',ME).catch(er=>toast('تعذّر الحفظ: '+(er.code||er.message),4000));
-        toast(navigator.onLine?'اتحفظ ✓':'اتحفظ على الموبايل — هيترفع أول ما النت يرجع',2500)}catch(er){toast('تعذّر الحفظ: '+(er.code||er.message),4000)}
+        toast(navigator.onLine?'تم الحفظ ✓':'تم الحفظ على الجهاز، وسيُرفع تلقائياً عند عودة الاتصال.',2500)}catch(er){toast('تعذّر الحفظ: '+(er.code||er.message),4000)}
       close();repSel.clear();colorRepPlan();renderRepFoot()}};
   dlg('');draw()}
 
 /* ---------- copy yesterday / send ---------- */
-async function copyYesterday(){const cid=myCo();let s;busy('جاري تحميل آخر تقرير…');
+async function copyYesterday(){const cid=myCo();let s;busy('جارٍ تحميل آخر تقرير…');
   try{s=await repCol().where('cid','==',cid).get()}catch(e){busy();toast('تعذّر التحميل: '+(e.code||''));return}busy();
   const prev=s.docs.map(d=>d.data()).filter(r=>r.date<repDate&&r.villas&&Object.keys(r.villas).length).sort((a,b)=>a.date<b.date?1:-1)[0];
-  if(!prev){toast('مفيش تقرير قبل كده تنسخ منه');return}
-  const cur0=myRep();if(cur0&&cur0.villas&&Object.keys(cur0.villas).length&&!confirm('التقرير الحالي هيتبدّل بتقرير '+dayLabel(prev.date)+'. تكمل؟'))return;
+  if(!prev){toast('لا يوجد تقرير سابق للنسخ منه.');return}
+  const cur0=myRep();if(cur0&&cur0.villas&&Object.keys(cur0.villas).length&&!confirm('سيُستبدل التقرير الحالي بتقرير '+dayLabel(prev.date)+'. هل تريد المتابعة؟'))return;
   const villas={};for(const [c,e] of Object.entries(prev.villas)){const items={};for(const [n,i] of Object.entries(e.items||{})){items[n]={w:+i.w||0};if(i.pct!=null)items[n].pct=i.pct;if(i.custom)items[n].custom=true}villas[c]={items,obst:[],note:'',photos:[],ut:Date.now(),by:ME}}
-  try{const id=await ensureRep(cid);repCol().doc(id).update({villas,ut:Date.now(),ub:ME}).catch(()=>{});toast(`اتنسخ تقرير ${dayLabel(prev.date)} — عدّل اللي اتغيّر وبعدين ارسل`,4000)}catch(e){toast('تعذّر النسخ: '+(e.code||''))}}
+  try{const id=await ensureRep(cid);repCol().doc(id).update({villas,ut:Date.now(),ub:ME}).catch(()=>{});toast(`تم نسخ تقرير ${dayLabel(prev.date)}. عدّل ما يلزم ثم أرسل التقرير.`,4000)}catch(e){toast('تعذّر النسخ: '+(e.code||''))}}
 function sendReport(){const r=myRep();if(!r)return;const t=repTot(r);const late=isLate(repDate,Date.now());
   dlg(`<h3>إرسال تقرير اليوم</h3><p class="q">${dayLabel(repDate)}</p><div class="rsum big"><b>${t.v}</b> فيلا – <b>${t.w}</b> عامل – <b>${t.i}</b> بند</div>
-    ${late?'<p class="q" style="color:#a91a2c">⏰ فات آخر ميعاد (10:00) — التقرير هيتسجّل متأخر.</p>':''}
-    <p class="q">ملاحظة عامة على اليوم (اختياري):</p><textarea id="gNote" placeholder="مثلاً: تأخير توريد المواد">${esc(r.note||'')}</textarea>
-    <p class="q">بعد الإرسال مش هتقدر تعدّل التقرير.</p>
+    ${late?'<p class="q" style="color:#a91a2c">⏰ انقضى الموعد النهائي (10:00)، وسيُسجَّل التقرير متأخراً.</p>':''}
+    <p class="q">ملاحظة عامة على اليوم (اختياري):</p><textarea id="gNote" placeholder="مثال: تأخر توريد المواد">${esc(r.note||'')}</textarea>
+    <p class="q">لا يمكن تعديل التقرير بعد إرساله.</p>
     <div class="row"><button class="btn" id="sOk">✓ تأكيد الإرسال</button><span class="sp"></span><button class="btn g" id="sX">رجوع</button></div>`);
   $('#sX').onclick=close;$('#sOk').onclick=async()=>{$('#sOk').disabled=true;const now=Date.now();
-    try{await repCol().doc(r.id).update({status:'sent',sentAt:now,sentBy:ME,late:isLate(repDate,now),note:$('#gNote').value.trim(),ut:now,ub:ME});close();toast('اتأرسل تقرير النهارده ✓',3000);scheduleReminders()}
-    catch(e){$('#sOk').disabled=false;toast('تعذّر الإرسال: '+(e.code||e.message)+(navigator.onLine?'':' — مفيش نت'),4000)}}}
+    try{await repCol().doc(r.id).update({status:'sent',sentAt:now,sentBy:ME,late:isLate(repDate,now),note:$('#gNote').value.trim(),ut:now,ub:ME});close();toast('تم إرسال تقرير اليوم ✓',3000);scheduleReminders()}
+    catch(e){$('#sOk').disabled=false;toast('تعذّر الإرسال: '+(e.code||e.message)+(navigator.onLine?'':' — لا يوجد اتصال بالإنترنت'),4000)}}}
 
 /* ---------- work items (admin) ---------- */
-function workPanel(){dlg(`<h3>قائمة البنود</h3><p class="q">بند في كل سطر. البنود اللي بتبدأ بـ «إزالة» بتظهر أول القائمة بلون مختلف.</p><textarea id="wT" style="min-height:260px">${esc(WORK.join('\n'))}</textarea>
-  <div class="row"><button class="btn" id="wOk">حفظ</button><button class="btn g" id="wDef">رجّع الافتراضي</button><span class="sp"></span><button class="btn g" id="wX">إلغاء</button></div>`);
+function workPanel(){dlg(`<h3>قائمة البنود</h3><p class="q">بند واحد في كل سطر. تظهر البنود التي تبدأ بـ «إزالة» في أول القائمة بلون مميّز.</p><textarea id="wT" style="min-height:260px">${esc(WORK.join('\n'))}</textarea>
+  <div class="row"><button class="btn" id="wOk">حفظ</button><button class="btn g" id="wDef">استعادة القائمة الافتراضية</button><span class="sp"></span><button class="btn g" id="wX">إلغاء</button></div>`);
   $('#wX').onclick=close;$('#wDef').onclick=()=>$('#wT').value=DEF_WORK.join('\n');
-  $('#wOk').onclick=async()=>{const items=[...new Set($('#wT').value.split('\n').map(s=>s.trim()).filter(Boolean))];try{await FS.collection(C('settings')).doc('work').set({items,by:ME,t:Date.now()});WORK=items;close();toast('اتحفظت قائمة البنود ✓')}catch(e){toast('تعذّر الحفظ: '+(e.code||''))}}}
+  $('#wOk').onclick=async()=>{const items=[...new Set($('#wT').value.split('\n').map(s=>s.trim()).filter(Boolean))];try{await FS.collection(C('settings')).doc('work').set({items,by:ME,t:Date.now()});WORK=items;close();toast('تم حفظ قائمة البنود ✓')}catch(e){toast('تعذّر الحفظ: '+(e.code||''))}}}
 
 /* ---------- companies + invite links (admin) ---------- */
 const joinLink=c=>`${WEB_URL}?join=${c.code}`;
-const joinMsg=c=>`السلام عليكم،\nده رابط برنامج تقارير الأعمال اليومية لمشروع Dhahiat Sumou – Block 5 الخاص بـ ${c.name}:\n${joinLink(c)}\n\nافتحه واعمل حساب باسمك (كود الشركة: ${c.code}). بعد موافقة م. هيثم فوزي هتقدر ترسل تقريرك اليومي قبل الساعة 10 الصبح.\n\nتطبيق الأندرويد (اختياري): ${APK_URL}`;
+const joinMsg=c=>`السلام عليكم ورحمة الله وبركاته،\n\nيسرّنا دعوتكم لاستخدام تطبيق التقارير اليومية لمشروع Dhahiat Sumou – Block 5، الخاص بـ ${c.name}، عبر الرابط التالي:\n${joinLink(c)}\n\nيُرجى فتح الرابط وإنشاء حساب باسمكم (رمز الشركة: ${c.code}). وبعد اعتماد الحساب من مدير المشروع م. هيثم فوزي، يمكنكم إرسال التقرير اليومي قبل الساعة 10:00 صباحاً.\n\nتطبيق أندرويد (اختياري): ${APK_URL}\n\nمع التحية،\nإدارة مشروع Dhahiat Sumou — شركة تام للإنشاء والتعمير`;
 async function companiesPanel(){let users=[];try{users=(await FS.collection('users').get()).docs.map(d=>d.data())}catch(e){}
   const list=Object.values(COS).sort((a,b)=>(a.t||0)-(b.t||0));
-  dlg(`<h3>🏗 المقاولين (${list.length})</h3><p class="q">ضيف شركة، وابعت رابط الدعوة بتاعها للمقاول. كل شركة بتشوف تقاريرها بس.</p>
+  dlg(`<h3>🏗 المقاولين (${list.length})</h3><p class="q">أضف شركة المقاول وأرسل إليها رابط الدعوة الخاص بها، وتطّلع كل شركة على تقاريرها فقط.</p>
     <button class="btn" id="cAdd" style="width:100%">+ إضافة مقاول</button>
     ${list.map(c=>{const n=users.filter(u=>u.company===c.id&&u.approved).length,w=users.filter(u=>u.role==='contractor'&&u.join===c.code&&!u.approved&&!u.disabled).length;
-      return `<div class="cocard" style="border-inline-start:5px solid ${c.color}"><div class="rch">${coBadge(c.id,38)}<div><b>${esc(c.name)}</b><small>${n} حساب${w?` · ${w} مستني موافقة`:''} · ${c.active===false?'<span class="st bad">موقوفة</span>':'<span class="st ok">شغالة</span>'}</small></div><span class="sp"></span><button class="btn g sm" data-ced="${esc(c.id)}">تعديل</button></div>
+      return `<div class="cocard" style="border-inline-start:5px solid ${c.color}"><div class="rch">${coBadge(c.id,38)}<div><b>${esc(c.name)}</b><small>${n} حساب${w?` · ${w} بانتظار الاعتماد`:''} · ${c.active===false?'<span class="st bad">موقوفة</span>':'<span class="st ok">نشطة</span>'}</small></div><span class="sp"></span><button class="btn g sm" data-ced="${esc(c.id)}">تعديل</button></div>
         <div class="lnkbox" dir="ltr">${esc(joinLink(c))}</div>
-        <div class="row"><button class="btn g sm" data-ccp="${esc(c.id)}">📋 نسخ الرابط</button><button class="btn sm wa" data-cwa="${esc(c.id)}">🟢 ابعت واتساب</button><button class="btn g sm" data-cnew="${esc(c.id)}">🔄 رابط جديد</button><button class="btn g sm" data-coff="${esc(c.id)}">${c.active===false?'▶ تشغيل':'⛔ إيقاف'}</button></div></div>`}).join('')}
+        <div class="row"><button class="btn g sm" data-ccp="${esc(c.id)}">📋 نسخ الرابط</button><button class="btn sm wa" data-cwa="${esc(c.id)}">🟢 إرسال عبر واتساب</button><button class="btn g sm" data-cnew="${esc(c.id)}">🔄 رابط جديد</button><button class="btn g sm" data-coff="${esc(c.id)}">${c.active===false?'▶ تفعيل':'⛔ إيقاف'}</button></div></div>`}).join('')}
     <div class="row"><span class="sp"></span><button class="btn g" id="cX">إغلاق</button></div>`);
   $('#cX').onclick=close;$('#cAdd').onclick=()=>companyEdit(null);
   const B=$('#box');
   B.querySelectorAll('[data-ced]').forEach(b=>b.onclick=()=>companyEdit(b.dataset.ced));
-  B.querySelectorAll('[data-ccp]').forEach(b=>b.onclick=async()=>{const t=joinLink(COS[b.dataset.ccp]);try{await navigator.clipboard.writeText(t);toast('اتنسخ الرابط ✓')}catch(e){prompt('انسخ الرابط:',t)}});
+  B.querySelectorAll('[data-ccp]').forEach(b=>b.onclick=async()=>{const t=joinLink(COS[b.dataset.ccp]);try{await navigator.clipboard.writeText(t);toast('تم نسخ الرابط ✓')}catch(e){prompt('انسخ الرابط:',t)}});
   B.querySelectorAll('[data-cwa]').forEach(b=>b.onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(joinMsg(COS[b.dataset.cwa])),'_blank'));
-  B.querySelectorAll('[data-cnew]').forEach(b=>b.onclick=async()=>{if(!confirm('الرابط القديم هيبطل، والحسابات اللي اتوافق عليها هتفضل شغالة. تكمل؟'))return;
-    try{await coCol().doc(b.dataset.cnew).update({code:rid(4)+'-'+rid(4)});setTimeout(companiesPanel,300);toast('اتعمل رابط جديد ✓')}catch(e){toast('تعذّر: '+(e.code||''))}});
+  B.querySelectorAll('[data-cnew]').forEach(b=>b.onclick=async()=>{if(!confirm('سيتوقف الرابط الحالي عن العمل، وتبقى الحسابات المعتمدة فعّالة. هل تريد المتابعة؟'))return;
+    try{await coCol().doc(b.dataset.cnew).update({code:rid(4)+'-'+rid(4)});setTimeout(companiesPanel,300);toast('تم إنشاء رابط جديد ✓')}catch(e){toast('تعذّر: '+(e.code||''))}});
   B.querySelectorAll('[data-coff]').forEach(b=>b.onclick=async()=>{const c=COS[b.dataset.coff];const on=c.active===false;
-    if(!on&&!confirm(`إيقاف ${c.name}؟ حسابات الشركة هتتوقف، وتقاريرها القديمة هتفضل في الأرشيف.`))return;
+    if(!on&&!confirm(`هل تريد إيقاف ${c.name}؟ ستُوقَف حسابات الشركة، وتبقى تقاريرها السابقة محفوظة في الأرشيف.`))return;
     try{await coCol().doc(c.id).update({active:on});const us=await FS.collection('users').where('company','==',c.id).get();
-      for(const d of us.docs)await d.ref.update({disabled:!on,approved:on,by:ME,at:Date.now()});setTimeout(companiesPanel,300);toast(on?'اتشغلت الشركة ✓':'اتوقفت الشركة')}catch(e){toast('تعذّر: '+(e.code||''))}})}
+      for(const d of us.docs)await d.ref.update({disabled:!on,approved:on,by:ME,at:Date.now()});setTimeout(companiesPanel,300);toast(on?'تم تفعيل الشركة ✓':'تم إيقاف الشركة')}catch(e){toast('تعذّر: '+(e.code||''))}})}
 function logoColor(dataUrl){return new Promise(r=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=48;const x=c.getContext('2d');x.drawImage(im,0,0,48,48);
   const d=x.getImageData(0,0,48,48).data;let R=0,G=0,Bc=0,n=0;for(let i=0;i<d.length;i+=4){const a=d[i+3],mx=Math.max(d[i],d[i+1],d[i+2]),mn=Math.min(d[i],d[i+1],d[i+2]);if(a<128||mx>235&&mn>200||mx-mn<30)continue;R+=d[i];G+=d[i+1];Bc+=d[i+2];n++}
   r(n?'#'+[R,G,Bc].map(v=>Math.round(v/n).toString(16).padStart(2,'0')).join(''):null)};im.onerror=()=>r(null);im.src=dataUrl})}
 function companyEdit(id){const c=id?{...COS[id]}:{name:'',logo:'',color:PALETTE[Object.keys(COS).length%PALETTE.length]};
   const draw=()=>{$('#box').innerHTML=`<h3>${id?'تعديل مقاول':'إضافة مقاول'}</h3>
     <label class="fl">اسم الشركة<input id="cN" value="${esc(c.name)}" placeholder="شركة التاج المضيء"></label>
-    <label class="fl">اللوجو (اختياري)</label><div class="row" style="align-items:center;margin-top:4px">${c.logo?`<img src="${c.logo}" class="colg" style="width:56px;height:56px">`:''}<label class="btn g">📷 اختار صورة<input type="file" accept="image/*" id="cL" hidden></label>${c.logo?'<button class="btn g" id="cLx">شيل اللوجو</button>':''}</div>
+    <label class="fl">الشعار (اختياري)</label><div class="row" style="align-items:center;margin-top:4px">${c.logo?`<img src="${c.logo}" class="colg" style="width:56px;height:56px">`:''}<label class="btn g">📷 اختيار صورة<input type="file" accept="image/*" id="cL" hidden></label>${c.logo?'<button class="btn g" id="cLx">إزالة الشعار</button>':''}</div>
     <label class="fl">اللون على المخطط</label><div class="pal">${[...new Set([c.color,...PALETTE])].map(p=>`<button data-col="${p}" style="background:${p}" class="${p===c.color?'on':''}"></button>`).join('')}</div>
     <div class="row"><button class="btn" id="cOk">حفظ</button><span class="sp"></span><button class="btn g" id="cX2">رجوع</button></div>`;
     $('#cX2').onclick=companiesPanel;$('#cN').oninput=e=>c.name=e.target.value;
@@ -1241,9 +1330,9 @@ function companyEdit(id){const c=id?{...COS[id]}:{name:'',logo:'',color:PALETTE[
     $('#cL').onchange=async e=>{const f=e.target.files[0];if(!f)return;const u=URL.createObjectURL(f);const im=new Image();await new Promise(r=>{im.onload=r;im.src=u});
       const k=Math.min(1,256/Math.max(im.width,im.height));const cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);
       c.logo=cv.toDataURL('image/png');const col=await logoColor(c.logo);if(col)c.color=col;draw()};
-    $('#cOk').onclick=async()=>{const name=c.name.trim();if(name.length<2){toast('اكتب اسم الشركة');return}$('#cOk').disabled=true;
+    $('#cOk').onclick=async()=>{const name=c.name.trim();if(name.length<2){toast('يُرجى إدخال اسم الشركة.');return}$('#cOk').disabled=true;
       try{if(id)await coCol().doc(id).update({name,logo:c.logo||'',color:c.color});else{const ref=coCol().doc();await ref.set({name,logo:c.logo||'',color:c.color,code:rid(4)+'-'+rid(4),active:true,t:Date.now(),by:ME})}
-        toast('اتحفظ ✓');setTimeout(companiesPanel,300)}catch(e){toast('تعذّر الحفظ: '+(e.code||''));$('#cOk').disabled=false}}};
+        toast('تم الحفظ ✓');setTimeout(companiesPanel,300)}catch(e){toast('تعذّر الحفظ: '+(e.code||''));$('#cOk').disabled=false}}};
   dlg('');draw()}
 
 /* ---------- weekly / daily report + export ---------- */
@@ -1262,31 +1351,44 @@ function aggregate(reps,from,to){const days=[];for(let d=from;d<=to;d=addD(d,1))
       for(const [n,i] of Object.entries(e.items||{})){v.items.add(n);c.items[n]=(c.items[n]||0)+(+i.w||0)}}}
   for(const c of Object.values(cos))c.miss=days.filter(d=>!reps.some(r=>r.cid===c.id&&r.date===d&&r.status==='sent')&&d<=todayS());
   return {days,cos,vil}}
-let wkStart=null;
-async function weeklyPanel(ws){wkStart=ws||wkStart||weekStart(todayS());const from=wkStart,to=addD(wkStart,5);
-  dlg(`<h3>📊 التقرير الأسبوعي</h3><p class="q">جاري التحميل…</p>`);let reps;
-  try{reps=await loadRange(from,to)}catch(e){$('#box').innerHTML=`<h3>📊 التقرير الأسبوعي</h3><p class="q">تعذّر التحميل: ${esc(e.code||e.message)}</p><div class="row"><span class="sp"></span><button class="btn g" onclick="">إغلاق</button></div>`;$('#box .btn').onclick=close;return}
-  const A=aggregate(reps,from,to);const now=new Date();const thu=parseD(to);thu.setHours(WEEKLY_H,0,0,0);const ready=Date.now()>=thu.getTime();
-  $('#box').innerHTML=`<h3>📊 التقرير الأسبوعي</h3>
-    <div class="chip dnav" style="margin-bottom:8px"><button id="wPrev">→</button><span class="dl"><span>السبت ${shortD(from)} – الخميس ${shortD(to)}</span></span><button id="wNext" ${addD(from,7)>todayS()?'disabled':''}>←</button></div>
-    <p class="q">${ready?'✓ الأسبوع اتقفل (الخميس 12 الظهر) — أي تقرير متأخر بيتضاف لوحده.':'⏳ الأسبوع لسه شغال — التقرير النهائي يطلع الخميس 12 الظهر.'}</p>
-    <table class="wtab"><tr><th>المقاول</th><th>الفلل</th><th>يوميات العمال</th><th>أيام الإرسال</th><th>متأخر</th><th>لم يُرسل</th></tr>
-    ${Object.values(A.cos).map(c=>`<tr><td><span class="rch">${coBadge(c.id,22)}<b>${esc(coName(c.id))}</b></span></td><td>${c.villas.size}</td><td>${c.md}</td><td>${c.sent}/${A.days.length}</td><td>${c.late||''}</td><td>${c.miss.length||''}</td></tr>`).join('')||'<tr><td colspan="6">مفيش بيانات</td></tr>'}</table>
+const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const monthStart=s=>s.slice(0,8)+'01';const monthEnd=s=>{const d=parseD(monthStart(s));d.setMonth(d.getMonth()+1);d.setDate(0);return dstr(d)};
+const addM=(s,n)=>{const d=parseD(monthStart(s));d.setMonth(d.getMonth()+n);return dstr(d)};
+const monthLabel=s=>{const d=parseD(s);return `${MONTHS[d.getMonth()]} ${d.getFullYear()}`};
+function periodTitle(from,to){if(from===to)return `تقرير أعمال المقاولين اليومي — ${dayLabel(from)}`;
+  if(from===monthStart(from)&&to===monthEnd(from))return `تقرير أعمال المقاولين الشهري — شهر ${monthLabel(from)}`;
+  return `تقرير أعمال المقاولين الأسبوعي — من ${dayLabel(from)} إلى ${dayLabel(to)}`}
+let wkStart=null,moStart=null;
+const weeklyPanel=ws=>periodPanel('w',ws),monthlyPanel=ms=>periodPanel('m',ms);
+async function periodPanel(kind,st){const W=kind==='w';
+  if(W){wkStart=st||wkStart||weekStart(todayS())}else{moStart=st||moStart||monthStart(todayS())}
+  const from=W?wkStart:moStart,to=W?addD(wkStart,5):monthEnd(moStart);const T=W?'📊 التقرير الأسبوعي':'📅 التقرير الشهري';
+  dlg(`<h3>${T}</h3><p class="q">جارٍ التحميل…</p>`);let reps;
+  try{reps=await loadRange(from,to)}catch(e){$('#box').innerHTML=`<h3>${T}</h3><p class="q">تعذّر التحميل: ${esc(e.code||e.message)}</p><div class="row"><span class="sp"></span><button class="btn g" id="wX">إغلاق</button></div>`;$('#wX').onclick=close;return}
+  const A=aggregate(reps,from,to);const end=parseD(to);end.setHours(WEEKLY_H,0,0,0);const ready=Date.now()>=end.getTime();
+  const nextOk=W?addD(from,7)<=todayS():addM(from,1)<=todayS();
+  $('#box').innerHTML=`<h3>${T}</h3>
+    <div class="row" style="margin:0 0 8px"><div class="chip"><button class="${W?'on':''}" id="kW">أسبوعي</button><button class="${W?'':'on'}" id="kM">شهري</button></div></div>
+    <div class="chip dnav" style="margin-bottom:8px"><button id="wPrev">→</button><span class="dl"><span>${W?`السبت ${shortD(from)} – الخميس ${shortD(to)}`:`شهر ${monthLabel(from)}`}</span></span><button id="wNext" ${nextOk?'':'disabled'}>←</button></div>
+    <p class="q">${ready?`✓ أُغلقت الفترة (${W?'الخميس':'آخر يوم في الشهر'} الساعة 12 ظهراً)، وتُضاف التقارير المتأخرة تلقائياً.`:`⏳ الفترة جارية، ويصدر التقرير النهائي ${W?'يوم الخميس':'في آخر يوم من الشهر'} الساعة 12 ظهراً.`}</p>
+    <table class="wtab"><tr><th>المقاول</th><th>الفلل</th><th>يوميات العمال</th><th>أيام الإرسال</th><th>متأخر</th><th>لم يُرسَل</th></tr>
+    ${Object.values(A.cos).map(c=>`<tr><td><span class="rch">${coBadge(c.id,22)}<b>${esc(coName(c.id))}</b></span></td><td>${c.villas.size}</td><td>${c.md}</td><td>${c.sent}/${A.days.length}</td><td>${c.late||''}</td><td>${c.miss.length||''}</td></tr>`).join('')||'<tr><td colspan="6">لا توجد بيانات.</td></tr>'}</table>
     <div class="row" style="flex-direction:column"><button class="btn" id="wXl">⬇ Excel</button><button class="btn g" id="wPdf">⬇ PDF (المخطط الملوّن)</button><button class="btn g" id="wX">إغلاق</button></div>`;
-  $('#wX').onclick=close;$('#wPrev').onclick=()=>weeklyPanel(addD(from,-7));$('#wNext').onclick=()=>weeklyPanel(addD(from,7));
+  $('#wX').onclick=close;$('#kW').onclick=()=>periodPanel('w');$('#kM').onclick=()=>periodPanel('m');
+  $('#wPrev').onclick=()=>periodPanel(kind,W?addD(from,-7):addM(from,-1));$('#wNext').onclick=()=>periodPanel(kind,W?addD(from,7):addM(from,1));
   $('#wXl').onclick=()=>doRepExport(reps,from,to,'xlsx');$('#wPdf').onclick=()=>doRepExport(reps,from,to,'pdf')}
-async function exportPanel(from,to){dlg('<h3>⬇ تقرير اليوم</h3><p class="q">جاري التحميل…</p>');let reps;try{reps=await loadRange(from,to)}catch(e){close();toast('تعذّر التحميل: '+(e.code||''));return}
+async function exportPanel(from,to){dlg('<h3>⬇ تقرير اليوم</h3><p class="q">جارٍ التحميل…</p>');let reps;try{reps=await loadRange(from,to)}catch(e){close();toast('تعذّر التحميل: '+(e.code||''));return}
   $('#box').innerHTML=`<h3>⬇ تقرير ${dayLabel(from)}</h3><div class="row" style="flex-direction:column"><button class="btn" id="dXl">Excel</button><button class="btn g" id="dPdf">PDF (المخطط الملوّن)</button><button class="btn g" id="dX">إلغاء</button></div>`;
   $('#dX').onclick=close;$('#dXl').onclick=()=>doRepExport(reps,from,to,'xlsx');$('#dPdf').onclick=()=>doRepExport(reps,from,to,'pdf')}
 async function doRepExport(reps,from,to,kind){close();const one=from===to;const base=`Contractors_${one?from:from+'_to_'+to}${isTeam()?'':'_'+coName(myCo()).replace(/\s+/g,'_')}`;
-  try{busy('جاري التجهيز…');await document.fonts.load('700 40px Cairo');const data=kind==='xlsx'?await repXlsx(reps,from,to):await repPdf(reps,from,to);busy();
-    await downloads.save({filename:base+(kind==='xlsx'?'.xlsx':'.pdf'),data})}catch(e){busy();toast('حصلت مشكلة في الاستخراج: '+(e.code||e.message||e),4500)}}
+  try{busy('جارٍ التجهيز…');await document.fonts.load('700 40px Cairo');const data=kind==='xlsx'?await repXlsx(reps,from,to):await repPdf(reps,from,to);busy();
+    await downloads.save({filename:base+(kind==='xlsx'?'.xlsx':'.pdf'),data})}catch(e){busy();toast('تعذّر الاستخراج: '+(e.code||e.message||e),4500)}}
 async function dataUrlB64(u){return u.split(',')[1]}
 async function repXlsx(reps,from,to){const A=aggregate(reps,from,to);const one=from===to;const single=!isTeam()||Object.keys(A.cos).length===1;
   const wb=new ExcelJS.Workbook();wb.creator='Dhahiat Sumou';const thin={style:'thin',color:{argb:'FF9FB0C8'}};const bd={top:thin,left:thin,bottom:thin,right:thin};
   const R_=(c,t,o={})=>{c.value=t;c.alignment={horizontal:o.h||'right',vertical:'middle',wrapText:true,readingOrder:'rtl'};c.font={name:'Arial',size:o.s||11,bold:!!o.b,color:{argb:o.c||'FF13294B'}};if(o.f)c.fill={type:'pattern',pattern:'solid',fgColor:{argb:o.f}};if(o.bd)c.border=bd};
   const logo=await (async()=>{try{const lb=await (await fetch('img/logo.png')).blob();return wb.addImage({base64:await b64(lb),extension:'png'})}catch(e){return null}})();
-  const title=one?`تقرير أعمال المقاولين اليومي — ${dayLabel(from)}`:`تقرير أعمال المقاولين الأسبوعي — من ${dayLabel(from)} إلى ${dayLabel(to)}`;
+  const title=periodTitle(from,to);
   // cols given right-to-left; written physically reversed so the first column sits on the far right
   const sheet=(name,cols)=>{const ws=wb.addWorksheet(name,{views:[{rightToLeft:false,showGridLines:false}],pageSetup:{paperSize:9,orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0}});
     const n=cols.length;ws.columns=cols.slice().reverse().map(c=>({width:c[1]}));const L=i=>String.fromCharCode(65+i);
@@ -1297,7 +1399,7 @@ async function repXlsx(reps,from,to){const A=aggregate(reps,from,to);const one=f
     ws.getRow(1).height=60;ws.getRow(2).height=26;
     const hr=ws.getRow(4);cols.forEach((c,i)=>R_(hr.getCell(n-i),ar(c[0]),{b:true,h:'center',c:'FFFFFFFF',f:'FFA91A2C',bd:1}));hr.height=24;
     let rn=5;return {ws,add:(vals,o={})=>{const row=ws.getRow(rn++);vals.forEach((v,i)=>{const isN=typeof v==='number';R_(row.getCell(n-i),isN?v:ar(String(v??'')),{h:isN||i===0?'center':(o.h||'right'),bd:1,b:o.b,f:o.f})});row.height=o.ht||20}}};
-  const s1=sheet('الملخص',[['م',6],['المقاول',30],['عدد الفلل',12],['يوميات العمال',14],['أيام الإرسال',13],['تقارير متأخرة',13],['أيام لم يُرسل فيها',28],['أكتر البنود',46]]);
+  const s1=sheet('الملخص',[['م',6],['المقاول',30],['عدد الفلل',12],['يوميات العمال',14],['أيام الإرسال',13],['تقارير متأخرة',13],['أيام لم يُرسل فيها',28],['أكثر البنود',46]]);
   let k=1,tv=new Set(),tm=0;for(const c of Object.values(A.cos)){c.villas.forEach(v=>tv.add(v));tm+=c.md;
     const top=Object.entries(c.items).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([n,w])=>`${n} (${w})`).join('، ');
     s1.add([k++,coName(c.id),c.villas.size,c.md,`${c.sent} / ${A.days.length}`,c.late,c.miss.map(shortD).join('، '),top])}
@@ -1318,7 +1420,7 @@ async function repPdf(reps,from,to){const A=aggregate(reps,from,to);const one=fr
   const coLogoW=!isTeam()&&COS[myCo()]&&COS[myCo()].logo?200:0;
   if(coLogoW){try{const li=await imgOf(COS[myCo()].logo);const s=160/Math.max(li.width,li.height);x.drawImage(li,PW-m-20-li.width*s,m/2+35,li.width*s,li.height*s)}catch(e){}}
   x.fillText('إدارة مشروع Dhahiat Sumou — Block 5',PW-m-20-coLogoW,m/2+70);x.font='600 44px Cairo,Arial';
-  x.fillText((one?`تقرير أعمال المقاولين اليومي — ${dayLabel(from)}`:`تقرير أعمال المقاولين الأسبوعي — ${dayLabel(from)} إلى ${dayLabel(to)}`)+(isTeam()?'':' — '+coName(myCo())),PW-m-20-coLogoW,m/2+160);
+  x.fillText(periodTitle(from,to)+(isTeam()?'':' — '+coName(myCo())),PW-m-20-coLogoW,m/2+160);
   const lg=await logoImg();if(lg){const lh=hh-40;x.drawImage(lg,m+20,m/2+20,lh*lg.width/lg.height,lh)}
   // plan
   const legendW=900;const ax=m+30,ay=m/2+hh+30,aw=PW-2*m-60-legendW,ah=PH_-m-hh-80;
@@ -1336,7 +1438,7 @@ async function repPdf(reps,from,to){const A=aggregate(reps,from,to);const one=fr
     if(co.logo){try{const li=await imgOf(co.logo);const s=60/Math.max(li.width,li.height);x.drawImage(li,lx-140-li.width*s/2+30,ly-li.height*s/2,li.width*s,li.height*s)}catch(e){}}
     x.fillStyle='#2b2b30';x.font='700 38px Cairo,Arial';x.fillText(coName(cc.id),lx-160,ly-4);x.font='400 30px Cairo,Arial';x.fillStyle='#5b6b82';
     x.fillText(`${cc.villas.size} فيلا · ${cc.md} يومية عامل · أرسل ${cc.sent}/${A.days.length}${cc.late?` · متأخر ${cc.late}`:''}`,lx-160,ly+40);ly+=130;if(ly>PH_-200)break}
-  x.font='400 28px Cairo,Arial';x.fillStyle='#5b6b82';x.fillText('الرقم تحت رقم الفيلا = يوميات العمال · الإطار الأسود = أكتر من مقاول',lx,PH_-m-30);
+  x.font='400 28px Cairo,Arial';x.fillStyle='#5b6b82';x.fillText('الرقم تحت رقم الفيلا = يوميات العمال · الإطار الأسود = أكثر من مقاول',lx,PH_-m-30);
   const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a3',compress:true});pdf.addImage(c.toDataURL('image/jpeg',0.9),'JPEG',0,0,420,297,undefined,'FAST');return pdf.output('blob')}
 
 /* ---------- join links ---------- */
