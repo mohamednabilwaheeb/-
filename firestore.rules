@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() { return signedIn() && request.auth.token.email == 'haithamfawzy@dhahiat-sumou.app'; }
+    function prof() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+    function hasProf() { return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)); }
+    function approved() { return isAdmin() || (hasProf() && prof().get('approved', false) == true && prof().get('disabled', false) != true); }
+    function contractor() { return !isAdmin() && approved() && prof().get('role', 'team') == 'contractor'; }
+    function team() { return approved() && !contractor(); }
+    function myCo() { return prof().get('company', ''); }
+
+    // Accounts: anyone signed in creates their own pending profile; only the admin approves/changes.
+    match /users/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow list: if isAdmin();
+      allow create: if signedIn() && request.auth.uid == uid
+                    && request.resource.data.approved == false
+                    && !('company' in request.resource.data)
+                    && !('disabled' in request.resource.data);
+      allow update, delete: if isAdmin();
+    }
+
+    // Contractor companies: team sees all, a contractor only its own company.
+    match /{col}/{cid} {
+      allow read: if (col == 'companies' || col == 't_companies') && (team() || (contractor() && myCo() == cid));
+      allow write: if (col == 'companies' || col == 't_companies') && isAdmin();
+    }
+
+    // Shared settings (work-item list etc.)
+    match /{col}/{id} {
+      allow read: if (col == 'settings' || col == 't_settings') && approved();
+      allow write: if (col == 'settings' || col == 't_settings') && isAdmin();
+    }
+
+    // Daily contractor reports (prod + test copies)
+    match /{col}/{id} {
+      allow read: if (col == 'rep' || col == 't_rep')
+                  && (team() || (contractor() && resource.data.cid == myCo()));
+      allow create: if (col == 'rep' || col == 't_rep')
+                    && (isAdmin() || (contractor() && request.resource.data.cid == myCo()));
+      allow update: if (col == 'rep' || col == 't_rep')
+                    && (isAdmin() || (contractor() && resource.data.cid == myCo()
+                         && request.resource.data.cid == myCo()
+                         && resource.data.get('status', 'draft') != 'sent'));
+      allow delete: if (col == 'rep' || col == 't_rep') && isAdmin();
+    }
+
+    // Report photos
+    match /{col}/{id} {
+      allow read: if (col == 'rph' || col == 't_rph')
+                  && (team() || (contractor() && resource.data.cid == myCo()));
+      allow create: if (col == 'rph' || col == 't_rph')
+                    && (team() || (contractor() && request.resource.data.cid == myCo()));
+      allow delete: if (col == 'rph' || col == 't_rph') && isAdmin();
+    }
+
+    // Team-only collections: Snag List, activity, photos, quantities (prod + test)
+    match /{col}/{id} {
+      allow read, write: if team() && col in ['v', 'ph', 'act', 'boq', 't_v', 't_ph', 't_act', 't_boq'];
+    }
+  }
+}
