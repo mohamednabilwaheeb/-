@@ -1,7 +1,7 @@
 name: Build APK
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   workflow_dispatch:
 permissions:
   contents: write
@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HAS_FB_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' }}
+      IS_TEST: ${{ github.ref_name == 'dev' }}
+      APK: ${{ github.ref_name == 'dev' && 'Dhahiat-Sumou-TEST.apk' || 'Dhahiat-Sumou-Mecca-TAAM.apk' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,7 +20,15 @@ jobs:
       - run: npm ci
       - run: node scripts/copy-libs.js
       - name: Stamp version
-        run: echo "window.APP_BUILD=${{ github.run_number }};window.APP_NATIVE=$(cat native-version.txt);" > www/app-version.js
+        run: |
+          CH=prod; [ "$IS_TEST" = "true" ] && CH=test
+          echo "window.APP_BUILD=${{ github.run_number }};window.APP_NATIVE=$(cat native-version.txt);window.APP_CHANNEL='$CH';" > www/app-version.js
+      - name: Test app identity (dev branch)
+        if: env.IS_TEST == 'true'
+        run: |
+          sed -i 's/applicationId "com.taam.snagblock5"/applicationId "com.taam.snagblock5.test"/' android/app/build.gradle
+          sed -i 's#>Dhahiat Sumou Mecca TAAM<#>TEST Dhahiat Sumou<#g' android/app/src/main/res/values/strings.xml
+          grep -n applicationId android/app/build.gradle; grep -n TEST android/app/src/main/res/values/strings.xml
       - run: npx cap sync android
       - uses: actions/setup-java@v4
         with:
@@ -28,7 +38,7 @@ jobs:
         run: |
           chmod +x android/gradlew
           cd android && ./gradlew assembleDebug --no-daemon
-      - run: cp android/app/build/outputs/apk/debug/app-debug.apk Dhahiat-Sumou-Mecca-TAAM.apk
+      - run: cp android/app/build/outputs/apk/debug/app-debug.apk $APK
       - name: Web bundle for in-app updates
         run: |
           cd www && zip -qr ../bundle.zip . && cd ..
@@ -37,8 +47,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: SnagBlock5-apk
-          path: Dhahiat-Sumou-Mecca-TAAM.apk
+          path: ${{ env.APK }}
       - name: Publish release
+        if: env.IS_TEST != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -48,8 +59,20 @@ jobs:
             echo "retry $i"; sleep 20
           done
           exit 1
+      - name: Publish test release
+        if: env.IS_TEST == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in 1 2 3 4 5; do
+            gh release delete test --yes --cleanup-tag 2>/dev/null || true
+            sleep 3
+            if gh release create test $APK bundle.zip --target dev --prerelease --latest=false --title "TEST build ${{ github.run_number }}" --notes-file notes.md; then exit 0; fi
+            echo "retry $i"; sleep 20
+          done
+          exit 1
       - name: Deploy web version (GitHub Pages)
-        if: always()
+        if: always() && env.IS_TEST != 'true'
         run: |
           cd www
           touch .nojekyll
@@ -61,10 +84,24 @@ jobs:
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
 
       - name: Deploy web version (Firebase Hosting)
-        if: always() && env.HAS_FB_SA == 'true'
+        if: always() && env.HAS_FB_SA == 'true' && env.IS_TEST != 'true'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ github.token }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: dhahiat-sumou-mecca-taam
           channelId: live
+
+      - name: Deploy TEST web version (Firebase preview channel)
+        id: fbtest
+        if: always() && env.HAS_FB_SA == 'true' && env.IS_TEST == 'true'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ github.token }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: dhahiat-sumou-mecca-taam
+          channelId: test
+          expires: 30d
+      - name: Show TEST link
+        if: always() && env.IS_TEST == 'true'
+        run: echo "TEST_URL=${{ steps.fbtest.outputs.details_url }}"
