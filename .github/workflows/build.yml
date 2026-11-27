@@ -19,14 +19,6 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: node scripts/copy-libs.js
-      - name: Deploy Firestore security rules
-        if: env.HAS_FB_SA == 'true'
-        env:
-          FB_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: |
-          echo "$FB_SA" > "$RUNNER_TEMP/sa.json"
-          GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json" npx -y firebase-tools@13 deploy --only firestore:rules --project dhahiat-sumou-mecca-taam --non-interactive
-          rm -f "$RUNNER_TEMP/sa.json"
       - name: Stamp version
         run: |
           CH=prod; [ "$IS_TEST" = "true" ] && CH=test
