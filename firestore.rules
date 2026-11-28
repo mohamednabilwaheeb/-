@@ -87,7 +87,7 @@ service cloud.firestore {
 
     // Team-only collections: Snag List, activity, photos, quantities (prod + test)
     match /{col}/{id} {
-      allow read, write: if team() && col in ['v', 'ph', 'act', 'boq', 't_v', 't_ph', 't_act', 't_boq'];
+      allow read, write: if team() && col in ['v', 'ph', 'act', 'boq', 'prog', 'psnap', 'pcfg', 't_v', 't_ph', 't_act', 't_boq', 't_prog', 't_psnap', 't_pcfg'];
     }
   }
 }
