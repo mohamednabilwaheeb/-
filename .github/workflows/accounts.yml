@@ -19,6 +19,6 @@ jobs:
         env:
           FB_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          mkdir -p /tmp/acc && cp tools/accounts.js /tmp/acc/ && cd /tmp/acc
+          mkdir -p /tmp/acc && cp tools/accounts.js tools/*.json /tmp/acc/ && cd /tmp/acc
           npm init -y >/dev/null && npm i --no-audit --no-fund firebase-admin@12 >/dev/null
           node accounts.js
