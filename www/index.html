@@ -1502,11 +1502,11 @@ async function repPdf(reps,from,to){const A=aggregate(reps,from,to);const one=fr
 try{const j=new URLSearchParams(location.search).get('join');if(j){lsSet('snag5_join',j.trim().toUpperCase());history.replaceState(null,'',location.pathname)}}catch(e){}
 
 /* ================= الموقف التنفيذي (أعمال الأسطح — المرحلة الأولى) ================= */
-const PITEMS=[{k:'rem',t:'إزالة التشطيب القديم'},{k:'slope',t:'الميول واللياسة'},{k:'wp',t:'العزل المائي واختبار الغمر'},{k:'fin',t:'التشطيب النهائي'}];
+const PITEMS=[{k:'remp',t:'إزالة اللياسة'},{k:'remw',t:'إزالة العزل'},{k:'slope',t:'الميول واللياسة'},{k:'wp',t:'العزل المائي واختبار الغمر'},{k:'fin',t:'التشطيب النهائي'}];
 const finT=roof=>roof==='gravel'?'التشطيب النهائي (بحص)':'التشطيب النهائي (بلاط + وزرة)';
 const PCO={TAAJ:'شركة التاج المضيء',PCC:'شركة تخطيط PCC'},PCOL={TAAJ:'#8e7cc3',PCC:'#3d85c6'};
 const ROOFN={tile:'بلاط',gravel:'بحص'};
-let ROOF=null,PROG={},PCFG={w:{rem:15,slope:20,wp:35,fin:30},start:'2026-12-01',days:60},progPZ=null,progBy='all',progCo='',progRoof='',progSel=new Set(),progMulti=false,unsubProg=null,unsubPcfg=null;
+let ROOF=null,PROG={},PCFG={w:{remp:7.5,remw:7.5,slope:20,wp:35,fin:30},start:'2026-12-01',days:60,editors:[]},progPZ=null,progBy='all',progCo='',progRoof='',progSel=new Set(),progMulti=false,unsubProg=null,unsubPcfg=null;
 async function loadRoof(){if(!ROOF){try{ROOF=await (await fetch('data/roof.json')).json()}catch(e){ROOF={}}}return ROOF}
 const pcol=()=>FS.collection(C('prog'));
 const r1=x=>Math.round(x*10)/10;
@@ -1517,11 +1517,12 @@ function aggr(f){const cs=Object.keys(ROOF||{}).filter(f||(()=>true));const n=cs
   PITEMS.forEach(it=>o.items[it.k]=cs.reduce((a,c)=>a+iPct(c,it.k),0)/n);o.pct=cs.reduce((a,c)=>a+vPct(c),0)/n;
   o.done=cs.filter(c=>vPct(c)>=99.95).length;o.none=cs.filter(c=>vPct(c)<=0).length;return o}
 const pctColor=p=>p<=0?'#e8a1aa':p<25?'#f4b183':p<50?'#f6c98f':p<75?'#f3e28a':p<99.95?'#b9dc8c':'#5fbf7a';
+const canProg=()=>isAdmin()||!!(USER&&PCFG.editors.includes(USER.uid));
 const progVis=c=>(!progCo||ROOF[c].co===progCo)&&(!progRoof||ROOF[c].roof===progRoof);
 const valOf=c=>progBy==='all'?vPct(c):iPct(c,progBy);
 async function startProg(){if(unsubProg||!FS||!isTeam())return;await loadRoof();
   unsubProg=pcol().onSnapshot(s=>{PROG={};s.docs.forEach(d=>PROG[d.id]=d.data());if(SECTION==='prog')renderProg()},()=>{});
-  unsubPcfg=FS.collection(C('pcfg')).doc('main').onSnapshot(s=>{if(s.exists){const x=s.data();PCFG={w:{...PCFG.w,...(x.w||{})},start:x.start||PCFG.start,days:+x.days||PCFG.days}}if(SECTION==='prog')renderProg()},()=>{})}
+  unsubPcfg=FS.collection(C('pcfg')).doc('main').onSnapshot(s=>{if(s.exists){const x=s.data();PCFG={w:{...PCFG.w,...(x.w||{})},start:x.start||PCFG.start,days:+x.days||PCFG.days,editors:Array.isArray(x.editors)?x.editors:[]}}if(SECTION==='prog')renderProg()},()=>{})}
 function stopProg(){[unsubProg,unsubPcfg].forEach(u=>u&&u());unsubProg=unsubPcfg=null;PROG={}}
 async function writeSnap(){try{const a=aggr();const it={};PITEMS.forEach(x=>it[x.k]=r1(a.items[x.k]));
   await FS.collection(C('psnap')).doc(todayS()).set({pct:r1(a.pct),items:it,t:Date.now(),by:ME})}catch(e){}}
@@ -1548,12 +1549,12 @@ function renderProg(){if(!$('#vProg').classList.contains('on')||!ROOF)return;
   $('#progTools').innerHTML=`<select class="sel" id="pBy"><option value="all">النسبة الإجمالية</option>${PITEMS.map(it=>`<option value="${it.k}" ${progBy===it.k?'selected':''}>${it.t}</option>`).join('')}</select>
     <select class="sel" id="pCo"><option value="">جميع المقاولين</option>${Object.keys(PCO).map(k=>`<option value="${k}" ${progCo===k?'selected':''}>${PCO[k]}</option>`).join('')}</select>
     <select class="sel" id="pRf"><option value="">بلاط وبحص</option><option value="tile" ${progRoof==='tile'?'selected':''}>بلاط فقط</option><option value="gravel" ${progRoof==='gravel'?'selected':''}>بحص فقط</option></select>
-    <span class="sp"></span><button class="btn g ${progMulti?'on':''}" id="pMul">${progMulti?'✓ تحديد فلل متعددة':'☐ تحديد فلل متعددة'}</button>
+    <span class="sp"></span>${canProg()?`<button class="btn g ${progMulti?'on':''}" id="pMul">${progMulti?'✓ تحديد فلل متعددة':'☐ تحديد فلل متعددة'}</button>`:''}
     <button class="btn g" id="pTab">📋 الجدول</button><button class="btn g" id="pMore">⋯ المزيد</button>`;
   if(progBy==='all'&&$('#pBy'))$('#pBy').value='all';
   $('#pBy').onchange=e=>{progBy=e.target.value;colorProg()};$('#pCo').onchange=e=>{progCo=e.target.value;renderProg()};$('#pRf').onchange=e=>{progRoof=e.target.value;renderProg()};
-  $('#pMul').onclick=()=>{progMulti=!progMulti;progSel.clear();renderProg()};$('#pTab').onclick=progTable;$('#pMore').onclick=()=>{dlg(`<h3>الموقف التنفيذي</h3><div class="row" style="flex-direction:column"><button class="btn g" id="pCur">📈 منحنى التقدّم (المخطط مقابل الفعلي)</button><button class="btn" id="pXl">⬇ تقرير Excel</button><button class="btn g" id="pPdf">⬇ تقرير PDF (المخطط الملوّن)</button><button class="btn g" id="pCfg">⚙ الأوزان والبرنامج الزمني</button><button class="btn g" id="pmX">إغلاق</button></div>`);
-    $('#pCur').onclick=progCurve;$('#pXl').onclick=()=>{close();progExport('xlsx')};$('#pPdf').onclick=()=>{close();progExport('pdf')};$('#pCfg').onclick=progCfg;$('#pmX').onclick=close};
+  if($('#pMul'))$('#pMul').onclick=()=>{progMulti=!progMulti;progSel.clear();renderProg()};$('#pTab').onclick=progTable;$('#pMore').onclick=()=>{dlg(`<h3>الموقف التنفيذي</h3><div class="row" style="flex-direction:column"><button class="btn g" id="pCur">📈 منحنى التقدّم (المخطط مقابل الفعلي)</button><button class="btn" id="pXl">⬇ تقرير Excel</button><button class="btn g" id="pPdf">⬇ تقرير PDF (المخطط الملوّن)</button>${canProg()?'<button class="btn g" id="pCfg">⚙ الأوزان والبرنامج الزمني</button>':''}${isAdmin()?'<button class="btn g" id="pPerm">👥 تحديد المسؤولين عن التحديث</button>':''}<button class="btn g" id="pmX">إغلاق</button></div>`);
+    $('#pCur').onclick=progCurve;$('#pXl').onclick=()=>{close();progExport('xlsx')};$('#pPdf').onclick=()=>{close();progExport('pdf')};if($('#pCfg'))$('#pCfg').onclick=progCfg;if($('#pPerm'))$('#pPerm').onclick=progPerms;$('#pmX').onclick=close};
   const row=(lab,f)=>{const a=aggr(c=>progVis(c)&&f(c));return a.n?`<div class="pk"><b>${lab}</b><span>${a.n} فيلا</span><span class="pb"><i style="width:${a.pct}%;background:${pctColor(a.pct)}"></i></span><b>${r1(a.pct)}%</b></div>`:''};
   $('#progFoot').innerHTML=`<div class="kpis"><div><small>الإنجاز الفعلي</small><b>${r1(A.pct)}%</b></div><div><small>المخطط حتى اليوم</small><b>${r1(pl)}%</b></div>
       <div class="${dv>=0?'ok':'bad'}"><small>${dv>=0?'متقدم بـ':'متأخر بـ'}</small><b>${r1(Math.abs(dv))}%</b></div><div><small>فلل منتهية</small><b>${A.done}/${A.n}</b></div></div>
@@ -1563,8 +1564,20 @@ function renderProg(){if(!$('#vProg').classList.contains('on')||!ROOF)return;
   const nx=$('#progNext');nx.style.display=progMulti&&progSel.size?'':'none';nx.textContent=`تحديث ${progSel.size} فيلا ←`;
   colorProg()}
 $('#progNext').onclick=()=>{if(progSel.size)progEdit([...progSel])};
-function progTap(code){if(!ROOF[code])return;if(progMulti){progSel.has(code)?progSel.delete(code):progSel.add(code);colorProg();renderProg();return}progEdit([code])}
-function progEdit(codes){const one=codes.length===1,c0=codes[0],r=one?(PROG[c0]||{}):{},inf=ROOF[c0]||{};
+function progTap(code){if(!ROOF[code])return;if(progMulti&&canProg()){progSel.has(code)?progSel.delete(code):progSel.add(code);colorProg();renderProg();return}progEdit([code])}
+function progView(c){const r=PROG[c]||{},inf=ROOF[c]||{};
+  dlg(`<h3>فيلا ${esc(villaNo(c))} — ${esc(D.villas[c].model)}</h3><p class="q">${esc(PCO[inf.co]||'')} · سطح ${ROOFN[inf.roof]||''}</p>
+    ${PITEMS.map(it=>{const v=+r[it.k]||0;return `<div class="pk" style="margin:6px 0"><b>${esc(it.k==='fin'?finT(inf.roof):it.t)}</b><span>الوزن ${PCFG.w[it.k]}%</span><span class="pb"><i style="width:${v}%;background:${pctColor(v)}"></i></span><b>${v}%</b></div>`}).join('')}
+    <div class="rsum big">الإنجاز الإجمالي: <b>${r1(vPct(c))}%</b></div>${r.ub?`<p class="q">آخر تحديث: ${esc(r.ub)} — ${new Date(r.ut||0).toLocaleString('ar-SA-u-nu-latn')}</p>`:''}
+    <div class="row"><span class="sp"></span><button class="btn g" id="pvX">إغلاق</button></div>`);$('#pvX').onclick=close}
+async function progPerms(){close();let us=[];try{us=(await FS.collection('users').get()).docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.approved&&u.role!=='contractor'&&u.username!==ADMIN)}catch(e){toast('تعذّر تحميل المستخدمين.');return}
+  const ed=new Set(PCFG.editors);
+  dlg(`<h3>👥 المسؤولون عن تحديث الموقف التنفيذي</h3><p class="q">حدّد أعضاء الفريق المخوّلين بتحديث نسب الإنجاز والأوزان. يطّلع بقية الفريق على الموقف دون تعديل.</p>
+    ${us.map(u=>`<label class="chk" style="padding:6px 0;border-bottom:1px solid var(--line)"><input type="checkbox" data-u="${esc(u.id)}" ${ed.has(u.id)?'checked':''}> ${esc(u.name||u.username)}</label>`).join('')||'<p class="q">لا يوجد أعضاء معتمدون.</p>'}
+    <div class="row"><button class="btn" id="ppOk">حفظ</button><span class="sp"></span><button class="btn g" id="ppX">إلغاء</button></div>`);
+  $('#ppX').onclick=close;$('#ppOk').onclick=async()=>{const sel=[...$('#box').querySelectorAll('[data-u]')].filter(i=>i.checked).map(i=>i.dataset.u);
+    try{await FS.collection(C('pcfg')).doc('main').set({editors:sel,by:ME,t:Date.now()},{merge:true});PCFG.editors=sel;close();renderProg();toast('تم حفظ المسؤولين عن التحديث ✓')}catch(e){toast('تعذّر الحفظ: '+(e.code||''))}}}
+function progEdit(codes){if(!canProg()){progView(codes[0]);return}const one=codes.length===1,c0=codes[0],r=one?(PROG[c0]||{}):{},inf=ROOF[c0]||{};
   const title=one?`فيلا ${villaNo(c0)} — ${D.villas[c0].model}`:`${codes.length} فلل: ${codes.map(villaNo).join('، ')}`;
   dlg(`<h3>${esc(title)}</h3>${one?`<p class="q">${esc(PCO[inf.co]||'')} · سطح ${ROOFN[inf.roof]||''} · الإنجاز الحالي <b>${r1(vPct(c0))}%</b></p>`:'<p class="q">حدّد البنود المراد تحديثها، وستُطبَّق النسبة على جميع الفلل المحددة.</p>'}
     ${PITEMS.map(it=>{const v=one?(+r[it.k]||0):0;return `<div class="prow" data-k="${it.k}">${one?'':`<label class="chk"><input type="checkbox" data-on></label>`}<b>${esc(it.k==='fin'&&one?finT(inf.roof):it.t)}</b><span class="pv2">${v}%</span>
@@ -1592,7 +1605,7 @@ async function progCfg(){const w=PCFG.w;dlg(`<h3>⚙ الأوزان والبرن
   $('#cfX').onclick=close;$('#cfOk').onclick=async()=>{const nw={};$('#box').querySelectorAll('[data-w]').forEach(i=>nw[i.dataset.w]=+i.value||0);const sum=Object.values(nw).reduce((a,b)=>a+b,0);
     if(Math.abs(sum-100)>0.01){$('#cfE').textContent=`مجموع الأوزان ${sum}%، ويجب أن يساوي 100%.`;return}
     const st=$('#cfS').value||PCFG.start,dy=Math.max(1,+$('#cfD').value||60);
-    try{await FS.collection(C('pcfg')).doc('main').set({w:nw,start:st,days:dy,by:ME,t:Date.now()});PCFG={w:nw,start:st,days:dy};close();renderProg();writeSnap();toast('تم حفظ الإعدادات ✓')}catch(e){toast('تعذّر الحفظ: '+(e.code||''))}}}
+    try{await FS.collection(C('pcfg')).doc('main').set({w:nw,start:st,days:dy,by:ME,t:Date.now()},{merge:true});PCFG={...PCFG,w:nw,start:st,days:dy};close();renderProg();writeSnap();toast('تم حفظ الإعدادات ✓')}catch(e){toast('تعذّر الحفظ: '+(e.code||''))}}}
 async function progCurve(){dlg('<h3>📈 منحنى التقدّم (المخطط مقابل الفعلي)</h3><p class="q">جارٍ التحميل…</p>');let snaps=[];
   try{snaps=(await FS.collection(C('psnap')).get()).docs.map(d=>({d:d.id,...d.data()})).sort((a,b)=>a.d<b.d?-1:1)}catch(e){}
   const today={d:todayS(),pct:aggr().pct};if(!snaps.length||snaps[snaps.length-1].d!==today.d)snaps.push(today);
@@ -1626,8 +1639,9 @@ async function progXlsx(){const wb=new ExcelJS.Workbook();const thin={style:'thi
   const s1=sheet('الملخص',[['البيان',34],['عدد الفلل',12],...PITEMS.map(it=>[it.t+` (${PCFG.w[it.k]}%)`,18]),['الإنجاز الإجمالي',16]]);
   const line=(lab,f)=>{const a=aggr(f);if(!a.n)return;s1.add([lab,a.n,...PITEMS.map(it=>r1(a.items[it.k])),r1(a.pct)],{fs:[null,null,...PITEMS.map(it=>argb(pctColor(a.items[it.k]))),argb(pctColor(a.pct))]})};
   line('البلوك كاملاً');line(PCO.TAAJ,c=>ROOF[c].co==='TAAJ');line(PCO.PCC,c=>ROOF[c].co==='PCC');line('فلل البلاط',c=>ROOF[c].roof==='tile');line('فلل البحص',c=>ROOF[c].roof==='gravel');
-  s1.add(['',' ','','','','','']);s1.add(['النسبة المخططة حتى اليوم','',' ','','','',r1(pl)],{b:true});s1.add([A.pct>=pl?'متقدم بنسبة':'متأخر بنسبة','','','','','',r1(Math.abs(A.pct-pl))],{b:true,f:A.pct>=pl?'FFDFF3EA':'FFFBE3E6'});
-  s1.add([`البرنامج: ${PCFG.days} يوماً من ${dayLabel(PCFG.start)}`,'','','','','','']);
+  const blank=n=>Array(n).fill('');const NC=PITEMS.length+3;
+  s1.add(blank(NC));s1.add(['النسبة المخططة حتى اليوم',...blank(NC-2),r1(pl)],{b:true});s1.add([A.pct>=pl?'متقدم بنسبة':'متأخر بنسبة',...blank(NC-2),r1(Math.abs(A.pct-pl))],{b:true,f:A.pct>=pl?'FFDFF3EA':'FFFBE3E6'});
+  s1.add([`البرنامج: ${PCFG.days} يوماً من ${dayLabel(PCFG.start)}`,...blank(NC-1)]);
   const s2=sheet('الموقف لكل فيلا',[['م',6],['الفيلا',9],['النموذج',9],['المقاول',22],['نوع السطح',11],...PITEMS.map(it=>[it.t,16]),['الإجمالي',12],['آخر تحديث',24]]);
   let k=1;for(const c of Object.keys(ROOF).sort((a,b)=>+villaNo(a)-+villaNo(b))){const r=PROG[c]||{};
     s2.add([k++,villaNo(c),(D.villas[c]||{}).model||'',PCO[ROOF[c].co],ROOFN[ROOF[c].roof],...PITEMS.map(it=>iPct(c,it.k)),r1(vPct(c)),r.ub?`${r.ub} — ${shortD(dstr(new Date(r.ut||0)))}`:''],{fs:[null,null,null,null,null,...PITEMS.map(it=>argb(pctColor(iPct(c,it.k)))),argb(pctColor(vPct(c))),null]})}

@@ -85,9 +85,22 @@ service cloud.firestore {
       allow delete: if (col == 'rph' || col == 't_rph') && isAdmin();
     }
 
+    // Roof works progress (الموقف التنفيذي): whole team reads; only the editors chosen by the admin write
+    function progEditor(cfg) { return isAdmin() || (team() && exists(/databases/$(database)/documents/$(cfg)/main)
+                                   && request.auth.uid in get(/databases/$(database)/documents/$(cfg)/main).data.get('editors', [])); }
+    match /{col}/{id} {
+      allow read: if team() && col in ['prog', 'psnap', 'pcfg', 't_prog', 't_psnap', 't_pcfg'];
+      allow write: if ((col == 'prog' || col == 'psnap') && progEditor('pcfg'))
+                   || ((col == 't_prog' || col == 't_psnap') && progEditor('t_pcfg'));
+    }
+    match /{col}/{id} {
+      allow write: if (col == 'pcfg' || col == 't_pcfg')
+                   && (isAdmin() || (progEditor(col) && request.resource.data.get('editors', []) == resource.data.get('editors', [])));
+    }
+
     // Team-only collections: Snag List, activity, photos, quantities (prod + test)
     match /{col}/{id} {
-      allow read, write: if team() && col in ['v', 'ph', 'act', 'boq', 'prog', 'psnap', 'pcfg', 't_v', 't_ph', 't_act', 't_boq', 't_prog', 't_psnap', 't_pcfg'];
+      allow read, write: if team() && col in ['v', 'ph', 'act', 'boq', 't_v', 't_ph', 't_act', 't_boq'];
     }
   }
 }
