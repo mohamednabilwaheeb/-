@@ -10,6 +10,15 @@ const temp = () => Array.from(require('crypto').randomBytes(8), b => A[b % A.len
   try { const u = await auth.getUserByEmail(ADMIN_EMAIL); await db.doc('admins/' + u.uid).set({ email: ADMIN_EMAIL, t: Date.now() }, { merge: true }); }
   catch (e) { if (e.code !== 'auth/user-not-found') console.log('admin', e.message); }
   const users = await db.collection('users').get();
+  const AU = {}; let tok;
+  do { const r = await auth.listUsers(1000, tok); r.users.forEach(u => AU[u.uid] = u); tok = r.pageToken; } while (tok);
+  for (const d of users.docs) {
+    const au = AU[d.id]; if (!au || !au.email || au.email.endsWith('@dhahiat-sumou.app')) continue;
+    const x = d.data(), upd = {};
+    if (!!x.emailVerified !== !!au.emailVerified) upd.emailVerified = !!au.emailVerified;
+    if (x.email !== au.email) upd.email = au.email;
+    if (Object.keys(upd).length) { await d.ref.update(upd); console.log('synced', d.id, JSON.stringify(upd)); }
+  }
   for (const d of users.docs) {
     const un = (d.data().username || '').toLowerCase(); if (!un) continue;
     const ref = db.doc('unames/' + un); const s = await ref.get();
