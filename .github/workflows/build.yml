@@ -27,7 +27,7 @@ jobs:
         if: env.IS_TEST == 'true'
         run: |
           sed -i 's/applicationId "com.taam.snagblock5"/applicationId "com.taam.snagblock5.test"/' android/app/build.gradle
-          sed -i 's#>Dhahiat Sumou Mecca TAAM<#>TEST Dhahiat Sumou<#g' android/app/src/main/res/values/strings.xml
+          sed -i 's#>Dhahiat Sumou Makkah TAAM<#>TEST Dhahiat Sumou<#g' android/app/src/main/res/values/strings.xml
           grep -n applicationId android/app/build.gradle; grep -n TEST android/app/src/main/res/values/strings.xml
       - run: npx cap sync android
       - uses: actions/setup-java@v4
@@ -55,7 +55,7 @@ jobs:
         run: |
           for i in 1 2 3 4 5; do
             gh release delete "build-${{ github.run_number }}" --yes --cleanup-tag 2>/dev/null || true
-            if gh release create "build-${{ github.run_number }}" Dhahiat-Sumou-Mecca-TAAM.apk bundle.zip --title "Dhahiat Sumou Mecca TAAM - build ${{ github.run_number }}" --notes-file notes.md --latest; then exit 0; fi
+            if gh release create "build-${{ github.run_number }}" Dhahiat-Sumou-Mecca-TAAM.apk bundle.zip --title "Dhahiat Sumou Makkah TAAM - build ${{ github.run_number }}" --notes-file notes.md --latest; then exit 0; fi
             echo "retry $i"; sleep 20
           done
           exit 1

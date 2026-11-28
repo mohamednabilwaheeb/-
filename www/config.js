@@ -1,4 +1,4 @@
-// Firebase project: Dhahiat Sumou Mecca TAAM
+// Firebase project: Dhahiat Sumou Makkah TAAM
 window.FIREBASE_CONFIG = {
   apiKey: "AIzaSyBkT63pWXyMB3CJ0KD5p2JfT3V66SICPms",
   authDomain: "dhahiat-sumou-mecca-taam.firebaseapp.com",

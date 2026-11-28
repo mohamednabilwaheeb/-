@@ -214,7 +214,7 @@ details.more{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.b
 <div class="upd" id="upd"><span id="updT"></span><button id="updB">تحديث</button><button id="updX" aria-label="إغلاق">×</button></div>
 
 <section class="view on" id="vHome"><div class="home">
-  <img class="hlogo" src="img/logo.png" alt="TAAM"><div class="hen">DHAHIAT SUMOU MECCA · BLOCK 5</div><h2 id="hHi"></h2>
+  <img class="hlogo" src="img/logo.png" alt="TAAM"><div class="hen">DHAHIAT SUMOU MAKKAH · BLOCK 5</div><h2 id="hHi"></h2>
   <div class="cards">
     <button class="card" data-sec="snag"><span class="ci">📍</span><b>Snag List</b><small>ملاحظات الفلل على اللوحات</small></button>
     <button class="card" data-sec="rep"><span class="ci">🏗</span><b>تقارير المقاولين</b><small id="hRep">التقارير اليومية والأسبوعية</small></button>
@@ -259,12 +259,12 @@ details.more{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.b
   </div>
 </section>
 
-<div id="auth"><img class="logo" src="img/logo.png" alt="TAAM"><div class="en">DHAHIAT SUMOU MECCA · BLOCK 5</div><div class="acard" id="acard"></div></div>
-<div id="splash"><img src="img/logo.png" alt="TAAM"><h2 id="spH">أهلاً بك</h2><div class="en">DHAHIAT SUMOU MECCA · BLOCK 5</div><p>منظومة متابعة مشروع Dhahiat Sumou — بلوك 5 — شركة تام للإنشاء والتعمير</p><div class="bar"><i></i></div></div>
+<div id="auth"><img class="logo" src="img/logo.png" alt="TAAM"><div class="en">DHAHIAT SUMOU MAKKAH · BLOCK 5</div><div class="acard" id="acard"></div></div>
+<div id="splash"><img src="img/logo.png" alt="TAAM"><h2 id="spH">أهلاً بك</h2><div class="en">DHAHIAT SUMOU MAKKAH · BLOCK 5</div><p>منظومة متابعة مشروع Dhahiat Sumou — بلوك 5 — شركة تام للإنشاء والتعمير</p><div class="bar"><i></i></div></div>
 <div id="wel" role="dialog" aria-label="مرحباً">
   <div class="wtrack" id="wtrack">
     <section class="wslide"><img src="img/logo.png" alt="TAAM — شركة تام للإنشاء والتعمير"><div class="en">DHAHIAT SUMOU – BLOCK 5 · SNAG LIST</div>
-      <h2>أهلاً بك في تطبيق Dhahiat Sumou Mecca TAAM</h2><p>منصة فريق شركة تام للإنشاء والتعمير لتسجيل ملاحظات الاستلام (Snag List) على لوحات فلل بلوك 5، ومتابعة تقارير المقاولين اليومية، واستخراج ملفات Excel وPDF جاهزة لكل فيلا.</p></section>
+      <h2>أهلاً بك في تطبيق Dhahiat Sumou Makkah TAAM</h2><p>منصة فريق شركة تام للإنشاء والتعمير لتسجيل ملاحظات الاستلام (Snag List) على لوحات فلل بلوك 5، ومتابعة تقارير المقاولين اليومية، واستخراج ملفات Excel وPDF جاهزة لكل فيلا.</p></section>
     <section class="wslide"><div class="wic">🗺️</div><h2>اختر الفيلا</h2><p>حدّد المرحلة الأولى أو الثانية من أعلى الشاشة، ثم اضغط على الفيلا في مخطط البلوك أو أدخل رقمها في خانة البحث.</p><p>تظهر الفلل التي تحتوي على ملاحظات باللون الأحمر.</p></section>
     <section class="wslide"><div class="wic">📐</div><h2>اللوحة</h2><div class="wsteps">
       <div><b>1</b><span>اختر الدور: الأرضي أو الأول.</span></div>
@@ -559,9 +559,9 @@ async function offerBio(u,p){if(lsGet('snag5_bio')==='1'||lsGet('snag5_bio_no')=
     <div class="row"><button class="btn" id="bY">تفعيل البصمة</button><span class="sp"></span><button class="btn g" id="bN">ليس الآن</button></div>`);
     $('#bY').onclick=async()=>{try{await BIO().verifyIdentity({reason:'تفعيل الدخول بالبصمة',title:'تفعيل البصمة'});await BIO().setCredentials({username:u,password:p,server:BIO_SRV});lsSet('snag5_bio','1');toast('تم تفعيل البصمة ✓')}catch(e){toast('لم يتم تفعيل البصمة.')}close()};
     $('#bN').onclick=()=>{lsSet('snag5_bio_no',u);close()}},800)}
-async function bioLogin(){const E=$('#aE');try{await BIO().verifyIdentity({reason:'تسجيل الدخول',title:'Dhahiat Sumou Mecca TAAM'});
+async function bioLogin(){const E=$('#aE');try{await BIO().verifyIdentity({reason:'تسجيل الدخول',title:'Dhahiat Sumou Makkah TAAM'});
   const c=await BIO().getCredentials({server:BIO_SRV});try{await AUTH.setPersistence(P_LOCAL())}catch(e){}await signInId(c.username,c.password)}catch(e){E.textContent=e&&e.code&&e.code.startsWith('auth/')?authErr(e):'تعذّر التحقق بالبصمة. حاول مرة أخرى أو استخدم كلمة المرور.'}}
-async function unlock(){try{await BIO().verifyIdentity({reason:'فتح التطبيق',title:'Dhahiat Sumou Mecca TAAM'});lockPending=false;afterProfile()}catch(e){const E=$('#aE');if(E)E.textContent='تعذّر التحقق بالبصمة. حاول مرة أخرى.'}}
+async function unlock(){try{await BIO().verifyIdentity({reason:'فتح التطبيق',title:'Dhahiat Sumou Makkah TAAM'});lockPending=false;afterProfile()}catch(e){const E=$('#aE');if(E)E.textContent='تعذّر التحقق بالبصمة. حاول مرة أخرى.'}}
 let emailAsked=false;
 async function syncVerified(){if(!USER||!PROFILE||legacyMail(USER.email))return;if(USER.emailVerified&&PROFILE.emailVerified!==true){try{await FS.collection('users').doc(USER.uid).update({emailVerified:true})}catch(e){}}}
 async function accountChecks(){if(!USER||!PROFILE)return;const ref=FS.collection('users').doc(USER.uid);
@@ -640,7 +640,7 @@ async function usersPanel(){dlg('<h3>إدارة المستخدمين</h3><p clas
       try{await FS.collection('pwreset').doc(r.id).set({uid:r.id,name:r.name||'',status:'pending',by:ME,t:Date.now()});if(b.dataset.rq)await FS.collection('pwreq').doc(b.dataset.rq).delete().catch(()=>{});
         toast('تم تسجيل الطلب، وستظهر كلمة المرور المؤقتة هنا خلال 5–10 دقائق.',4500);usersPanel()}catch(e){toast('تعذّر تنفيذ الطلب: '+(e.code||''));b.disabled=false}});
     $('#box').querySelectorAll('[data-pwa]').forEach(b=>b.onclick=()=>{const r=rows.find(x=>x.id===b.dataset.pwa),x=RS[r.id];
-      const msg=`السلام عليكم ${r.name||''}،\nتم إصدار كلمة مرور مؤقتة لحسابك في تطبيق Dhahiat Sumou Mecca TAAM:\nاسم المستخدم: ${r.username||r.email||''}\nكلمة المرور المؤقتة: ${x.temp}\n\nسيُطلب منك تعيين كلمة مرور جديدة عند تسجيل الدخول.`;
+      const msg=`السلام عليكم ${r.name||''}،\nتم إصدار كلمة مرور مؤقتة لحسابك في تطبيق Dhahiat Sumou Makkah TAAM:\nاسم المستخدم: ${r.username||r.email||''}\nكلمة المرور المؤقتة: ${x.temp}\n\nسيُطلب منك تعيين كلمة مرور جديدة عند تسجيل الدخول.`;
       window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')});
     $('#box').querySelectorAll('[data-on],[data-off]').forEach(b=>b.onclick=async()=>{b.disabled=true;const on=!!b.dataset.on;
       const uid=b.dataset.on||b.dataset.off,ur=rows.find(x=>x.id===uid)||{};const upd={approved:on,disabled:!on,by:ME,at:Date.now()};
@@ -1084,7 +1084,7 @@ function nav(sec){
   SECTION=sec;['vHome','vPlan','vVilla','vRep'].forEach(id=>$('#'+id).classList.remove('on'));
   $('#phase').style.display=sec==='snag'?'':'none';
   const contr=ROLE()==='contractor';$('#helpB').style.display=contr?'none':'';
-  if(sec==='home'){$('#vHome').classList.add('on');$('#ttl').textContent='Dhahiat Sumou Mecca TAAM';$('#sub').textContent='اختر القسم';$('#back').style.display='none';renderHome()}
+  if(sec==='home'){$('#vHome').classList.add('on');$('#ttl').textContent='Dhahiat Sumou Makkah TAAM';$('#sub').textContent='اختر القسم';$('#back').style.display='none';renderHome()}
   else if(sec==='snag'){$('#vPlan').classList.add('on');$('#ttl').textContent='Dhahiat Sumou – Block 5';$('#sub').textContent='Snag List';$('#back').style.display='';cur=null;pending=null;colorPlan();setTimeout(()=>planPZ&&planPZ.refit(),30)}
   else if(sec==='rep'){$('#vRep').classList.add('on');$('#ttl').textContent=contr?'تقرير الأعمال اليومي':'تقارير المقاولين';$('#sub').textContent=contr?coName(myCo()):'Dhahiat Sumou – Block 5';$('#back').style.display=contr?'none':'';
     if(!repPZ)drawRepPlan();renderRep();setTimeout(()=>repPZ&&repPZ.refit(),30)}
