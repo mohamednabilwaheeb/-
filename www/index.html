@@ -509,8 +509,13 @@ function showAuth(kind,msg){$('#auth').classList.add('on');const c=$('#acard');c
     <label for="nP2">تأكيد كلمة المرور</label><input id="nP2" type="password" autocomplete="new-password" dir="ltr">
     <div class="aerr" id="aE"></div><button class="btn" id="nGo">حفظ كلمة المرور</button><button class="lnk" id="aOut">تسجيل الخروج</button>`;
     $('#nGo').onclick=doNewPw;$('#aOut').onclick=()=>AUTH.signOut();return}
-  if(kind==='pending'){c.innerHTML=`<h3>الحساب بانتظار الاعتماد ⏳</h3><p>أهلاً بك ${esc(ME)}. تم إنشاء حسابك بنجاح، وسيُفعَّل تلقائياً فور اعتماده من مدير النظام م. هيثم فوزي.</p>
-    <button class="btn g" id="aOut">تسجيل الخروج</button>`;$('#aOut').onclick=()=>AUTH.signOut();return}
+  if(kind==='pending'){const lg=USER&&legacyMail(USER.email),ver=USER&&USER.emailVerified;
+    c.innerHTML=`<h3>الحساب بانتظار الاعتماد ⏳</h3><p>أهلاً بك ${esc(ME)}. تم إنشاء حسابك بنجاح، وسيُفعَّل تلقائياً فور اعتماده من مدير النظام م. هيثم فوزي.</p>
+    ${lg?'':ver?'<div class="okbox">✓ تم تأكيد بريدك الإلكتروني.</div>':`<div class="ureg">✉️ أرسلنا رابط تأكيد إلى <b dir="ltr">${esc(USER.email)}</b>. يُرجى فتح الرابط لتأكيد بريدك، فهذا مطلوب قبل اعتماد الحساب. إن لم تجد الرسالة، راجِع البريد غير الهام (Spam).</div>
+    <button class="btn" id="vChk">تحقّقتُ من بريدي</button><button class="btn g" id="vRe">إعادة إرسال رابط التأكيد</button>`}
+    <div class="aerr" id="aE"></div><button class="btn g" id="aOut">تسجيل الخروج</button>`;$('#aOut').onclick=()=>AUTH.signOut();
+    if($('#vChk'))$('#vChk').onclick=async()=>{try{await USER.reload();await USER.getIdToken(true)}catch(e){}if(USER.emailVerified){await syncVerified();showAuth('pending')}else $('#aE').textContent='لم يتم تأكيد البريد بعد. افتح الرابط المرسل إلى بريدك ثم أعد المحاولة.'};
+    if($('#vRe'))$('#vRe').onclick=async()=>{AUTH.languageCode='ar';try{await USER.sendEmailVerification();$('#aE').textContent='';toast('تم إرسال رابط التأكيد مرة أخرى ✓',3000)}catch(e){$('#aE').textContent=authErr(e)}};return}
   if(kind==='disabled'){c.innerHTML=`<h3>الحساب موقوف</h3><p>تم إيقاف هذا الحساب من قِبل مدير النظام. للاستفسار يُرجى التواصل مع م. هيثم فوزي.</p><button class="btn g" id="aOut">تسجيل الخروج</button>`;$('#aOut').onclick=()=>AUTH.signOut();return}
   if(kind==='lock'){c.innerHTML=`<h3>أهلاً بك ${esc(ME||'')} 👋</h3><p>استخدم البصمة لفتح التطبيق.</p>
     <button class="btn bio" id="lBio">☝️ الفتح بالبصمة</button><div class="aerr" id="aE">${esc(msg||'')}</div><button class="lnk" id="lPw">الدخول بكلمة المرور بدلاً من البصمة</button>`;
@@ -533,7 +538,7 @@ async function doRegister(){const n=$('#rN').value.trim(),m=$('#rM').value.trim(
     try{await AUTH.setPersistence(P_LOCAL())}catch(e){}
     const cr=await AUTH.createUserWithEmailAndPassword(m,p);const jc=(($('#rJ')||{}).value||'').trim().toUpperCase();
     await FS.collection('users').doc(cr.user.uid).set({name:n,username:u,email:m,approved:false,t:Date.now(),role:jc?'contractor':'team',...(jc?{join:jc}:{})});
-    FS.collection('unames').doc(u).set({uid:cr.user.uid,email:m,t:Date.now()}).catch(()=>{});lsSet('snag5_lastid',m);offerBio(m,p)}
+    FS.collection('unames').doc(u).set({uid:cr.user.uid,email:m,t:Date.now()}).catch(()=>{});AUTH.languageCode='ar';try{await cr.user.updateProfile({displayName:n})}catch(e){}cr.user.sendEmailVerification().catch(()=>{});lsSet('snag5_lastid',m);offerBio(m,p)}
   catch(e){E.textContent=authErr(e);$('#rGo').disabled=false}}
 async function doForgot(){const id=$('#fU').value.trim();const E=$('#aE'),O=$('#fOk');E.textContent='';if(!id){E.textContent='يُرجى إدخال البريد الإلكتروني أو اسم المستخدم.';return}
   $('#fGo').disabled=true;AUTH.languageCode='ar';
@@ -558,6 +563,7 @@ async function bioLogin(){const E=$('#aE');try{await BIO().verifyIdentity({reaso
   const c=await BIO().getCredentials({server:BIO_SRV});try{await AUTH.setPersistence(P_LOCAL())}catch(e){}await signInId(c.username,c.password)}catch(e){E.textContent=e&&e.code&&e.code.startsWith('auth/')?authErr(e):'تعذّر التحقق بالبصمة. حاول مرة أخرى أو استخدم كلمة المرور.'}}
 async function unlock(){try{await BIO().verifyIdentity({reason:'فتح التطبيق',title:'Dhahiat Sumou Mecca TAAM'});lockPending=false;afterProfile()}catch(e){const E=$('#aE');if(E)E.textContent='تعذّر التحقق بالبصمة. حاول مرة أخرى.'}}
 let emailAsked=false;
+async function syncVerified(){if(!USER||!PROFILE||legacyMail(USER.email))return;if(USER.emailVerified&&PROFILE.emailVerified!==true){try{await FS.collection('users').doc(USER.uid).update({emailVerified:true})}catch(e){}}}
 async function accountChecks(){if(!USER||!PROFILE)return;const ref=FS.collection('users').doc(USER.uid);
   if(PROFILE.name&&USER.displayName!==PROFILE.name&&USER.updateProfile)USER.updateProfile({displayName:PROFILE.name}).catch(()=>{});
   if(!legacyMail(USER.email)&&PROFILE.email!==USER.email){ref.update({email:USER.email,emailPending:firebase.firestore.FieldValue.delete()}).catch(()=>{});
@@ -579,7 +585,7 @@ function emailPrompt(pre){dlg(`<div class="shic">🛡️</div><h3>تحديث ب�
       if(PROFILE.username)await FS.collection('unames').doc(PROFILE.username).set({uid:USER.uid,email:m,pending:true,t:Date.now()});
       $('#box').innerHTML=`<div class="shic">✉️</div><h3>تم إرسال رابط التأكيد</h3><p class="q">أرسلنا رابط التأكيد إلى <b dir="ltr">${esc(m)}</b>. افتح الرابط لإتمام إضافة البريد، ثم سجّل الدخول من جديد بالبريد الإلكتروني أو اسم المستخدم وكلمة المرور الحالية.</p><div class="row"><span class="sp"></span><button class="btn" id="emOk">حسناً</button></div>`;$('#emOk').onclick=close}
     catch(e){$('#emGo').disabled=false;if(/requires-recent-login/.test(e.code||'')){$('#emPw').style.display='';E.textContent='لأسباب أمنية، يُرجى إدخال كلمة المرور الحالية ثم المتابعة.'}else E.textContent=authErr(e)}}}
-function afterProfile(){if(!USER)return;ME=(PROFILE&&PROFILE.name)||USER.email.split('@')[0];$('#userB').style.display='';
+function afterProfile(){if(!USER)return;ME=(PROFILE&&PROFILE.name)||USER.email.split('@')[0];$('#userB').style.display='';syncVerified();
   if(lockPending){showAuth('lock');return}
   lsSet('snag5_name',ME);
   if(isAdmin()||(PROFILE&&PROFILE.approved)){
@@ -625,7 +631,7 @@ async function usersPanel(){dlg('<h3>إدارة المستخدمين</h3><p clas
       return `<span class="st ok" dir="ltr">${esc(x.temp)}</span> <button class="btn sm wa" data-pwa="${esc(r.id)}">واتساب</button>`};
     $('#box').innerHTML=`<h3>إدارة المستخدمين (${rows.length})</h3>
       ${reqs.length?`<div class="cocard" style="border-inline-start:5px solid #e07b00"><b>طلبات استعادة كلمة المرور (${reqs.length})</b>${reqs.map(q=>{const u=rows.find(r=>r.username===q.u);return `<div class="urow"><div><b>${esc(u?u.name:q.u)}</b><small dir="ltr" style="text-align:right">${esc(q.u)}</small></div><div>${u?`<button class="btn sm" data-pw="${esc(u.id)}" data-rq="${esc(q.id)}">إصدار كلمة مؤقتة</button>`:'<span class="st bad">غير مسجّل</span>'} <button class="btn g sm" data-rqx="${esc(q.id)}">تجاهل</button></div></div>`}).join('')}</div>`:''}
-      <p class="q">اعتماد حسابات الفريق أو إيقافها، وإصدار كلمات مرور مؤقتة عند الحاجة.</p>`+rows.map(r=>`<div class="urow"><div><b>${esc(r.name||'')}</b> ${isAdm(r)?'':`<span class="st ${r.approved?'ok':'wait'}">${r.approved?'مفعّل':(r.disabled?'موقوف':'بانتظار الاعتماد')}</span>`} ${r.role==='contractor'?`<span class="st bad">🏗 مقاول${r.company&&COS[r.company]?' – '+esc(COS[r.company].name):(()=>{const c=Object.values(COS).find(c=>c.code===r.join);return c?' – '+esc(c.name):' – رمز '+esc(r.join||'؟')})()}</span>`:''}<small dir="ltr" style="text-align:right">${esc(r.username||'')}${r.email?' · '+esc(r.email):''}</small>
+      <p class="q">اعتماد حسابات الفريق أو إيقافها، وإصدار كلمات مرور مؤقتة عند الحاجة.</p>`+rows.map(r=>`<div class="urow"><div><b>${esc(r.name||'')}</b> ${isAdm(r)?'':`<span class="st ${r.approved?'ok':'wait'}">${r.approved?'مفعّل':(r.disabled?'موقوف':'بانتظار الاعتماد')}</span>`} ${r.role==='contractor'?`<span class="st bad">🏗 مقاول${r.company&&COS[r.company]?' – '+esc(COS[r.company].name):(()=>{const c=Object.values(COS).find(c=>c.code===r.join);return c?' – '+esc(c.name):' – رمز '+esc(r.join||'؟')})()}</span>`:''}<small dir="ltr" style="text-align:right">${esc(r.username||'')}${r.email?' · '+esc(r.email):''}</small>${r.email?(r.emailVerified?'<span class="st ok">البريد مؤكَّد ✓</span>':'<span class="st wait">البريد غير مؤكَّد</span>'):(r.emailPending?'<span class="st wait">بانتظار تأكيد البريد</span>':'')}
         ${!isAdm(r)&&r.approved?`<div style="margin-top:4px">${resetCell(r)}</div>`:''}</div>
       <div>${isAdm(r)?'<span class="st ok">مدير النظام</span>':r.approved?`<button class="btn g" data-off="${esc(r.id)}">إيقاف</button>`:`<button class="btn" data-on="${esc(r.id)}">اعتماد</button>`}</div></div>`).join('')+'<div class="row"><span class="sp"></span><button class="btn g" id="uX">إغلاق</button></div>';
     $('#uX').onclick=close;

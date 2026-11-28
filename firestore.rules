@@ -22,8 +22,9 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
       // a user may only clear the temporary-password flag and record their own e-mail
       allow update: if signedIn() && request.auth.uid == uid
-                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['mustChange', 'email', 'emailPending'])
-                    && request.resource.data.get('mustChange', false) == false;
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['mustChange', 'email', 'emailPending', 'emailVerified'])
+                    && request.resource.data.get('mustChange', false) == false
+                    && (request.resource.data.get('emailVerified', false) == false || request.auth.token.email_verified == true);
     }
 
     // Admin registry (written only by the server script)
