@@ -198,6 +198,7 @@ details.more{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.b
 .ureg{background:var(--sel);border-radius:10px;padding:8px;font-size:13px;margin:6px 0}
 .chk{display:flex!important;align-items:center;gap:8px;margin:10px 0 2px;color:var(--ink)!important;font-size:13.5px}.chk input{width:18px;height:18px;accent-color:#a91a2c}
 .okbox{background:#0f8a8318;color:#0b6b66;border-radius:10px;padding:10px;font-size:13.5px;margin:10px 0}.shic{font-size:30px;width:52px;height:52px;border-radius:26px;background:var(--sel);display:grid;place-items:center;margin-bottom:6px}.acard .lnk.sm{font-size:12.5px;padding:2px;margin-top:2px}
+.wn{margin:6px 0 4px;padding-inline-start:20px;line-height:1.8;font-size:14px;color:var(--ink)}.wn li{margin-bottom:4px}.upd .updw{background:transparent;border:1px solid #fff8;color:#fff;margin-inline-end:6px}
 </style>
 </head>
 <body>
@@ -211,7 +212,7 @@ details.more{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.b
   <img class="brand" src="img/mark.png" alt="TAAM">
 </div>
 <div class="warn" id="warn"></div>
-<div class="upd" id="upd"><span id="updT"></span><button id="updB">تحديث</button><button id="updX" aria-label="إغلاق">×</button></div>
+<div class="upd" id="upd"><span id="updT"></span><button id="updW" class="updw">ما الجديد؟</button><button id="updB">تحديث</button><button id="updX" aria-label="إغلاق">×</button></div>
 
 <section class="view on" id="vHome"><div class="home">
   <img class="hlogo" src="img/logo.png" alt="TAAM"><div class="hen">DHAHIAT SUMOU MAKKAH · BLOCK 5</div><h2 id="hHi"></h2>
@@ -446,11 +447,20 @@ async function checkUpdate(manual){
     const body=j.body||'';const m=body.match(/\{[^{}]*"build"[^{}]*\}/);const info=m?JSON.parse(m[0]):{build:+(String(j.tag_name).replace(/\D/g,''))||0,native:NATIVE};
     const asset=n=>(j.assets||[]).find(a=>a.name===n);
     if(info.build>BUILD){NEWREL={...info,notes:body.replace(m?m[0]:'','').trim(),zip:asset('bundle.zip'),apk:(j.assets||[]).find(a=>/\.apk$/i.test(a.name)),page:j.html_url};
-      $('#updT').textContent=`يتوفر تحديث جديد (الإصدار ${info.build})`+(NEWREL.notes?' — '+NEWREL.notes.split('\n')[0].slice(0,60):'');$('#upd').classList.add('on')}
+      NEWREL.items=wnItems(NEWREL.notes);$('#updT').textContent=`يتوفر تحديث جديد (الإصدار ${info.build})`;$('#updW').style.display=NEWREL.items.length?'':'none';$('#upd').classList.add('on')}
     else if(manual)toast('لديك أحدث إصدار ✓ ('+BUILD+')')}
   catch(e){if(manual)toast('تعذّر التحقق من التحديثات. يُرجى التحقق من الاتصال بالإنترنت.')}}
 const NATIVE_APP=!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());
-async function applyUpdate(){const R=NEWREL;if(!R)return;const U=UPD();
+const wnItems=n=>String(n||'').split('\n').map(s=>s.trim()).filter(s=>s&&!/^\{.*\}$/.test(s)).map(s=>s.replace(/^[-*•]\s*/,''));
+function wnDialog(title,items,onUpd){dlg(`<h3>${esc(title)}</h3><ul class="wn">${items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>
+  <div class="row">${onUpd?'<button class="btn" id="wnU">تحديث الآن</button>':''}<span class="sp"></span><button class="btn g" id="wnX">${onUpd?'لاحقاً':'حسناً'}</button></div>`);
+  $('#wnX').onclick=close;if(onUpd)$('#wnU').onclick=()=>{close();onUpd()}}
+$('#updW').onclick=()=>{if(NEWREL)wnDialog(`ما الجديد في الإصدار ${NEWREL.build}`,NEWREL.items,applyUpdate)};
+function showWhatsNew(force){let w=null;try{w=JSON.parse(lsGet('snag5_wn')||'null')}catch(e){}
+  if(!w||!w.items||!w.items.length){if(force)toast('لا توجد ملاحظات لهذا الإصدار.');return}
+  if(!force&&(w.b>BUILD||+(lsGet('snag5_wn_seen')||0)>=w.b))return;lsSet('snag5_wn_seen',String(w.b));
+  wnDialog(force?`ما الجديد في الإصدار ${w.b}`:`تم التحديث إلى الإصدار ${w.b} ✓`,w.items)}
+async function applyUpdate(){const R=NEWREL;if(!R)return;const U=UPD();try{lsSet('snag5_wn',JSON.stringify({b:R.build,items:R.items||[]}))}catch(e){}
   if(!NATIVE_APP){busy('جارٍ التحديث…');try{const rs=await caches.keys();await Promise.all(rs.map(k=>caches.delete(k)))}catch(e){}location.replace(location.pathname+'?v='+R.build);return}
   const needApk=R.native>NATIVE||!U||!R.zip;
   if(needApk){const url=R.apk?R.apk.browser_download_url:R.page;
@@ -593,7 +603,7 @@ function afterProfile(){if(!USER)return;ME=(PROFILE&&PROFILE.name)||USER.email.s
     const wasLocked=$('#auth').classList.contains('on');hideAuth();
     if(ROLE()==='contractor'){startRepBase();scheduleReminders()}else{startSync();startAct();startReq();startRepBase();startTeamWatch()}
     if(!navDone){navDone=true;if(!(cur&&$('#vVilla').classList.contains('on')))nav(ROLE()==='contractor'?'rep':'home')}
-    accountChecks();if(wasLocked)toast(greet(),3500)}
+    accountChecks();setTimeout(()=>{if(!$('#dlg').classList.contains('on'))showWhatsNew()},3500);if(wasLocked)toast(greet(),3500)}
   else{stopSync();showAuth(PROFILE&&PROFILE.disabled?'disabled':'pending')}}
 function startFirebase(){
   firebase.initializeApp(CFG);FS=firebase.firestore();try{FS.enablePersistence({synchronizeTabs:false}).catch(()=>{})}catch(e){}
@@ -610,8 +620,8 @@ function userMenu(){const bio=lsGet('snag5_bio')==='1';const lg=USER&&legacyMail
   <div class="row" style="flex-direction:column">${TEST&&isTeam()?'<button class="btn g" id="mCopy">📋 نسخ البيانات الفعلية إلى النسخة التجريبية</button>':''}${isAdmin()?`<button class="btn" id="mUsers">👥 إدارة المستخدمين${REQ?` (${REQ} بانتظار الإجراء)`:''}</button>`:''}
   ${lg?'<button class="btn g" id="mMail">✉️ إضافة البريد الإلكتروني</button>':''}
   <button class="btn g" id="mBio">${bio?'إلغاء الدخول بالبصمة':'تفعيل الدخول بالبصمة'}</button>
-  <button class="btn g" id="mDua">${lsGet('snag5_dua')==='0'?'تشغيل الأذكار':'إيقاف الأذكار'}</button><button class="btn g" id="mUpd">🔄 البحث عن تحديث</button><button class="btn g" id="mOut">تسجيل الخروج</button><button class="btn g" id="mX">إغلاق</button></div><p class="q" style="text-align:center;margin-top:10px">الإصدار ${BUILD}</p>`);
-  $('#mUpd').onclick=()=>{close();checkUpdate(true)};$('#mDua').onclick=()=>{lsSet('snag5_dua',lsGet('snag5_dua')==='0'?'1':'0');close();toast(lsGet('snag5_dua')==='0'?'تم إيقاف الأذكار.':'تم تشغيل الأذكار.');if(lsGet('snag5_dua')!=='0')showDua()};
+  <button class="btn g" id="mDua">${lsGet('snag5_dua')==='0'?'تشغيل الأذكار':'إيقاف الأذكار'}</button><button class="btn g" id="mUpd">🔄 البحث عن تحديث</button><button class="btn g" id="mWn">📝 ما الجديد في هذا الإصدار</button><button class="btn g" id="mOut">تسجيل الخروج</button><button class="btn g" id="mX">إغلاق</button></div><p class="q" style="text-align:center;margin-top:10px">الإصدار ${BUILD}</p>`);
+  $('#mUpd').onclick=()=>{close();checkUpdate(true)};$('#mWn').onclick=()=>{close();showWhatsNew(true)};$('#mDua').onclick=()=>{lsSet('snag5_dua',lsGet('snag5_dua')==='0'?'1':'0');close();toast(lsGet('snag5_dua')==='0'?'تم إيقاف الأذكار.':'تم تشغيل الأذكار.');if(lsGet('snag5_dua')!=='0')showDua()};
   if(isAdmin())$('#mUsers').onclick=usersPanel;if($('#mMail'))$('#mMail').onclick=()=>emailPrompt();
   if(TEST&&isTeam())$('#mCopy').onclick=async()=>{close();busy('جارٍ نسخ البيانات الفعلية…');try{const s=await FS.collection('v').get();for(const d of s.docs)await FS.collection('t_v').doc(d.id).set(d.data());busy();toast(`تم نسخ بيانات ${s.docs.length} فيلا إلى النسخة التجريبية ✓ (لم تتأثر النسخة الأصلية)`,4500)}catch(e){busy();toast('تعذّر النسخ: '+(e.code||e.message),4000)}};
   $('#mBio').onclick=async()=>{if(bio){try{await BIO()&&BIO().deleteCredentials({server:BIO_SRV})}catch(e){}lsSet('snag5_bio',null);toast('تم إلغاء الدخول بالبصمة.');close()}

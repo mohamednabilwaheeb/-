@@ -43,7 +43,7 @@ jobs:
         run: |
           cd www && zip -qr ../bundle.zip . && cd ..
           echo "{\"build\":${{ github.run_number }},\"native\":$(cat native-version.txt)}" > notes.md
-          git log -1 --pretty=%s >> notes.md
+          if [ -s whatsnew.md ]; then cat whatsnew.md >> notes.md; else git log -1 --pretty=%s >> notes.md; fi
       - uses: actions/upload-artifact@v4
         with:
           name: SnagBlock5-apk
