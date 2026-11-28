@@ -3,6 +3,11 @@ on:
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
+    inputs:
+      backup:
+        description: 'Send the weekly backup now (1)'
+        required: false
+        default: ''
 concurrency: accounts
 jobs:
   run:
@@ -18,7 +23,9 @@ jobs:
       - name: Process accounts
         env:
           FB_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          FORCE_BACKUP: ${{ github.event.inputs.backup }}
         run: |
-          mkdir -p /tmp/acc && cp tools/accounts.js tools/*.json /tmp/acc/ && cd /tmp/acc
-          npm init -y >/dev/null && npm i --no-audit --no-fund firebase-admin@12 >/dev/null
+          mkdir -p /tmp/acc && cp tools/accounts.js tools/mail.js tools/logo.png tools/*.json /tmp/acc/ && cd /tmp/acc
+          npm init -y >/dev/null && npm i --no-audit --no-fund firebase-admin@12 nodemailer@6 exceljs@4 >/dev/null
           node accounts.js

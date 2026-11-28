@@ -45,6 +45,7 @@ const temp = () => Array.from(require('crypto').randomBytes(8), b => A[b % A.len
       }
     } catch (e) { console.log('seed failed', pfx, e.message); }
   }
+  try { await require('./mail.js')(db, auth); } catch (e) { console.log('mail', e.message); }
   const old = await db.collection('pwreset').where('status', '==', 'done').get();
   for (const j of old.docs) if (Date.now() - (j.data().doneAt || 0) > 2 * 864e5) await j.ref.delete();
   process.exit(0);
