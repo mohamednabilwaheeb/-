@@ -37,11 +37,11 @@ const temp = () => Array.from(require('crypto').randomBytes(8), b => A[b % A.len
   for (const pfx of ['t_']) {
     try {
       const cfg = db.doc(pfx + 'pcfg/main'), cs = await cfg.get();
-      if (!(cs.exists && cs.data().base === '2026-11-28')) {
+      if (!(cs.exists && cs.data().base === '2026-11-28b')) {
         const B = require('./prog_base.json'), R = require('./roof.json'), now = Date.now(), b = db.batch();
         for (const c of Object.keys(R)) { const it = B[c] || {}; const d = { ...it, co: R[c].co, ut: now, ub: 'الموقف الابتدائي', h: [{ t: now, by: 'النظام', x: 'إدخال الموقف من لوحتي 28/11/2026' }] };
           for (const k in it) if (it[k] >= 100) d['d_' + k] = '2026-11-28'; b.set(db.doc(pfx + 'prog/' + c), d); }
-        await b.commit(); await cfg.set({ base: '2026-11-28', t: now }, { merge: true }); console.log('seeded progress', pfx);
+        await b.commit(); await cfg.set({ base: '2026-11-28b', t: now }, { merge: true }); console.log('seeded progress', pfx);
       }
     } catch (e) { console.log('seed failed', pfx, e.message); }
   }
