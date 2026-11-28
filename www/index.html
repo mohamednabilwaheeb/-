@@ -1533,9 +1533,10 @@ async function repPdf(reps,from,to){const A=aggregate(reps,from,to);const one=fr
 try{const j=new URLSearchParams(location.search).get('join');if(j){lsSet('snag5_join',j.trim().toUpperCase());history.replaceState(null,'',location.pathname)}}catch(e){}
 
 /* ================= الموقف التنفيذي (أعمال الأسطح — المرحلة الأولى) ================= */
-const PIT={remp:'إزالة اللياسة القديمة',remw:'إزالة العزل القديم',prep:'تجهيزات اللياسة',elec:'أعمال الكهرباء',mech:'أعمال الميكانيكا',plas:'اللياسة',slope:'الميول',foam:'الرغوية',wp:'العزل المائي واختبار الغمر',th:'العزل الحراري',fin:'التشطيب النهائي'};
-const PSTG=[{k:'s1',t:'إزالة اللياسة القديمة',sh:'إزالة لياسة',it:['remp']},{k:'s2',t:'التأسيس',sh:'تأسيس',it:['prep','elec','mech'],g:['prep']},{k:'s3',t:'اللياسة',sh:'لياسة',it:['plas']},
-  {k:'s4',t:'إزالة العزل والميول والرغوية',sh:'ميول ورغوية',it:['remw','slope','foam']},{k:'s5',t:'العزل المائي والحراري',sh:'عزل',it:['wp','th']},{k:'s6',t:'التشطيب النهائي',sh:'تشطيب',it:['fin']}];
+const PIT={remp:'إزالة اللياسة القديمة',remw:'إزالة العزل القديم',prep:'تجهيزات اللياسة',elec:'أعمال الكهرباء',mech:'أعمال الميكانيكا',plas:'اللياسة',slope:'الميول',foam:'الرغوية',wp:'العزل المائي',flood:'اختبار الغمر',th:'العزل الحراري',fin:'التشطيب النهائي'};
+/* engineering sequence of roof rehabilitation */
+const PSTG=[{k:'s1',t:'أعمال الإزالة',sh:'إزالة',it:['remw','remp']},{k:'s2',t:'التأسيس',sh:'تأسيس',it:['prep','elec','mech'],g:['prep']},{k:'s3',t:'اللياسة',sh:'لياسة',it:['plas']},
+  {k:'s4',t:'الميول والرغوية',sh:'ميول ورغوية',it:['slope','foam']},{k:'s5',t:'العزل المائي والحراري',sh:'عزل',it:['wp','flood','th']},{k:'s6',t:'التشطيب النهائي',sh:'تشطيب',it:['fin']}];
 const PKEYS=PSTG.flatMap(s=>s.it),NAOK=['remp','remw'];
 const finT=roof=>roof==='gravel'?'التشطيب النهائي (بحص)':'التشطيب النهائي (بلاط + وزرة)';
 const PCO={TAAJ:'شركة التاج المضيء للمقاولات',PCC:'شركة تخطيط للمقاولات والتطوير العقاري'},PCOS={TAAJ:'التاج المضيء',PCC:'تخطيط (PCC)'},PCOC={TAAJ:'#b8860b',PCC:'#022366'};
@@ -1579,13 +1580,13 @@ async function startProg(){if(unsubProg||!FS)return;await loadRoof();
   unsubPcfg=FS.collection(C('pcfg')).doc('main').onSnapshot(s=>{if(s.exists)setPcfg(s.data());if(SECTION==='prog')renderProg()},()=>{})}
 function setPcfg(x){const w={...DEFW};if(x.w)for(const s of PSTG)if(x.w[s.k]!=null)w[s.k]=+x.w[s.k];PCFG={w,start:x.start||PCFG.start,days:+x.days||PCFG.days,editors:Array.isArray(x.editors)?x.editors:[],base:x.base||''}}
 function stopProg(){[unsubProg,unsubPcfg].forEach(u=>u&&u());unsubProg=unsubPcfg=null;PROG={};progMine=''}
-const BASE_D='2026-11-28';
-async function maybeSeed(){if(!canProg()||PCFG.base===BASE_D)return;try{await seedBase(false)}catch(e){}}
+const BASE_D='2026-11-28',BASE_V='2026-11-28b';
+async function maybeSeed(){if(!canProg()||PCFG.base===BASE_V)return;try{await seedBase(false)}catch(e){}}
 async function seedBase(ask){if(ask&&!confirm('سيُستبدل الموقف الحالي لجميع الفلل بموقف لوحتي 28/11/2026. هل تريد المتابعة؟'))return;
   const B=await (await fetch('data/prog_base.json')).json();const now=Date.now();const b=FS.batch();
   for(const c of Object.keys(ROOF)){const it=B[c]||{};const d={...it,co:ROOF[c].co,ut:now,ub:'الموقف الابتدائي',h:[{t:now,by:ME,x:'إدخال الموقف من لوحتي 28/11/2026'}]};
     Object.keys(it).forEach(k=>{if(it[k]>=100)d['d_'+k]=BASE_D});b.set(pcol().doc(c),d)}
-  await b.commit();await FS.collection(C('pcfg')).doc('main').set({base:BASE_D,by:ME,t:now},{merge:true});PCFG.base=BASE_D;writeSnap();toast('تم إدخال موقف 28/11/2026 لجميع الفلل ✓',3500)}
+  await b.commit();await FS.collection(C('pcfg')).doc('main').set({base:BASE_V,by:ME,t:now},{merge:true});PCFG.base=BASE_V;writeSnap();toast('تم إدخال موقف 28/11/2026 لجميع الفلل ✓',3500)}
 async function writeSnap(){try{const a=aggr();const st={};PSTG.forEach(s=>st[s.k]=r1(a.st[s.k]));const co={};for(const k of Object.keys(PCO))co[k]=r1(aggr(c=>ROOF[c].co===k).pct);
   await FS.collection(C('psnap')).doc(todayS()).set({pct:r1(a.pct),st,co,t:Date.now(),by:ME})}catch(e){}}
 
