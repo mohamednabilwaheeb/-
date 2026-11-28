@@ -88,10 +88,18 @@ service cloud.firestore {
     // Roof works progress (الموقف التنفيذي): whole team reads; only the editors chosen by the admin write
     function progEditor(cfg) { return isAdmin() || (team() && exists(/databases/$(database)/documents/$(cfg)/main)
                                    && request.auth.uid in get(/databases/$(database)/documents/$(cfg)/main).data.get('editors', [])); }
+    function coPco(cc) { return get(/databases/$(database)/documents/$(cc)/$(myCo())).data.get('pco', '-'); }
     match /{col}/{id} {
-      allow read: if team() && col in ['prog', 'psnap', 'pcfg', 't_prog', 't_psnap', 't_pcfg'];
-      allow write: if ((col == 'prog' || col == 'psnap') && progEditor('pcfg'))
-                   || ((col == 't_prog' || col == 't_psnap') && progEditor('t_pcfg'));
+      allow read: if team() && col in ['prog', 'psnap', 'pcfg', 'pph', 't_prog', 't_psnap', 't_pcfg', 't_pph'];
+      allow write: if ((col == 'prog' || col == 'psnap' || col == 'pph') && progEditor('pcfg'))
+                   || ((col == 't_prog' || col == 't_psnap' || col == 't_pph') && progEditor('t_pcfg'));
+    }
+    // a contractor sees only the villas (and their photos) of its own company
+    match /{col}/{id} {
+      allow read: if contractor() && (
+                     ((col == 'prog' || col == 'pph') && resource.data.get('co', '') == coPco('companies'))
+                  || ((col == 't_prog' || col == 't_pph') && resource.data.get('co', '') == coPco('t_companies'))
+                  || col in ['pcfg', 't_pcfg']);
     }
     match /{col}/{id} {
       allow write: if (col == 'pcfg' || col == 't_pcfg')
