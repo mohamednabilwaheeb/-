@@ -27,6 +27,20 @@ service cloud.firestore {
                     && (request.resource.data.get('emailVerified', false) == false || request.auth.token.email_verified == true);
     }
 
+    // Account e-mails queued for the project Gmail (sent by the server script)
+    match /mailq/{id} {
+      allow get: if true;
+      allow create: if request.resource.data.status == 'new' && request.resource.data.t is int && (
+           (request.resource.data.k == 'reset' && request.resource.data.keys().hasOnly(['k', 'to', 't', 'status'])
+             && request.resource.data.to is string && request.resource.data.to.size() <= 100)
+        || (signedIn() && request.resource.data.k in ['verify', 'change'] && request.resource.data.uid == request.auth.uid
+             && request.resource.data.keys().hasOnly(['k', 'uid', 'to', 't', 'status'])));
+    }
+    // Server status (weekly backup etc.)
+    match /sys/{id} {
+      allow read: if isAdmin();
+    }
+
     // Admin registry (written only by the server script)
     match /admins/{uid} {
       allow get: if signedIn() && request.auth.uid == uid;

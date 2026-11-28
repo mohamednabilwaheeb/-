@@ -18,8 +18,8 @@
    PICTURE: the drawing itself fills the screen; list below it
    COLOUR: drafting white, ink navy #13294b, red-orange tag #e0462b, shared items teal
    TYPE: Cairo; LAYOUT: top bar, drawing, bottom sheet list */
-:root{color-scheme:light;--bg:light-dark(#f3f4f6,#0f1520);--card:light-dark(#fff,#18212f);--ink:light-dark(#13294b,#e6ecf5);--mute:light-dark(#5b6b82,#93a3ba);--line:light-dark(#dde2ea,#2a3545);--acc:#a91a2c;--sh:#0f8a83;--nav:#2b2b30;--sel:light-dark(#fbeef0,#3a1c22)}
-:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:light}
+:root{color-scheme:light dark;--bg:light-dark(#f3f4f6,#0f1520);--card:light-dark(#fff,#18212f);--ink:light-dark(#13294b,#e6ecf5);--mute:light-dark(#5b6b82,#93a3ba);--line:light-dark(#dde2ea,#2a3545);--acc:#a91a2c;--sh:#0f8a83;--nav:#2b2b30;--sel:light-dark(#fbeef0,#3a1c22)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Cairo,Tahoma,Arial,sans-serif;overflow:hidden}
@@ -212,25 +212,31 @@ details.more{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.b
 .pchip img{height:16px}.pchip.on{background:#1f2937;color:#fff;border-color:#1f2937}.pq2{width:110px;border:1px solid var(--line);border-radius:20px;padding:5px 10px;font:inherit;font-size:12.5px;background:var(--card);color:var(--ink)}
 .rdot{display:inline-block;width:9px;height:9px;border-radius:5px;background:#dc2626;vertical-align:middle}
 .pcoh{display:flex;align-items:center;gap:10px;width:100%}.pcoh img{height:40px;max-width:120px;object-fit:contain}.pcoh b{display:block;font-size:14.5px}.pcoh small{color:var(--mute);font-size:11.5px}
-.pkp{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.pkp div{background:var(--bg);border-radius:12px;padding:6px 4px;text-align:center}.pkp small{display:block;font-size:10.5px;color:var(--mute)}.pkp b{font-size:17px;color:var(--ink)}.pkp em{font-style:normal;font-size:11px;color:var(--mute)}.pkp .ok b{color:#15803d}.pkp .bad b{color:#dc2626}
+.pkp{display:grid;grid-template-columns:repeat(auto-fit,minmax(62px,1fr));gap:6px}.pkp div{background:var(--bg);border-radius:12px;padding:6px 4px;text-align:center}.pkp small{display:block;font-size:10.5px;color:var(--mute)}.pkp b{font-size:17px;color:var(--ink)}.pkp em{font-style:normal;font-size:11px;color:var(--mute)}.pkp .ok b{color:#15803d}.pkp .bad b{color:#dc2626}
 .pbox{background:var(--bg);border-radius:12px;padding:8px}.pbh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}.pbh b{font-size:13px}.pbh small{color:var(--mute);font-size:10.5px}
 .pipe{display:flex;gap:3px}.pp{flex:1;min-width:0;background:none;border:0;padding:0;font:inherit;cursor:pointer;text-align:center}.pp b{display:block;color:#fff;font-size:13px;padding:4px 0;border-radius:7px}.pp small{display:block;font-size:9.5px;line-height:1.2;margin-top:3px;color:var(--mute)}.pp.on b{outline:3px solid #f59e0b;outline-offset:1px}
 .pmeta{display:flex;gap:14px;font-size:12px;color:var(--mute)}.pmeta b{color:var(--ink)}
 .pscale{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--mute)}.pscale img{height:16px;width:22px;object-fit:contain}.pscale i{flex:1;height:8px;border-radius:5px}
 .pvh{display:flex;align-items:center;gap:10px}.pvh img{height:44px;max-width:90px;object-fit:contain}.pvh h3{margin:0}
 .pring{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:6px 0 10px}.pring b{display:block;font-size:16px}.pring small{display:block;color:var(--mute);font-size:12px}
-.pwarn{background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:10px;padding:7px 10px;font-size:12.5px;margin-top:8px}
+.pinfo{background:light-dark(#f0f9ff,#0c2a3d);color:light-dark(#075985,#bae6fd);border:1px solid light-dark(#bae6fd,#0e4a6b);border-radius:10px;padding:7px 10px;font-size:12.5px;margin-top:8px}.pwarn{background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:10px;padding:7px 10px;font-size:12.5px;margin-top:8px}
 .ptl{padding:8px 0}.pst{display:grid;grid-template-columns:30px 1fr;gap:10px;position:relative;padding-bottom:10px}.pst:before{content:'';position:absolute;right:14px;top:30px;bottom:0;width:2px;background:var(--line)}.pst:last-child:before{display:none}
 .pc{width:30px;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;background:#f3f4f6;color:#9ca3af;z-index:1}
 .pst.d .pc{background:var(--cc,#15803d);color:#fff}.pst.c .pc{background:#fff;border:2.5px solid var(--cm,#f59e0b);color:var(--cc,#b45309)}.pst.p .pc{background:#f3f4f6;color:var(--cm,#b45309)}
 .pst.c .pbd{background:var(--card);border:1.5px solid var(--cm,#f59e0b);border-radius:12px;padding:6px 8px;box-shadow:0 2px 10px #0000000f}
 .pth{display:flex;justify-content:space-between;align-items:center}.pth b{font-size:14px}.pth span{font-weight:700;font-size:13px;color:var(--mute)}.pst.d .pth span{color:var(--cc,#15803d)}.pst.c .pth span{color:var(--cm,#b45309)}
 .pit{display:grid;grid-template-columns:1fr 70px 42px;gap:6px;align-items:center;font-size:12px;padding:3px 0;color:var(--ink)}.pit small{color:var(--mute);font-size:10.5px}.pit .pd{grid-column:1/-1;margin-top:-3px}.pit em{grid-column:2/4;font-style:normal;color:var(--mute);font-size:11px;text-align:left}
-.pit .mb{height:6px;background:#eef1f5;border-radius:4px;overflow:hidden;display:block}.pit .mb u{display:block;height:100%;border-radius:4px}.pit b{text-align:left;font-size:12px}
+.pit .mb{height:6px;background:var(--line);border-radius:4px;overflow:hidden;display:block}.pit .mb u{display:block;height:100%;border-radius:4px}.pit b{text-align:left;font-size:12px}
 .pph{border-top:1px solid var(--line);padding:8px 0}.pphs{display:flex;gap:6px;overflow-x:auto;margin-top:6px}.pphs figure{margin:0;flex:none;width:92px;cursor:pointer}.pphs img{width:92px;height:70px;object-fit:cover;border-radius:8px;display:block}.pphs figcaption{font-size:10px;color:var(--mute);text-align:center}
 .plog{font-size:12px;border-inline-start:3px solid #15803d;padding:2px 8px;margin:5px 0}.plog small{display:block;color:var(--mute);font-size:10.5px}
 .pegh{font-weight:700;color:#15803d;margin-top:12px;font-size:13.5px}.pna{grid-column:1/-1;font-size:12px;color:var(--mute)}
 .pmx th.v{writing-mode:vertical-rl;transform:rotate(180deg);height:96px;font-size:11px}.pmx td{text-align:center;min-width:26px}.pmx td.na{background:#f3f4f6;color:#9ca3af}
+.dash{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}.dh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}.dh b{font-size:16px}.dh small{color:var(--mute);font-size:12px}
+.dg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.dt{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 10px;text-align:right;display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center;font:inherit;color:var(--ink);cursor:pointer}
+.dt span{grid-row:1/4;font-size:20px}.dt small{color:var(--mute);font-size:11.5px}.dt b{font-size:18px;line-height:1.2}.dt em{font-style:normal;font-size:10.5px;color:var(--mute)}.dt.tg b{color:#15803d}.dt.tr{border-color:#fca5a5}.dt.tr b{color:#dc2626}.dt.to b{color:#ea580c}
+.pcmp td,.pcmp th{text-align:center;white-space:nowrap}.pcmp th img{height:26px}.pcmp td:first-child{text-align:right;font-weight:700}.pcmp td.win{background:light-dark(#dcfce7,#14532d);color:light-dark(#14532d,#dcfce7);font-weight:700}.pcmp tr.sub td{font-size:11.5px;color:var(--mute);font-weight:400}
+.sumsec{border-top:1px solid var(--line);padding:8px 0}.sumsec>b{font-size:14px}.sumsec p{margin:4px 0;font-size:13px}.sline{font-size:12.5px;margin:3px 0}
+.vchip{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:0 6px;margin:2px;font-size:12px;font-weight:700}
 .btn.g.on{background:var(--sel);border-color:var(--acc);color:var(--acc)}
 </style>
 </head>
@@ -249,7 +255,7 @@ details.more{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}.b
 
 <section class="view on" id="vHome"><div class="home">
   <img class="hlogo" src="img/logo.png" alt="TAAM"><div class="hen">DHAHIAT SUMOU MAKKAH · BLOCK 5</div><h2 id="hHi"></h2>
-  <div class="cards">
+  <div class="cards"><div id="hDash"></div>
     <div class="phc"><div class="phh"><b>المرحلة الأولى</b><span class="st ok">جارية</span></div>
       <div class="cards2"><button class="card" data-sec="snag" data-ph="1"><span class="ci">📍</span><b>Snag List</b><small id="hSnag">ملاحظات الفلل على اللوحات</small></button>
       <button class="card" data-sec="prog"><span class="ci">📊</span><b>الموقف التنفيذي</b><small id="hProg">إنجاز أعمال الأسطح</small></button></div></div>
@@ -383,6 +389,7 @@ const BIO=()=>{try{return window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins
 const mail=u=>u.trim().toLowerCase()+'@'+DOMAIN;
 let ADMIN_UID=null;const isAdmin=()=>!!(USER&&(USER.email===mail(ADMIN)||ADMIN_UID===USER.uid));
 const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}},lsSet=(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}};
+function applyTheme(){const t=lsGet('snag5_theme')||'auto';if(t==='auto')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=t}applyTheme();
 function canon(o){if(Array.isArray(o))return '['+o.map(canon).join(',')+']';if(o&&typeof o==='object')return '{'+Object.keys(o).sort().filter(k=>o[k]!==undefined).map(k=>JSON.stringify(k)+':'+canon(o[k])).join(',')+'}';return JSON.stringify(o)}
 function toLocal(d){d=JSON.parse(JSON.stringify(d));const r=blank();r.mirror=!!d.mirror;for(const p of [1,2]){const q=d['p'+p]||{};
   r.p[p].marks=Object.values(q.marks||{}).sort((a,b)=>(a.t||0)-(b.t||0));r.p[p].extra=Object.values(q.extra||{}).sort((a,b)=>(a.t||0)-(b.t||0));r.p[p].gen={...(q.gen||{})};r.p[p].gb={...(q.gb||{})}}return r}
@@ -403,7 +410,7 @@ function diffDoc(want,have){const FV=firebase.firestore.FieldValue;const upd={};
     for(const k in hb)if(!(k in wb))(o.gb||(o.gb={}))[k]=FV.delete();
     if(Object.keys(o).length)upd[P]=o}
   return upd}
-function pushDoc(code){const upd=diffDoc(REC[code],SYNCED[code]);if(!Object.keys(upd).length)return;
+function pushDoc(code){const upd=diffDoc(REC[code],SYNCED[code]);if(!Object.keys(upd).length)return;if(!navigator.onLine)offlineQueued();
   logAct(code,upd);upd.lu=ME;upd.lt=Date.now();
   FS.collection(C('v')).doc(code).set(upd,{merge:true}).catch(e=>toast('تعذّر الرفع: '+(e.code||e.message),4000))}
 function canEdit(o){if(mode!=='fs'||!o)return true;if(isAdmin())return true;if(o.uid)return !!USER&&o.uid===USER.uid;return !o.by||o.by===ME}
@@ -574,6 +581,13 @@ function showAuth(kind,msg){$('#auth').classList.add('on');const c=$('#acard');c
   if(kind==='lock'){c.innerHTML=`<h3>أهلاً بك ${esc(ME||'')} 👋</h3><p>استخدم البصمة لفتح التطبيق.</p>
     <button class="btn bio" id="lBio">☝️ الفتح بالبصمة</button><div class="aerr" id="aE">${esc(msg||'')}</div><button class="lnk" id="lPw">الدخول بكلمة المرور بدلاً من البصمة</button>`;
     $('#lBio').onclick=unlock;$('#lPw').onclick=()=>{lockPending=false;AUTH.signOut()};return}}
+/* account e-mails are queued and sent from the project Gmail; Firebase sends directly as a fallback */
+async function mailReq(d){try{const r=await FS.collection('mailq').add({...d,status:'new',t:Date.now()});return r.id}catch(e){return ''}}
+function mailWatch(id,fallback,box){let done=false;const fb=async()=>{if(done)return;done=true;try{await fallback()}catch(e){}};
+  const show=()=>{const el=box&&document.getElementById(box);if(!el)return;el.innerHTML=`<button class="btn g" id="mfb" style="width:100%">لم تصلك الرسالة؟ إعادة الإرسال الآن</button><small class="q" style="display:block;margin-top:4px">تحقّق أيضاً من مجلد البريد غير الهام (Spam).</small>`;
+    $('#mfb').onclick=async()=>{try{await fallback();toast('تمت إعادة الإرسال ✓',3000)}catch(e){toast(authErr(e),4000)}}};
+  if(!id){fb();return}const tm=setTimeout(show,10*60e3);
+  const un=FS.collection('mailq').doc(id).onSnapshot(s=>{const st=s.exists&&s.data().status;if(!st||st==='new')return;un();if(st==='done'||st==='skip')return;clearTimeout(tm);fb()},()=>{})}
 function hideAuth(){$('#auth').classList.remove('on')}
 function authErr(e){const c=e&&e.code||'';return c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found')||c.includes('invalid-login')?'بيانات الدخول غير صحيحة.':
   c.includes('email-already-in-use')?'هذا البريد الإلكتروني مسجّل مسبقاً. استخدم «نسيت كلمة المرور؟» إن كان الحساب لك.':c.includes('invalid-email')?'صيغة البريد الإلكتروني غير صحيحة.':c.includes('weak-password')?'يجب ألا تقل كلمة المرور عن 6 أحرف.':
@@ -592,13 +606,13 @@ async function doRegister(){const n=$('#rN').value.trim(),m=$('#rM').value.trim(
     try{await AUTH.setPersistence(P_LOCAL())}catch(e){}
     const cr=await AUTH.createUserWithEmailAndPassword(m,p);const jc=(($('#rJ')||{}).value||'').trim().toUpperCase();
     await FS.collection('users').doc(cr.user.uid).set({name:n,username:u,email:m,approved:false,t:Date.now(),role:jc?'contractor':'team',...(jc?{join:jc}:{})});
-    FS.collection('unames').doc(u).set({uid:cr.user.uid,email:m,t:Date.now()}).catch(()=>{});AUTH.languageCode='ar';try{await cr.user.updateProfile({displayName:n})}catch(e){}cr.user.sendEmailVerification().catch(()=>{});lsSet('snag5_lastid',m);offerBio(m,p)}
+    FS.collection('unames').doc(u).set({uid:cr.user.uid,email:m,t:Date.now()}).catch(()=>{});AUTH.languageCode='ar';try{await cr.user.updateProfile({displayName:n})}catch(e){}{const u0=cr.user;mailReq({k:'verify',uid:u0.uid}).then(id=>mailWatch(id,()=>u0.sendEmailVerification(),null))};lsSet('snag5_lastid',m);offerBio(m,p)}
   catch(e){E.textContent=authErr(e);$('#rGo').disabled=false}}
 async function doForgot(){const id=$('#fU').value.trim();const E=$('#aE'),O=$('#fOk');E.textContent='';if(!id){E.textContent='يُرجى إدخال البريد الإلكتروني أو اسم المستخدم.';return}
   $('#fGo').disabled=true;AUTH.languageCode='ar';
   try{const r=await resolveId(id);const target=id.includes('@')?id.toLowerCase():r.real;
-    if(target){await AUTH.sendPasswordResetEmail(target).catch(e=>{if(!/user-not-found/.test(e.code||''))throw e});
-      O.innerHTML=`<div class="okbox">✓ تم إرسال رابط إعادة التعيين إلى ${esc(maskMail(target))}. يُرجى مراجعة صندوق الوارد أو البريد غير الهام (Spam).</div>`}
+    if(target){const fb=()=>AUTH.sendPasswordResetEmail(target).catch(e=>{if(!/user-not-found/.test(e.code||''))throw e});const qid=await mailReq({k:'reset',to:target});mailWatch(qid,fb,'fMw');
+      O.innerHTML=`<div class="okbox">✓ تم إرسال رابط إعادة التعيين إلى ${esc(maskMail(target))} من بريد التطبيق dhahiatsumoumakkahtaam@gmail.com، وقد يستغرق وصوله بضع دقائق. يُرجى مراجعة صندوق الوارد أو البريد غير الهام (Spam).</div><div id="fMw" style="margin-top:8px"></div>`}
     else{await FS.collection('pwreq').add({u:id.toLowerCase().slice(0,40),t:Date.now()});
       O.innerHTML='<div class="okbox">لا يوجد بريد إلكتروني مسجّل لهذا الحساب، لذلك أُرسل طلبك إلى مدير النظام م. هيثم فوزي لإصدار كلمة مرور مؤقتة، وسيتواصل معك قريباً.</div>'}
     $('#fGo').style.display='none'}
@@ -634,10 +648,10 @@ function emailPrompt(pre){dlg(`<div class="shic">🛡️</div><h3>تحديث ب�
   $('#emGo').onclick=async()=>{const m=$('#emI').value.trim().toLowerCase(),E=$('#emE');if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)||legacyMail(m)){E.textContent='يُرجى إدخال بريد إلكتروني صحيح.';return}
     $('#emGo').disabled=true;AUTH.languageCode='ar';
     try{const pw=$('#emP').value;if(pw){await USER.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(USER.email,pw))}
-      await USER.verifyBeforeUpdateEmail(m);
+      const qid=await mailReq({k:'change',uid:USER.uid,to:m});if(!qid)await USER.verifyBeforeUpdateEmail(m);else{const U0=USER;mailWatch(qid,()=>U0.verifyBeforeUpdateEmail(m),'emMw')}
       await FS.collection('users').doc(USER.uid).update({emailPending:m});
       if(PROFILE.username)await FS.collection('unames').doc(PROFILE.username).set({uid:USER.uid,email:m,pending:true,t:Date.now()});
-      $('#box').innerHTML=`<div class="shic">✉️</div><h3>تم إرسال رابط التأكيد</h3><p class="q">أرسلنا رابط التأكيد إلى <b dir="ltr">${esc(m)}</b>. افتح الرابط لإتمام إضافة البريد، ثم سجّل الدخول من جديد بالبريد الإلكتروني أو اسم المستخدم وكلمة المرور الحالية.</p><div class="row"><span class="sp"></span><button class="btn" id="emOk">حسناً</button></div>`;$('#emOk').onclick=close}
+      $('#box').innerHTML=`<div class="shic">✉️</div><h3>تم إرسال رابط التأكيد</h3><p class="q">أرسلنا رابط التأكيد إلى <b dir="ltr">${esc(m)}</b>. قد يستغرق وصول الرسالة بضع دقائق. افتح الرابط لإتمام إضافة البريد، ثم سجّل الدخول من جديد بالبريد الإلكتروني أو اسم المستخدم وكلمة المرور الحالية.</p><div id="emMw"></div><div class="row"><span class="sp"></span><button class="btn" id="emOk">حسناً</button></div>`;$('#emOk').onclick=close}
     catch(e){$('#emGo').disabled=false;if(/requires-recent-login/.test(e.code||'')){$('#emPw').style.display='';E.textContent='لأسباب أمنية، يُرجى إدخال كلمة المرور الحالية ثم المتابعة.'}else E.textContent=authErr(e)}}}
 function afterProfile(){if(!USER)return;ME=(PROFILE&&PROFILE.name)||USER.email.split('@')[0];$('#userB').style.display='';syncVerified();
   if(lockPending){showAuth('lock');return}
@@ -645,7 +659,7 @@ function afterProfile(){if(!USER)return;ME=(PROFILE&&PROFILE.name)||USER.email.s
   if(isAdmin()||(PROFILE&&PROFILE.approved)){
     if(PROFILE&&PROFILE.mustChange){stopSync();showAuth('newpw');return}
     const wasLocked=$('#auth').classList.contains('on');hideAuth();
-    if(ROLE()==='contractor'){startRepBase();scheduleReminders()}else{startSync();startAct();startReq();startRepBase();startTeamWatch();startProg()}
+    if(ROLE()==='contractor'){startRepBase();scheduleReminders()}else{startSync();startAct();startReq();startRepBase();startTeamWatch();startProg();scheduleMorning()}
     if(!navDone){navDone=true;if(!(cur&&$('#vVilla').classList.contains('on')))nav(ROLE()==='contractor'?'rep':'home')}
     accountChecks();setTimeout(()=>{if(!$('#dlg').classList.contains('on'))showWhatsNew()},3500);if(wasLocked)toast(greet(),3500)}
   else{stopSync();showAuth(PROFILE&&PROFILE.disabled?'disabled':'pending')}}
@@ -664,8 +678,8 @@ function userMenu(){const bio=lsGet('snag5_bio')==='1';const lg=USER&&legacyMail
   <div class="row" style="flex-direction:column">${TEST&&isTeam()?'<button class="btn g" id="mCopy">📋 نسخ البيانات الفعلية إلى النسخة التجريبية</button>':''}${isAdmin()?`<button class="btn" id="mUsers">👥 إدارة المستخدمين${REQ?` (${REQ} بانتظار الإجراء)`:''}</button>`:''}
   ${lg?'<button class="btn g" id="mMail">✉️ إضافة البريد الإلكتروني</button>':''}
   <button class="btn g" id="mBio">${bio?'إلغاء الدخول بالبصمة':'تفعيل الدخول بالبصمة'}</button>
-  <button class="btn g" id="mDua">${lsGet('snag5_dua')==='0'?'تشغيل الأذكار':'إيقاف الأذكار'}</button><button class="btn g" id="mUpd">🔄 البحث عن تحديث</button><button class="btn g" id="mWn">📝 ما الجديد في هذا الإصدار</button><button class="btn g" id="mOut">تسجيل الخروج</button><button class="btn g" id="mX">إغلاق</button></div><p class="q" style="text-align:center;margin-top:10px">الإصدار ${BUILD}</p>`);
-  $('#mUpd').onclick=()=>{close();checkUpdate(true)};$('#mWn').onclick=()=>{close();showWhatsNew(true)};$('#mDua').onclick=()=>{lsSet('snag5_dua',lsGet('snag5_dua')==='0'?'1':'0');close();toast(lsGet('snag5_dua')==='0'?'تم إيقاف الأذكار.':'تم تشغيل الأذكار.');if(lsGet('snag5_dua')!=='0')showDua()};
+  <button class="btn g" id="mDua">${lsGet('snag5_dua')==='0'?'تشغيل الأذكار':'إيقاف الأذكار'}</button><button class="btn g" id="mTheme">${{auto:'🌗 المظهر: تلقائي حسب الجهاز',light:'☀️ المظهر: فاتح',dark:'🌙 المظهر: داكن'}[lsGet('snag5_theme')||'auto']}</button><button class="btn g" id="mUpd">🔄 البحث عن تحديث</button><button class="btn g" id="mWn">📝 ما الجديد في هذا الإصدار</button><button class="btn g" id="mOut">تسجيل الخروج</button><button class="btn g" id="mX">إغلاق</button></div><p class="q" style="text-align:center;margin-top:10px">الإصدار ${BUILD}</p>`);
+  $('#mUpd').onclick=()=>{close();checkUpdate(true)};$('#mTheme').onclick=()=>{const o=['auto','light','dark'],c=lsGet('snag5_theme')||'auto';lsSet('snag5_theme',o[(o.indexOf(c)+1)%3]);applyTheme();userMenu()};$('#mWn').onclick=()=>{close();showWhatsNew(true)};$('#mDua').onclick=()=>{lsSet('snag5_dua',lsGet('snag5_dua')==='0'?'1':'0');close();toast(lsGet('snag5_dua')==='0'?'تم إيقاف الأذكار.':'تم تشغيل الأذكار.');if(lsGet('snag5_dua')!=='0')showDua()};
   if(isAdmin())$('#mUsers').onclick=usersPanel;if($('#mMail'))$('#mMail').onclick=()=>emailPrompt();
   if(TEST&&isTeam())$('#mCopy').onclick=async()=>{close();busy('جارٍ نسخ البيانات الفعلية…');try{const s=await FS.collection('v').get();for(const d of s.docs)await FS.collection('t_v').doc(d.id).set(d.data());busy();toast(`تم نسخ بيانات ${s.docs.length} فيلا إلى النسخة التجريبية ✓ (لم تتأثر النسخة الأصلية)`,4500)}catch(e){busy();toast('تعذّر النسخ: '+(e.code||e.message),4000)}};
   $('#mBio').onclick=async()=>{if(bio){try{await BIO()&&BIO().deleteCredentials({server:BIO_SRV})}catch(e){}lsSet('snag5_bio',null);toast('تم إلغاء الدخول بالبصمة.');close()}
@@ -1163,7 +1177,7 @@ function nav(sec){
   else if(sec==='rep'){$('#vRep').classList.add('on');$('#ttl').textContent=contr?'تقرير الأعمال اليومي':'تقارير المقاولين';$('#sub').textContent=contr?coName(myCo()):'Dhahiat Sumou – Block 5';$('#back').style.display=contr?'none':'';
     if(!repPZ)drawRepPlan();renderRep();setTimeout(()=>repPZ&&repPZ.refit(),30)}
 }
-function renderHome(){$('#hHi').textContent=greet();if(ROOF&&Object.keys(PROG).length){$('#hProg').textContent=`الإنجاز ${r1(aggr().pct)}% — المخطط ${r1(planned())}%`}
+function renderHome(){$('#hHi').textContent=greet();renderDash();if(ROOF&&Object.keys(PROG).length){$('#hProg').textContent=`الإنجاز ${r1(aggr().pct)}% — المخطط ${r1(planned())}%`}
   const t=Object.values(REPS).filter(r=>r.date===todayS()&&r.status==='sent').length,n=Object.values(COS).filter(c=>c.active!==false).length;
   $('#hRep').textContent=n?`اليوم: أرسل ${t} من أصل ${n} مقاولين تقاريرهم`:'التقارير اليومية والأسبوعية'}
 $('#vHome').onclick=e=>{const b=e.target.closest('[data-sec]');if(!b)return;const s=b.dataset.sec;if(b.dataset.ph&&phase!==+b.dataset.ph){const pb=$(`#phase [data-p="${b.dataset.ph}"]`);if(pb)pb.click()}
@@ -1185,7 +1199,7 @@ function stopRep(){[unsubCo,unsubW,unsubRep,unsubToday].forEach(u=>u&&u());unsub
 function notify(title,body,extra){toast(body,6000);
   try{const L=LN();if(L&&notifReady){L.schedule({notifications:[{id:Math.floor(Math.random()*2e9),title,body,extra:extra||{},smallIcon:'ic_stat_notify'}]}).catch(()=>{});return}
     if(!NATIVE_APP&&'Notification' in window&&Notification.permission==='granted'&&document.hidden){const n=new Notification(title,{body,icon:'img/icon-192.png'});n.onclick=()=>{window.focus();if(extra&&extra.rep)openFromNotif(extra)}}}catch(e){}}
-function openFromNotif(x){nav('rep');if(x.rep==='week')weeklyPanel();else if(x.rep==='month')monthlyPanel()}
+function openFromNotif(x){if(x.rep==='sum'){morningSummary();return}if(x.rep==='late'){progLate=true;nav('prog');return}nav('rep');if(x.rep==='week')weeklyPanel();else if(x.rep==='month')monthlyPanel()}
 function startTeamWatch(){if(unsubToday||!FS||!isTeam())return;let first=true;const seen=new Set();
   unsubToday=repCol().where('date','==',todayS()).onSnapshot(s=>{const now=Date.now();
     s.docs.forEach(d=>{const r=d.data();if(r.status!=='sent')return;if(seen.has(d.id))return;seen.add(d.id);if(first)return;
@@ -1543,7 +1557,7 @@ const PCO={TAAJ:'شركة التاج المضيء للمقاولات',PCC:'شر�
 const coMark=k=>`img/coM_${k}.png`,coLogo=k=>`img/co_${k}.png`;
 const ROOFN={tile:'بلاط',gravel:'بحص'};
 const DEFW={s1:10,s2:10,s3:15,s4:20,s5:25,s6:20};
-let ROOF=null,PROG={},PCFG={w:{...DEFW},start:'2026-12-01',days:60,editors:[],base:''},progPZ=null,progBy='all',progCo='',progRoof='',progStg=-1,progFlag=false,progQ='',progSel=new Set(),progMulti=false,unsubProg=null,unsubPcfg=null,progMine='';
+let ROOF=null,PROG={},PCFG={w:{...DEFW},start:'2026-12-01',days:60,editors:[],base:'',dur:{}},progLate=false,progPZ=null,progBy='all',progCo='',progRoof='',progStg=-1,progFlag=false,progQ='',progSel=new Set(),progMulti=false,unsubProg=null,unsubPcfg=null,progMine='';
 async function loadRoof(){if(!ROOF){try{ROOF=await (await fetch('data/roof.json')).json()}catch(e){ROOF={}}}return ROOF}
 const pcol=()=>FS.collection(C('prog'));
 const r1=x=>Math.round(x*10)/10;
@@ -1555,10 +1569,16 @@ function vPct(c){let S=0,W=0;for(const s of PSTG){const w=+PCFG.w[s.k]||0;W+=w;S
 function vStage(c){for(let i=0;i<PSTG.length;i++)if(sPct(c,PSTG[i])<99.95)return i;return PSTG.length}
 function vFlag(c){if(!naOf(c).includes('remw')&&iVal(c,'remw')<100&&iVal(c,'foam')>0)return 'لم يُزَل العزل القديم رغم تنفيذ الرغوية';const i=vStage(c);if(i>=PSTG.length)return '';for(let j=i+1;j<PSTG.length;j++)if(sPct(c,PSTG[j])>0)return `لم تكتمل مرحلة «${PSTG[i].t}» رغم بدء مرحلة «${PSTG[j].t}»`;return ''}
 const stName=i=>i>=PSTG.length?'منتهي':PSTG[i].t;
+/* delay: each stage has a duration (days) set from the time schedule; the clock of a stage starts when the previous stage is completed */
+const durOn=()=>PSTG.some(s=>+(PCFG.dur||{})[s.k]>0);
+function vStart(c){const k=vStage(c);if(k>=PSTG.length)return '';if(k===0)return PCFG.start;const r=PROG[c]||{};let m='';
+  for(let i=0;i<k;i++)for(const it of (PSTG[i].g||PSTG[i].it))if(!naOf(c).includes(it)&&(r['d_'+it]||'')>m)m=r['d_'+it];return m||'2026-11-28'}
+function vLate(c){const k=vStage(c);if(k>=PSTG.length)return 0;const d=+(PCFG.dur||{})[PSTG[k].k]||0;if(!d)return 0;const st=vStart(c);if(!st)return 0;
+  const n=Math.floor((parseD(todayS())-parseD(st))/864e5);return n>d?n-d:0}
 function planned(d){const s=parseD(PCFG.start),x=parseD(d||todayS());const n=Math.floor((x-s)/864e5)+1;return Math.max(0,Math.min(100,n/PCFG.days*100))}
 function aggr(f){const cs=Object.keys(ROOF||{}).filter(c=>(!progMine||ROOF[c].co===progMine)&&(!f||f(c)));const n=cs.length;
-  const o={n,cs,pct:0,done:0,flags:0,cnt:Array(PSTG.length+1).fill(0),st:{},elec:0,mech:0};if(!n)return o;
-  for(const c of cs){o.pct+=vPct(c);const k=vStage(c);o.cnt[k]++;if(k>=PSTG.length)o.done++;if(vFlag(c))o.flags++;if(iVal(c,'elec')>=100)o.elec++;if(iVal(c,'mech')>=100)o.mech++}
+  const o={n,cs,pct:0,done:0,flags:0,late:0,cnt:Array(PSTG.length+1).fill(0),st:{},elec:0,mech:0};if(!n)return o;
+  for(const c of cs){o.pct+=vPct(c);const k=vStage(c);o.cnt[k]++;if(k>=PSTG.length)o.done++;if(vFlag(c))o.flags++;if(vLate(c))o.late++;if(iVal(c,'elec')>=100)o.elec++;if(iVal(c,'mech')>=100)o.mech++}
   o.pct/=n;PSTG.forEach(s=>o.st[s.k]=cs.reduce((a,c)=>a+sPct(c,s),0)/n);return o}
 /* each company's villas are shaded in its own logo colour: light = little progress, dark = finished */
 const GSC={TAAJ:['#eef1f5','#faf1d6','#f2dc9a','#e5c35f','#d4a72c','#b8860b','#93690a','#6b4c05'],PCC:['#eef1f5','#e3e9f5','#c3d0ea','#94aad6','#5f7fbd','#3557a0','#1a3b80','#022366'],'':['#eef1f5','#e0f2e9','#c4e8d3','#9fd8b5','#72c493','#43a970','#23874f','#14532d']};
@@ -1568,7 +1588,7 @@ const pctInk=p=>p>=67?'#ffffff':'#1f2937';
 const segCol=(sp,co)=>{const g=GSC[co]||GSC[''];return sp>=99.95?g[7]:sp>0?g[4]:'#ffffff'};
 const PIPE=['#cbd5e1','#94a3b8','#7c8ba1','#64748b','#475569','#334155','#1e293b'];
 const canProg=()=>isTeam()&&(isAdmin()||!!(USER&&PCFG.editors.includes(USER.uid)));
-const progVis=c=>!!ROOF[c]&&(!progMine||ROOF[c].co===progMine)&&(!progCo||ROOF[c].co===progCo)&&(!progRoof||ROOF[c].roof===progRoof)&&(progStg<0||vStage(c)===progStg)&&(!progFlag||!!vFlag(c))&&(!progQ||villaNo(c).startsWith(progQ));
+const progVis=c=>!!ROOF[c]&&(!progMine||ROOF[c].co===progMine)&&(!progCo||ROOF[c].co===progCo)&&(!progRoof||ROOF[c].roof===progRoof)&&(progStg<0||vStage(c)===progStg)&&(!progFlag||!!vFlag(c))&&(!progLate||vLate(c)>0)&&(!progQ||villaNo(c).startsWith(progQ));
 const valOf=c=>progBy==='all'?vPct(c):sPct(c,PSTG[+progBy]);
 function myPco(){const c=COS[myCo()];return (c&&c.pco)||''}
 async function startProg(){if(unsubProg||!FS)return;await loadRoof();
@@ -1576,9 +1596,9 @@ async function startProg(){if(unsubProg||!FS)return;await loadRoof();
   try{const s=await FS.collection(C('pcfg')).doc('main').get();if(s.exists)setPcfg(s.data())}catch(e){}
   let q=pcol();if(progMine)q=q.where('co','==',progMine);
   let first=true;
-  unsubProg=q.onSnapshot(s=>{PROG={};s.docs.forEach(d=>PROG[d.id]=d.data());if(first){first=false;maybeSeed()}if(SECTION==='prog')renderProg();if(SECTION==='home')renderHome()},e=>{if(SECTION==='prog')toast('تعذّر تحميل الموقف التنفيذي: '+(e.code||''),3500)});
+  unsubProg=q.onSnapshot(s=>{PROG={};s.docs.forEach(d=>PROG[d.id]=d.data());if(first){first=false;maybeSeed();lateAlert()}if(SECTION==='prog')renderProg();if(SECTION==='home')renderHome()},e=>{if(SECTION==='prog')toast('تعذّر تحميل الموقف التنفيذي: '+(e.code||''),3500)});
   unsubPcfg=FS.collection(C('pcfg')).doc('main').onSnapshot(s=>{if(s.exists)setPcfg(s.data());if(SECTION==='prog')renderProg()},()=>{})}
-function setPcfg(x){const w={...DEFW};if(x.w)for(const s of PSTG)if(x.w[s.k]!=null)w[s.k]=+x.w[s.k];PCFG={w,start:x.start||PCFG.start,days:+x.days||PCFG.days,editors:Array.isArray(x.editors)?x.editors:[],base:x.base||''}}
+function setPcfg(x){const w={...DEFW};if(x.w)for(const s of PSTG)if(x.w[s.k]!=null)w[s.k]=+x.w[s.k];PCFG={w,start:x.start||PCFG.start,days:+x.days||PCFG.days,editors:Array.isArray(x.editors)?x.editors:[],base:x.base||'',dur:x.dur||{}}}
 function stopProg(){[unsubProg,unsubPcfg].forEach(u=>u&&u());unsubProg=unsubPcfg=null;PROG={};progMine=''}
 const BASE_D='2026-11-28',BASE_V='2026-11-28b';
 async function maybeSeed(){if(!canProg()||PCFG.base===BASE_V)return;try{await seedBase(false)}catch(e){}}
@@ -1612,14 +1632,14 @@ function drawProgPlan(){const svg=$('#progSvg');
   setTimeout(()=>progPZ.fit([Math.min(...xs),Math.min(...ys),Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys)]),20)}
 $('#vProg').addEventListener('click',e=>{const b=e.target.closest('[data-pz]');if(!b||!progPZ)return;if(b.dataset.pz==='fit')progPZ.refit();else progPZ.zoom(b.dataset.pz==='in'?1/1.5:1.5)});
 function colorProg(){if(!ROOF)return;document.querySelectorAll('#pvillas .pv').forEach(g=>{const c=g.dataset.code,pg=g.querySelector('polygon');const has=!!ROOF[c]&&(!progMine||ROOF[c].co===progMine);
-  const vis=has&&progVis(c),sel=progSel.has(c),p=has?valOf(c):0,k=has?vStage(c):0,fl=has&&!!vFlag(c);
+  const vis=has&&progVis(c),sel=progSel.has(c),p=has?valOf(c):0,k=has?vStage(c):0,fl=has&&(!!vFlag(c)||vLate(c)>0),fc=has&&vFlag(c)?'#dc2626':'#f97316';
   const co=has?ROOF[c].co:'';pg.setAttribute('fill',vis?pctColor(p,co):'#f5f6f8');pg.setAttribute('stroke',sel?'#a91a2c':'#ffffff');pg.setAttribute('stroke-width',sel?'2':'0.8');
-  const ink=vis?pctInk(p):'#c5cbd3';g.querySelector('.vn').setAttribute('fill',ink);g.querySelector('.vf').style.display=vis&&fl?'':'none';
+  const ink=vis?pctInk(p):'#c5cbd3';g.querySelector('.vn').setAttribute('fill',ink);const vf=g.querySelector('.vf');vf.style.display=vis&&fl?'':'none';vf.setAttribute('fill',fc);
   const det=g.querySelector('.det');det.style.visibility=vis?'':'hidden';if(!vis)return;
   g.querySelector('.dn').setAttribute('fill',ink);const ds=g.querySelector('.ds');ds.setAttribute('fill',ink);ds.textContent=k>=PSTG.length?'منتهي':PSTG[k].sh;
   const dp=g.querySelector('.dp');dp.setAttribute('fill',ink);dp.textContent=Math.round(vPct(c))+'%';
   g.querySelectorAll('.sg').forEach((r,i)=>{const sp=sPct(c,PSTG[i]);r.setAttribute('fill',segCol(sp,co));r.setAttribute('stroke',p>=67?'#e5e7eb':'#64748b')});
-  g.querySelector('.dl').setAttribute('href',coMark(ROOF[c].co));g.querySelector('.df').style.display=fl?'':'none'})}
+  g.querySelector('.dl').setAttribute('href',coMark(ROOF[c].co));const df=g.querySelector('.df');df.style.display=fl?'':'none';df.querySelector('circle').setAttribute('fill',fc);df.querySelector('text').textContent=vFlag(c)?'!':'⏱'})}
 function renderProg(){if(!$('#vProg').classList.contains('on')||!ROOF)return;
   const contr=!isTeam();
   if(contr&&!progMine){$('#progTools').innerHTML='';$('#progFoot').innerHTML='<div class="empty">لم تُربط شركتكم بفللها في الموقف التنفيذي بعد. يُرجى التواصل مع إدارة المشروع.</div>';colorProg();return}
@@ -1627,7 +1647,7 @@ function renderProg(){if(!$('#vProg').classList.contains('on')||!ROOF)return;
   const chip=(on,attr,lab)=>`<button class="pchip ${on?'on':''}" ${attr}>${lab}</button>`;
   $('#progTools').innerHTML=(contr?`<div class="pcoh" style="border-inline-start:5px solid ${GSC[progMine][6]}"><img src="${coLogo(progMine)}" alt=""><div><b>${esc(PCO[progMine])}</b><small>الموقف التنفيذي لأعمال الأسطح · اطّلاع</small></div></div>`:'')+
     `<div class="pchips">${contr?'':chip(!progCo,'data-pc=""','الكل')+Object.keys(PCO).map(k=>chip(progCo===k,`data-pc="${k}"`,`<img src="${coMark(k)}" alt="">${PCOS[k]}`)).join('')}
-    ${chip(progRoof==='tile','data-pr="tile"','بلاط')}${chip(progRoof==='gravel','data-pr="gravel"','بحص')}${chip(progFlag,'data-pf','<i class="rdot"></i>تحتاج متابعة')}</div>
+    ${chip(progRoof==='tile','data-pr="tile"','بلاط')}${chip(progRoof==='gravel','data-pr="gravel"','بحص')}${chip(progFlag,'data-pf','<i class="rdot"></i>تحتاج متابعة')}${durOn()?chip(progLate,'data-pl','<i class="rdot" style="background:#f97316"></i>متأخرة'):''}</div>
     <div class="pchips"><input class="pq2" id="pQ" inputmode="numeric" placeholder="🔍 رقم الفيلا" value="${esc(progQ)}">
     <select class="sel" id="pBy"><option value="all">تلوين: الإنجاز الكلي</option>${PSTG.map((s,i)=>`<option value="${i}" ${progBy===String(i)?'selected':''}>تلوين: ${s.t}</option>`).join('')}</select>
     <span class="sp"></span>${canProg()?`<button class="btn g sm ${progMulti?'on':''}" id="pMul">${progMulti?'✓ تحديد متعدد':'☐ تحديد متعدد'}</button>`:''}
@@ -1635,18 +1655,18 @@ function renderProg(){if(!$('#vProg').classList.contains('on')||!ROOF)return;
   if(progBy==='all')$('#pBy').value='all';
   const T=$('#progTools');T.querySelectorAll('[data-pc]').forEach(b=>b.onclick=()=>{progCo=b.dataset.pc;renderProg()});
   T.querySelectorAll('[data-pr]').forEach(b=>b.onclick=()=>{progRoof=progRoof===b.dataset.pr?'':b.dataset.pr;renderProg()});
-  T.querySelector('[data-pf]').onclick=()=>{progFlag=!progFlag;renderProg()};
+  T.querySelector('[data-pf]').onclick=()=>{progFlag=!progFlag;renderProg()};if(T.querySelector('[data-pl]'))T.querySelector('[data-pl]').onclick=()=>{progLate=!progLate;renderProg()};
   $('#pQ').oninput=e=>{progQ=e.target.value.replace(/\D/g,'');colorProg();const hit=Object.keys(ROOF).filter(progVis);if(progQ&&hit.length===1)progFocus(hit[0])};
   $('#pBy').onchange=e=>{progBy=e.target.value;colorProg()};
   if($('#pMul'))$('#pMul').onclick=()=>{progMulti=!progMulti;progSel.clear();renderProg()};$('#pTab').onclick=progTable;$('#pMore').onclick=progMore;
   const pipe=A.cnt.map((n,i)=>`<button class="pp ${progStg===i?'on':''}" data-ps="${i}"><b style="background:${PIPE[i]}">${n}</b><small>${stName(i)}</small></button>`).join('');
   $('#progFoot').innerHTML=`<div class="pkp"><div><small>${contr?'إنجاز فللكم':'إنجاز الأسطح'}</small><b>${r1(A.pct)}%</b></div><div><small>المخطط حتى اليوم</small><b>${r1(pl)}%</b></div>
       <div class="${dv>=0?'ok':'bad'}"><small>${dv>=0?'متقدم بـ':'متأخر بـ'}</small><b>${r1(Math.abs(dv))}%</b></div><div><small>أسطح منتهية</small><b>${A.done}<em>/${A.n}</em></b></div>
-      <div class="${A.flags?'bad':''}"><small>تحتاج متابعة</small><b>${A.flags}</b></div></div>
+      <div class="${A.flags?'bad':''}"><small>تحتاج متابعة</small><b>${A.flags}</b></div>${durOn()?`<div class="${A.late?'bad':''}"><small>متأخرة</small><b style="${A.late?'color:#ea580c':''}">${A.late}</b></div>`:''}</div>
     <div class="pbox"><div class="pbh"><b>أين تقف الفلل الآن</b><small>اضغط على المرحلة لعرض فللها</small></div><div class="pipe">${pipe}</div></div>
     <div class="pmeta"><span>⚡ الكهرباء: <b>${A.elec}</b> / ${A.n}</span><span>🔧 الميكانيكا: <b>${A.mech}</b> / ${A.n}</span></div>
     ${(contr?[progMine]:Object.keys(PCO).filter(k=>!progCo||k===progCo)).map(k=>`<div class="pscale"><img src="${coMark(k)}" alt=""><span>0%</span><i style="background:linear-gradient(to left,${GSC[k].slice(1).join(',')})"></i><span>100%</span></div>`).join('')}
-    <div class="rsum">كل فيلا بلون شركتها، وكلما زاد الإنجاز غمق اللون · <i class="rdot"></i> تحتاج متابعة · قرّب على المخطط لعرض تفاصيل كل فيلا${A.n!==Aall.n?` · المعروض ${A.n} من ${Aall.n} فيلا`:''}${progMulti?` · <b>${progSel.size}</b> فيلا محددة`:''}</div>`;
+    <div class="rsum">كل فيلا بلون شركتها، وكلما زاد الإنجاز غمق اللون · <i class="rdot"></i> تحتاج متابعة ·${durOn()?' <i class="rdot" style="background:#f97316"></i> متأخرة ·':''} قرّب على المخطط لعرض تفاصيل كل فيلا${A.n!==Aall.n?` · المعروض ${A.n} من ${Aall.n} فيلا`:''}${progMulti?` · <b>${progSel.size}</b> فيلا محددة`:''}</div>`;
   $('#progFoot').querySelectorAll('[data-ps]').forEach(b=>b.onclick=()=>{const i=+b.dataset.ps;progStg=progStg===i?-1:i;renderProg()});
   const nx=$('#progNext');nx.style.display=progMulti&&progSel.size?'':'none';nx.textContent=`تحديث ${progSel.size} فيلا ←`;
   colorProg()}
@@ -1654,11 +1674,11 @@ function progFocus(c){const v=Object.values(P.villas).find(v=>v.code===c);if(!v|
   const w=Math.max(...xs)-Math.min(...xs),h=Math.max(...ys)-Math.min(...ys);const box=progPZ.st.box;progPZ.fit([Math.min(...xs)-w*2.5,Math.min(...ys)-h*1.5,w*6,h*4]);progPZ.st.box=box;$('#progSvg').dispatchEvent(new Event('vb'))}
 function progMore(){const isT=isTeam();
   dlg(`<h3>الموقف التنفيذي</h3><div class="row" style="flex-direction:column">
-    ${isT?'<button class="btn g" id="pCur">📈 منحنى التقدّم (المخطط مقابل الفعلي)</button>':''}
+    ${isT?'<button class="btn g" id="pCmp">⚖️ مقارنة المقاولين</button><button class="btn g" id="pSum">☀️ ملخص الأمس</button><button class="btn g" id="pCur">📈 منحنى التقدّم (المخطط مقابل الفعلي)</button>':''}
     <button class="btn" id="pPdf">⬇ تقرير PDF</button><button class="btn g" id="pXl">⬇ تقرير Excel</button>
-    ${canProg()?'<button class="btn g" id="pCfg">⚙ أوزان المراحل والبرنامج الزمني</button>':''}${isAdmin()?'<button class="btn g" id="pPerm">👥 تحديد المسؤولين عن التحديث</button><button class="btn g" id="pSeed">↺ إعادة إدخال موقف 28/11/2026</button>':''}
+    ${canProg()?'<button class="btn g" id="pCfg">⚙ أوزان المراحل ومددها والبرنامج الزمني</button>':''}${isAdmin()?'<button class="btn g" id="pPerm">👥 تحديد المسؤولين عن التحديث</button><button class="btn g" id="pSeed">↺ إعادة إدخال موقف 28/11/2026</button>':''}
     <button class="btn g" id="pmX">إغلاق</button></div>`);
-  if($('#pCur'))$('#pCur').onclick=progCurve;$('#pXl').onclick=()=>progExportAsk('xlsx');$('#pPdf').onclick=()=>progExportAsk('pdf');
+  if($('#pCur'))$('#pCur').onclick=progCurve;if($('#pCmp'))$('#pCmp').onclick=progCompare;if($('#pSum'))$('#pSum').onclick=()=>morningSummary();$('#pXl').onclick=()=>progExportAsk('xlsx');$('#pPdf').onclick=()=>progExportAsk('pdf');
   if($('#pCfg'))$('#pCfg').onclick=progCfg;if($('#pPerm'))$('#pPerm').onclick=progPerms;if($('#pSeed'))$('#pSeed').onclick=async()=>{close();try{await seedBase(true)}catch(e){toast('تعذّر: '+(e.code||e.message),4000)}};$('#pmX').onclick=close}
 function progExportAsk(kind){if(!isTeam()){close();progExport(kind,progMine);return}
   dlg(`<h3>${kind==='pdf'?'تقرير PDF':'تقرير Excel'}</h3><p class="q">اختر نطاق التقرير.</p><div class="row" style="flex-direction:column">
@@ -1669,7 +1689,7 @@ $('#progNext').onclick=()=>{if(progSel.size)progEdit([...progSel])};
 function progTap(code){if(!ROOF[code]||(progMine&&ROOF[code].co!==progMine))return;if(progMulti&&canProg()){progSel.has(code)?progSel.delete(code):progSel.add(code);colorProg();renderProg();return}progVilla(code)}
 
 /* ---------- villa page ---------- */
-function ringSvg(p,col){const r=30,C=2*Math.PI*r;return `<svg width="84" height="84" viewBox="0 0 80 80"><circle cx="40" cy="40" r="${r}" fill="none" stroke="#eef1f5" stroke-width="9"/><circle cx="40" cy="40" r="${r}" fill="none" stroke="${col}" stroke-width="9" stroke-dasharray="${C*p/100} ${C}" transform="rotate(-90 40 40)" stroke-linecap="round"/><text x="40" y="46" text-anchor="middle" font-size="18" font-weight="700" font-family="Cairo,Arial" fill="#1f2937" direction="ltr">${Math.round(p)}%</text></svg>`}
+function ringSvg(p,col){const r=30,C=2*Math.PI*r;return `<svg width="84" height="84" viewBox="0 0 80 80"><circle cx="40" cy="40" r="${r}" fill="none" stroke="var(--line)" stroke-width="9"/><circle cx="40" cy="40" r="${r}" fill="none" stroke="${col}" stroke-width="9" stroke-dasharray="${C*p/100} ${C}" transform="rotate(-90 40 40)" stroke-linecap="round"/><text x="40" y="46" text-anchor="middle" font-size="18" font-weight="700" font-family="Cairo,Arial" fill="currentColor" direction="ltr">${Math.round(p)}%</text></svg>`}
 const fmtD=s=>s?shortD(s):'';
 function progVilla(c){const r=PROG[c]||{},inf=ROOF[c]||{},k=vStage(c),p=vPct(c),fl=vFlag(c),na=naOf(c);
   const steps=PSTG.map((s,i)=>{const sp=sPct(c,s),st=sp>=99.95?'d':(i===k?'c':(sp>0?'p':'n'));
@@ -1680,6 +1700,8 @@ function progVilla(c){const r=PROG[c]||{},inf=ROOF[c]||{},k=vStage(c),p=vPct(c),
   dlg(`<div class="pvh"><img src="${coMark(inf.co)}" alt=""><div><h3>فيلا ${esc(villaNo(c))} — ${esc((D.villas[c]||{}).model||'')}</h3><p class="q">${esc(PCO[inf.co]||'')} · سطح ${ROOFN[inf.roof]||''}</p></div></div>
     <div class="pring" style="--cc:${GSC[inf.co||''][7]};--cm:${GSC[inf.co||''][4]}">${ringSvg(p,GSC[inf.co||''][k>=PSTG.length?7:5])}<div><small>${k>=PSTG.length?'الحالة':'المرحلة الحالية'}</small><b>${k>=PSTG.length?'أعمال السطح منتهية ✓':PSTG[k].t}</b><small>${k<PSTG.length-1?'التالي: '+PSTG[k+1].t:''}</small></div></div>
     ${fl?`<div class="pwarn">⚠ ${esc(fl)}</div>`:''}
+    ${k<PSTG.length&&+(PCFG.dur||{})[PSTG[k].k]>0?(()=>{const d=+PCFG.dur[PSTG[k].k],st=vStart(c),n=Math.max(0,Math.floor((parseD(todayS())-parseD(st))/864e5)),lt=vLate(c);
+      return `<div class="${lt?'pwarn':'pinfo'}">⏱ ${lt?`متأخرة ${lt} يوم عن مدة مرحلة «${PSTG[k].t}»`:`مرحلة «${PSTG[k].t}»: اليوم ${n} من ${d} أيام`} · بدأت ${fmtD(st)}</div>`})():''}
     <div class="ptl" style="--cc:${GSC[inf.co||''][7]};--cm:${GSC[inf.co||''][4]}">${steps}</div>
     <div class="pph" id="pphW"><div class="pth"><b>📷 صور الموقف</b><span id="pphN"></span></div><div class="pphs" id="pphS"><small class="q">جارٍ التحميل…</small></div></div>
     ${hist?`<div class="pph"><div class="pth"><b>🕓 سجل التحديثات</b></div>${hist}</div>`:''}
@@ -1687,7 +1709,7 @@ function progVilla(c){const r=PROG[c]||{},inf=ROOF[c]||{},k=vStage(c),p=vPct(c),
     <div class="row">${canProg()?'<button class="btn" id="pvE">✏️ تحديث الموقف</button><label class="btn g">📷 إضافة صورة<input type="file" accept="image/*" id="pvP" hidden></label>':''}<span class="sp"></span><button class="btn g" id="pvX">إغلاق</button></div>`);
   $('#pvX').onclick=close;if($('#pvE'))$('#pvE').onclick=()=>progEdit([c]);
   if($('#pvP'))$('#pvP').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{busy('جارٍ رفع الصورة…');const img=await shrinkR(f,1280,0.7);
-    await FS.collection(C('pph')).add({c,co:inf.co,t:Date.now(),by:ME,img});busy();toast('تمت إضافة الصورة ✓');loadPph(c)}catch(er){busy();toast('تعذّر رفع الصورة: '+(er.code||er.message||''),4000)}};
+    await fsCommit(FS.collection(C('pph')).doc().set({c,co:inf.co,t:Date.now(),by:ME,img}));busy();toast('تمت إضافة الصورة ✓');loadPph(c)}catch(er){busy();toast('تعذّر رفع الصورة: '+(er.code||er.message||''),4000)}};
   loadPph(c)}
 async function loadPph(c){const S=$('#pphS');if(!S)return;let docs=[];
   try{let q=FS.collection(C('pph')).where('c','==',c);if(progMine)q=q.where('co','==',progMine);docs=(await q.get()).docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.t-a.t)}catch(e){}
@@ -1719,7 +1741,7 @@ function progEdit(codes){if(!canProg()){progVilla(codes[0]);return}const one=cod
         for(const [k,v] of Object.entries(upd)){if(onA.includes(k))continue;const o=+old[k]||0;if(o===v)continue;d[k]=v;ch.push(`${PIT[k]} ${o}% ← ${v}%`);if(v>=100&&o<100)d['d_'+k]=t}
         if(nna&&JSON.stringify([...nna].sort())!==JSON.stringify([...naOf(c)].sort())){d.na=nna;ch.push(nna.length?'لا ينطبق: '+nna.map(k=>PIT[k]).join('، '):'إلغاء «لا ينطبق»')}
         if(!ch.length)continue;d.h=[...(old.h||[]),{t:now,by:ME,x:ch.join(' · ')}].slice(-40);b.set(pcol().doc(c),d,{merge:true});PROG[c]={...old,...d}}
-      await b.commit();progSel.clear();writeSnap();toast(`تم تحديث ${codes.length===1?'الفيلا':codes.length+' فيلا'} ✓`);if(one)progVilla(c0);else{close();renderProg()}}
+      await fsCommit(b.commit());progSel.clear();writeSnap();toast(`تم تحديث ${codes.length===1?'الفيلا':codes.length+' فيلا'} ✓`);if(one)progVilla(c0);else{close();renderProg()}}
     catch(e){$('#pgOk').disabled=false;toast('تعذّر الحفظ: '+(e.code||e.message),4000)}}}
 function progTable(){const cs=Object.keys(ROOF).filter(progVis).sort((a,b)=>+villaNo(a)-+villaNo(b));
   const cell=(c,k)=>{if(naOf(c).includes(k))return '<td class="na">—</td>';const v=iVal(c,k);return `<td style="background:${pctColor(v,ROOF[c].co)};color:${pctInk(v)}">${v>=100?'✓':v||'·'}</td>`};
@@ -1728,15 +1750,17 @@ function progTable(){const cs=Object.keys(ROOF).filter(progVis).sort((a,b)=>+vil
     ${cs.map(c=>`<tr data-c="${esc(c)}"><td><b>${esc(villaNo(c))}</b>${vFlag(c)?' <i class="rdot"></i>':''}</td>${isTeam()?`<td><img src="${coMark(ROOF[c].co)}" style="height:16px"></td>`:''}${PKEYS.map(k=>cell(c,k)).join('')}<td>${stName(vStage(c))}</td><td style="background:${pctColor(vPct(c),ROOF[c].co)};color:${pctInk(vPct(c))}"><b>${Math.round(vPct(c))}%</b></td></tr>`).join('')}</table></div>
     <div class="row"><span class="sp"></span><button class="btn g" id="ptX">إغلاق</button></div>`);
   $('#ptX').onclick=close;$('#box').querySelectorAll('tr[data-c]').forEach(tr=>tr.onclick=()=>progVilla(tr.dataset.c))}
-async function progCfg(){const w=PCFG.w;dlg(`<h3>⚙ أوزان المراحل والبرنامج الزمني</h3><p class="q">وزن كل مرحلة في نسبة إنجاز الفيلا (يجب أن يكون المجموع 100%).</p>
+async function progCfg(){const w=PCFG.w;dlg(`<h3>⚙ أوزان المراحل ومددها والبرنامج الزمني</h3><p class="q">وزن كل مرحلة في نسبة إنجاز الفيلا (يجب أن يكون المجموع 100%).</p>
   ${PSTG.map(s=>`<label class="fl">${s.t}<input type="number" min="0" max="100" data-w="${s.k}" value="${w[s.k]}"></label>`).join('')}
   <div class="aerr" id="cfE"></div>
+  <p class="q" style="margin-top:12px"><b>مدة كل مرحلة (يوم)</b> — تُحسب الفيلا متأخرة إذا بقيت في المرحلة أكثر من مدتها، اتركها صفراً لإيقاف التنبيه.</p>
+  ${PSTG.map(s=>`<label class="fl">${s.t}<input type="number" min="0" data-d="${s.k}" value="${+(PCFG.dur||{})[s.k]||0}"></label>`).join('')}
   <label class="fl">تاريخ بداية البرنامج<input type="date" id="cfS" value="${PCFG.start}"></label><label class="fl">مدة البرنامج (يوم)<input type="number" id="cfD" min="1" value="${PCFG.days}"></label>
   <div class="row"><button class="btn" id="cfOk">حفظ</button><span class="sp"></span><button class="btn g" id="cfX">إلغاء</button></div>`);
   $('#cfX').onclick=close;$('#cfOk').onclick=async()=>{const nw={};$('#box').querySelectorAll('[data-w]').forEach(i=>nw[i.dataset.w]=+i.value||0);const sum=Object.values(nw).reduce((a,b)=>a+b,0);
     if(Math.abs(sum-100)>0.01){$('#cfE').textContent=`مجموع الأوزان ${sum}%، ويجب أن يساوي 100%.`;return}
-    const st=$('#cfS').value||PCFG.start,dy=Math.max(1,+$('#cfD').value||60);
-    try{await FS.collection(C('pcfg')).doc('main').set({w:nw,start:st,days:dy,by:ME,t:Date.now()},{merge:true});PCFG={...PCFG,w:nw,start:st,days:dy};close();renderProg();writeSnap();toast('تم حفظ الإعدادات ✓')}catch(e){toast('تعذّر الحفظ: '+(e.code||''))}}}
+    const st=$('#cfS').value||PCFG.start,dy=Math.max(1,+$('#cfD').value||60);const du={};$('#box').querySelectorAll('[data-d]').forEach(i=>du[i.dataset.d]=Math.max(0,+i.value||0));
+    try{await FS.collection(C('pcfg')).doc('main').set({w:nw,start:st,days:dy,dur:du,by:ME,t:Date.now()},{merge:true});PCFG={...PCFG,w:nw,start:st,days:dy,dur:du};close();renderProg();writeSnap();toast('تم حفظ الإعدادات ✓')}catch(e){toast('تعذّر الحفظ: '+(e.code||''))}}}
 async function progCurve(){dlg('<h3>📈 منحنى التقدّم (المخطط مقابل الفعلي)</h3><p class="q">جارٍ التحميل…</p>');let snaps=[];
   try{snaps=(await FS.collection(C('psnap')).get()).docs.map(d=>({d:d.id,...d.data()})).sort((a,b)=>a.d<b.d?-1:1)}catch(e){}
   const today={d:todayS(),pct:aggr().pct};if(!snaps.length||snaps[snaps.length-1].d!==today.d)snaps.push(today);
@@ -1845,7 +1869,86 @@ async function progPdf(co){const F=c=>!co||ROOF[c].co===co;const A=aggr(F),pl=pl
         {fs:[null,null,null,...(co?[]:[null]),null,...ss.map(v=>pctColor(v,ROOF[cd].co)),vFlag(cd)?'#fbe3e6':null,pctColor(p,ROOF[cd].co)],cs:[null,null,null,...(co?[]:[null]),null,...ss.map(pctInk),null,pctInk(p)]})});
     push(c)}
   return pdf.output('blob')}
-window.__progX={progXlsx,progPdf,seedBase,get PROG(){return PROG},aggr};
+/* ---------- offline-aware writes ---------- */
+async function fsCommit(p){if(navigator.onLine){await p;return}offlineQueued();p.catch(()=>{})}
+function offlineQueued(){setWarn('📴 لا يوجد اتصال بالإنترنت — حُفظ التحديث على الجهاز، وسيُرفع تلقائياً عند عودة الاتصال.');
+  if(offlineQueued.w||!FS||!FS.waitForPendingWrites)return;offlineQueued.w=1;
+  FS.waitForPendingWrites().then(()=>{offlineQueued.w=0;setWarn('');toast('تم رفع التحديثات المحفوظة ✓',3000)}).catch(()=>{offlineQueued.w=0})}
+
+/* ---------- delay alert (once a day, to the admin and the progress editors) ---------- */
+function lateAlert(){if(!canProg()||!durOn()||lsGet('snag5_late')===todayS())return;const a=aggr();if(!a.late)return;lsSet('snag5_late',todayS());
+  notify('تنبيه التأخير — الموقف التنفيذي',`${a.late} فيلا تجاوزت المدة المحددة لمرحلتها الحالية. اضغط للعرض.`,{rep:'late'})}
+
+/* ---------- contractor comparison ---------- */
+async function progCompare(){dlg('<h3>⚖️ مقارنة المقاولين</h3><p class="q">جارٍ التجهيز…</p>');const t=todayS(),wk=addD(t,-7);
+  let snaps=[],reps=[];try{snaps=(await FS.collection(C('psnap')).get()).docs.map(d=>({d:d.id,...d.data()})).sort((a,b)=>a.d<b.d?-1:1)}catch(e){}
+  try{reps=(await repCol().where('date','>=',wk).get()).docs.map(d=>d.data())}catch(e){}
+  const old=[...snaps].reverse().find(s=>s.d<=wk)||snaps[0];const pcoOf=cid=>(COS[cid]||{}).pco||'';
+  const K=Object.keys(PCO);const D2=K.map(k=>{const a=aggr(c=>ROOF[c].co===k);const prev=old&&old.co&&old.co[k]!=null?old.co[k]:null;
+    const rs=reps.filter(r=>pcoOf(r.cid)===k&&r.status==='sent');const days=new Set(rs.map(r=>r.date)).size;
+    return {k,a,speed:prev==null?null:a.pct-prev,late:rs.filter(r=>r.late).length,sent:rs.length,days}});
+  const best=(f,hi=true)=>{const v=D2.map(f).filter(x=>x!=null);if(v.length<2)return null;return hi?Math.max(...v):Math.min(...v)};
+  const row=(lab,f,fmt,hi=true)=>{const b=best(f,hi);return `<tr><td>${lab}</td>${D2.map(d=>{const v=f(d);return `<td class="${v!=null&&v===b?'win':''}">${v==null?'—':fmt(v)}</td>`}).join('')}</tr>`};
+  $('#box').innerHTML=`<h3>⚖️ مقارنة المقاولين</h3><p class="q">حتى ${dayLabel(t)} · الأفضل في كل بند مميَّز باللون الأخضر.</p>
+    <div class="ptwrap"><table class="wtab pcmp"><tr><th></th>${D2.map(d=>`<th><img src="${coMark(d.k)}" alt=""><br>${PCOS[d.k]}</th>`).join('')}</tr>
+    ${row('عدد الفلل',d=>d.a.n,v=>v,true).replace('class="win"','')}
+    ${row('نسبة الإنجاز',d=>r1(d.a.pct),v=>v+'%')}
+    ${row('التقدّم خلال آخر 7 أيام',d=>d.speed==null?null:r1(d.speed),v=>(v>=0?'+':'')+v+'%')}
+    ${row('أسطح منتهية',d=>d.a.done,v=>`${v}`)}
+    ${row('نسبة الأسطح المنتهية',d=>r1(d.a.done/Math.max(1,d.a.n)*100),v=>v+'%')}
+    ${row('تحتاج متابعة',d=>d.a.flags,v=>v,false)}
+    ${durOn()?row('فلل متأخرة',d=>d.a.late,v=>v,false):''}
+    ${row('تقارير يومية مرسلة (7 أيام)',d=>d.sent,v=>v)}
+    ${row('تقارير متأخرة (7 أيام)',d=>d.late,v=>v,false)}
+    ${PSTG.map((s,i)=>`<tr class="sub"><td>في مرحلة: ${s.t}</td>${D2.map(d=>`<td>${d.a.cnt[i]}</td>`).join('')}</tr>`).join('')}
+    </table></div>${D2.some(d=>d.speed==null)?'<p class="q">يظهر «التقدّم خلال آخر 7 أيام» بعد مرور أسبوع على تسجيل الموقف اليومي.</p>':''}
+    <div class="row"><span class="sp"></span><button class="btn g" id="cmX">إغلاق</button></div>`;$('#cmX').onclick=close}
+
+/* ---------- morning summary (yesterday) ---------- */
+async function morningSummary(day){day=day||addD(todayS(),-1);dlg(`<h3>☀️ ملخص ${dayLabel(day)}</h3><p class="q">جارٍ التجهيز…</p>`);
+  await loadRoof();const s0=parseD(day).getTime(),s1=s0+864e5;const upd=[],stg=[],fin=[];
+  for(const c of Object.keys(ROOF)){const r=PROG[c]||{};if(!r)continue;const hs=(r.h||[]).filter(h=>h.t>=s0&&h.t<s1&&!/^إدخال الموقف/.test(h.x));if(hs.length)upd.push(c);
+    if(hs.length)PSTG.forEach(s=>{const g=(s.g||s.it).filter(k=>!naOf(c).includes(k));if(g.length&&g.every(k=>iVal(c,k)>=100)&&g.some(k=>r['d_'+k]===day)&&g.every(k=>(r['d_'+k]||'')<=day))stg.push([c,s.t])});
+    if(hs.length&&vStage(c)>=PSTG.length&&Object.keys(r).some(k=>k.startsWith('d_')&&r[k]===day))fin.push(c)}
+  let reps=[],acts=0;try{reps=(await repCol().where('date','==',day).get()).docs.map(d=>d.data())}catch(e){}
+  try{acts=(await FS.collection(C('act')).where('t','>=',s0).get()).docs.filter(d=>d.data().t<s1).length}catch(e){}
+  const act=Object.values(COS).filter(c=>c.active!==false),sent=reps.filter(r=>r.status==='sent');const miss=act.filter(c=>!sent.some(r=>r.cid===c.id));
+  const A=aggr(),list=a=>a.slice(0,30).map(c=>`<span class="vchip">${esc(villaNo(c))}</span>`).join('')+(a.length>30?` <small>و${a.length-30} أخرى</small>`:'');
+  const fr=parseD(day).getDay()===5;
+  $('#box').innerHTML=`<h3>☀️ ملخص ${dayLabel(day)}</h3>
+    <div class="pkp" style="margin:8px 0"><div><small>فلل حُدِّث موقفها</small><b>${upd.length}</b></div><div><small>مراحل اكتملت</small><b>${stg.length}</b></div><div><small>أسطح انتهت</small><b>${fin.length}</b></div><div><small>تحديثات Snag</small><b>${acts}</b></div></div>
+    <div class="sumsec"><b>📊 الموقف التنفيذي</b><p>الإنجاز الحالي <b>${r1(A.pct)}%</b> مقابل المخطط <b>${r1(planned())}%</b> · منتهية ${A.done} من ${A.n} · تحتاج متابعة ${A.flags}${durOn()?` · متأخرة ${A.late}`:''}</p>
+      ${stg.length?`<p>المراحل المكتملة:</p>${stg.slice(0,40).map(([c,t])=>`<div class="sline"><span class="vchip">${esc(villaNo(c))}</span> ${esc(t)}</div>`).join('')}`:'<p class="q">لم تكتمل أي مرحلة في هذا اليوم.</p>'}
+      ${fin.length?`<p>أسطح انتهت بالكامل:</p><div>${list(fin)}</div>`:''}${upd.length?`<p>فلل حُدِّث موقفها:</p><div>${list(upd)}</div>`:''}</div>
+    <div class="sumsec"><b>🏗 تقارير المقاولين</b>${fr?'<p class="q">يوم الجمعة — لا توجد تقارير.</p>':`<p>أرسل ${sent.length} من ${act.length} مقاولين تقاريرهم${sent.filter(r=>r.late).length?`، منها ${sent.filter(r=>r.late).length} متأخرة ⏰`:''}.</p>${miss.length?`<p>لم يُرسل: ${miss.map(c=>esc(c.name)).join('، ')}</p>`:''}`}</div>
+    <div class="row"><button class="btn g" id="smP">← اليوم السابق</button>${day<addD(todayS(),-1)?'<button class="btn g" id="smN">اليوم التالي →</button>':''}<span class="sp"></span><button class="btn g" id="smX">إغلاق</button></div>`;
+  $('#smX').onclick=close;$('#smP').onclick=()=>morningSummary(addD(day,-1));if($('#smN'))$('#smN').onclick=()=>morningSummary(addD(day,1))}
+async function scheduleMorning(){const L=LN();if(!L||!isTeam())return;await notifPerm();if(!notifReady)return;
+  try{await L.cancel({notifications:[{id:7801}]})}catch(e){}
+  try{await L.schedule({notifications:[{id:7801,title:'☀️ صباح الخير — ملخص الأمس',body:'ملخص الموقف التنفيذي وتقارير المقاولين لأمس جاهز. اضغط للعرض.',schedule:{on:{hour:8,minute:0},allowWhileIdle:true},extra:{rep:'sum'},smallIcon:'ic_stat_notify'}]})}catch(e){}}
+
+/* ---------- admin dashboard on the home screen ---------- */
+async function renderDash(){const el=$('#hDash');if(!el)return;if(!isAdmin()||!ROOF){el.innerHTML='';return}
+  const A=aggr(),pl=planned(),dv=A.pct-pl,t=todayS(),act=Object.values(COS).filter(c=>c.active!==false),sent=Object.values(REPS).filter(r=>r.date===t&&r.status==='sent');
+  let open=0;for(const r of Object.values(REC||{}))for(const p of [1,2])for(const m of ((r.p||{})[p]||{}).marks||[])if((m.st||'o')!=='c')open++;
+  const fr=parseD(t).getDay()===5,after=new Date().getHours()>=DEADLINE;
+  const tile=(ic,lab,val,sub,act2,cls)=>`<button class="dt ${cls||''}" data-go="${act2}"><span>${ic}</span><small>${lab}</small><b>${val}</b>${sub?`<em>${sub}</em>`:''}</button>`;
+  el.innerHTML=`<div class="dash"><div class="dh"><b>لوحة المتابعة</b><small>${dayLabel(t)}</small></div><div class="dg">
+    ${tile('📊','إنجاز الأسطح',r1(A.pct)+'%',`المخطط ${r1(pl)}% · ${dv>=0?'متقدم':'متأخر'} ${r1(Math.abs(dv))}%`,'prog',dv<0?'tr':'tg')}
+    ${tile('🏠','أسطح منتهية',`${A.done}/${A.n}`,`تحتاج متابعة: ${A.flags}`,'prog',A.flags?'to':'')}
+    ${durOn()?tile('⏱','فلل متأخرة',A.late,'عن مدد المراحل','late',A.late?'tr':''):''}
+    ${tile('🏗','تقارير اليوم',fr?'—':`${sent.length}/${act.length}`,fr?'الجمعة':(after&&sent.length<act.length?`لم يُرسل ${act.length-sent.length} ⏰`:'الموعد 10:00 صباحاً'),'rep',!fr&&after&&sent.length<act.length?'tr':'')}
+    ${tile('📍','ملاحظات Snag مفتوحة',open,'','snag',open?'to':'')}
+    ${tile('👥','طلبات الحسابات',REQ||0,'','users',REQ?'to':'')}
+    ${tile('☀️','ملخص الأمس','عرض','','sum','')}${tile('⚖️','مقارنة المقاولين','عرض','','cmp','')}</div><div id="dBk"></div></div>`;
+  FS.collection('sys').doc('backup').get().then(d=>{const x=d.exists?d.data():{},bk=$('#dBk');if(!bk)return;
+    if(x.status==='unverified')bk.innerHTML=`<div class="pwarn" style="cursor:pointer" id="dBkM">✉️ لم تُرسَل النسخة الاحتياطية الأسبوعية لأن بريدك الإلكتروني غير مؤكَّد. اضغط هنا لإضافة بريدك وتأكيده.</div>`;
+    else if(x.status==='sent')bk.innerHTML=`<p class="q" style="margin:8px 0 0">💾 آخر نسخة احتياطية أُرسلت إلى <span dir="ltr">${esc(x.to||'')}</span> — ${new Date(x.t).toLocaleDateString('en-GB')}</p>`;
+    if($('#dBkM'))$('#dBkM').onclick=()=>emailPrompt()}).catch(()=>{});
+  el.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const g=b.dataset.go;if(g==='prog')nav('prog');else if(g==='late'){progLate=true;nav('prog')}else if(g==='rep')nav('rep');
+    else if(g==='snag'){const pb=$('#phase [data-p="1"]');if(pb&&phase!==1)pb.click();nav('snag')}else if(g==='users')usersPanel();else if(g==='sum')morningSummary();else if(g==='cmp')progCompare()})}
+
+window.__progX={cmp:progCompare,sum:morningSummary,today:todayS,progXlsx,progPdf,seedBase,get PROG(){return PROG},aggr};
 
 }
 </script>
